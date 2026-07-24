@@ -331,7 +331,7 @@ HeroSection::display([
             </div>
 
             <div class="result-card-actions">
-                <button class="btn-primary-ds btn-primary-ds--sm"
+                <button class="btn-outline-ds btn-outline-ds--sm"
                         data-bs-toggle="modal" data-bs-target="#<?php echo $unique_id; ?>">
                     <i class="fas fa-info-circle me-1" aria-hidden="true"></i>Ver Detalhes
                 </button>
@@ -339,7 +339,7 @@ HeroSection::display([
                 <a href="https://doi.org/<?php echo urlencode($doi); ?>" target="_blank" rel="noopener noreferrer"
                    class="btn-outline-ds btn-outline-ds--sm"
                    aria-label="Acessar via DOI">
-                    <i class="fas fa-external-link-alt" aria-hidden="true"></i>
+                    <i class="fas fa-external-link-alt me-1" aria-hidden="true"></i>DOI
                 </a>
                 <?php endif; ?>
             </div>
@@ -434,7 +434,7 @@ HeroSection::display([
                             <i class="fas fa-external-link-alt me-1" aria-hidden="true"></i>Acessar via DOI
                         </a>
                         <?php endif; ?>
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                        <button type="button" class="btn-outline-ds btn-outline-ds--sm" data-bs-dismiss="modal">Fechar</button>
                     </div>
                 </div>
             </div>

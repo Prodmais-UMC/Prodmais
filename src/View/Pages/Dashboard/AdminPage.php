@@ -53,8 +53,10 @@ $dpiaReport = $lgpdService->generateDpiaReport();
 $complianceStatus = $lgpdService->getComplianceStatus();
 
 if (isset($_POST['expunge'])) {
-    $log->expungeOld(365);
-    $msg = 'Logs antigos expurgados.';
+    $removidos = $log->expungeOld(365);
+    $msg = $removidos > 0
+        ? "{$removidos} log(s) com mais de 365 dias removido(s)."
+        : 'Nenhum log com mais de 365 dias — nada a remover.';
 }
 
 $import_result = null;
@@ -171,7 +173,7 @@ $ppgs = getAllPPGs();
     }
     /* ── Cards ── */
     .adm-card { background: white; border-radius: 20px; border: 1px solid rgba(0,0,0,.07); box-shadow: 0 2px 12px rgba(0,0,0,.06); overflow: hidden; margin-bottom: 1.5rem; }
-    .adm-card-header { background: linear-gradient(135deg,#1e1b4b,#312e81); padding: 1.25rem 1.75rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .adm-card-header { background: linear-gradient(135deg,#4f46e5,#6366f1); padding: 1.25rem 1.75rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
     .adm-card-header h5 { margin: 0; color: white; font-weight: 700; font-size: 1rem; }
     .adm-card-body { padding: 1.75rem; }
     /* ── Info box ── */

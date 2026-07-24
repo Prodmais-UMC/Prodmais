@@ -1650,21 +1650,6 @@ img[loading="lazy"].loaded {
     border-color: var(--gray-300);
 }
 
-.result-card::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 3px;
-    background: var(--primary);
-    border-radius: var(--radius-lg) 0 0 var(--radius-lg);
-    opacity: 0;
-    transition: opacity var(--transition-fast);
-}
-
-.result-card:hover::before { opacity: 1; }
-
 .result-card-title {
     font-size: 0.9375rem;
     font-weight: 700;
@@ -1763,7 +1748,9 @@ mark.search-highlight {
     box-shadow: var(--shadow-sm);
     padding: 1.25rem;
     position: sticky;
-    top: 1rem;
+    /* navbar-elegant é fixed com 64px de altura — sem esse offset o painel
+       gruda embaixo dela, sobrepondo o topo em vez de respeitar o espaço. */
+    top: calc(64px + 1rem);
 }
 
 .filter-panel-title {
