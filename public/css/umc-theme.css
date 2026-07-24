@@ -456,14 +456,12 @@ body {
 /* Alert UMC */
 .alert-umc {
     background: var(--umc-cinza-claro);
-    border-left: 4px solid var(--umc-azul-claro);
     padding: 1.5rem;
     border-radius: 8px;
     margin: 2rem 0;
 }
 
 .alert-umc-warning {
-    border-left-color: var(--umc-laranja);
     background: #fff3cd;
 }
 

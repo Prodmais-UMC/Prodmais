@@ -1299,7 +1299,6 @@ img[loading="lazy"].loaded {
 
 .researcher-meta {
     background: rgba(26,86,219,.04);
-    border-left: 3px solid var(--primary);
     border-radius: var(--radius-md);
     padding: 0.7rem 1rem;
     margin-bottom: 1.125rem;
@@ -2286,12 +2285,6 @@ mark.search-highlight {
 .modal-detail-label i { color: var(--primary); }
 .modal-detail-value { color: var(--gray-900); font-size: 0.875rem; }
 .modal-detail-value--lg { font-size: 1rem; }
-.modal-doi-box {
-    background: var(--gray-50);
-    padding: 1rem;
-    border-radius: var(--radius-md);
-    border-left: 3px solid #059669;
-}
 .modal-doi-box .modal-detail-label i { color: #059669; }
 .modal-doi-link { color: #059669; text-decoration: none; font-weight: 600; }
 .modal-doi-link:hover { text-decoration: underline; }
@@ -2408,7 +2401,6 @@ mark.search-highlight {
     border-radius: var(--radius-lg);
     padding: 1.5rem 2rem;
     margin-bottom: 1.5rem;
-    border-left: 4px solid var(--primary);
 }
 .search-term-text { font-size: 1.5rem; font-weight: 700; color: #1e3a8a; margin: 0; }
 .refine-search-card {
