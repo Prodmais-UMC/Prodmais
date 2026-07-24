@@ -81,11 +81,12 @@ class LogService {
         $stmt->execute();
     }
     
-    public function expungeOld($days = 365) {
+    public function expungeOld($days = 365): int {
         $limit = date('c', strtotime("-$days days"));
         $stmt = $this->db->prepare("DELETE FROM logs WHERE timestamp < :limit");
         $stmt->bindValue(':limit', $limit, SQLITE3_TEXT);
         $stmt->execute();
+        return $this->db->changes();
     }
 
     public function getLogs($limit = 100) {
