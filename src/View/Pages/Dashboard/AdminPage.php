@@ -206,11 +206,15 @@ $ppgs = getAllPPGs();
     .adm-btn-danger { background: linear-gradient(135deg,#dc2626,#ef4444); color: white !important; }
     /* ── Log table ── */
     .adm-table { width: 100%; border-collapse: collapse; }
-    .adm-table th { background: #1e1b4b; color: white; font-size: .75rem; letter-spacing: .05em; text-transform: uppercase; padding: .875rem 1rem; text-align: left; }
-    .adm-table td { padding: .75rem 1rem; font-size: .875rem; color: #374151; border-bottom: 1px solid #f1f5f9; }
+    .adm-table th { background: linear-gradient(135deg,#4f46e5,#6366f1); color: white; font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 1rem 1.25rem; text-align: left; }
+    .adm-table td { padding: .9rem 1.25rem; font-size: .875rem; color: #374151; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
     .adm-table tbody tr:last-child td { border-bottom: none; }
-    .adm-table tbody tr:hover td { background: rgba(99,102,241,.04); }
-    .adm-table-wrap { border-radius: 12px; overflow: hidden; border: 1px solid rgba(0,0,0,.08); }
+    .adm-table tbody tr:nth-child(even) td { background: #fafafe; }
+    .adm-table tbody tr:hover td { background: rgba(99,102,241,.06); }
+    .adm-table-wrap { border-radius: 16px; overflow: hidden; border: 1px solid rgba(0,0,0,.08); box-shadow: 0 2px 10px rgba(0,0,0,.04); }
+    .adm-log-user { display: inline-flex; align-items: center; gap: .4rem; font-weight: 600; color: #312e81; }
+    .adm-log-user i { color: #818cf8; font-size: .8rem; }
+    .adm-log-time { color: #94a3b8; font-size: .8rem; white-space: nowrap; }
     .adm-badge { display: inline-flex; align-items: center; padding: .2rem .65rem; border-radius: 100px; font-size: .68rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
     .adm-badge-info    { background: rgba(59,130,246,.12); color: #1d4ed8; }
     .adm-badge-warning { background: rgba(245,158,11,.12); color: #b45309; }
@@ -665,8 +669,12 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
                             }
                                 $user = htmlspecialchars($row['user'] ?? $row['level'] ?? 'Sistema');
                                 $action = htmlspecialchars($row['action'] ?? $row['message'] ?? 'N/A');
-                                $timestamp = htmlspecialchars($row['timestamp'] ?? 'N/A');
-                                echo "<tr><td><span class='{$badge_cls}'>{$level}</span></td><td>{$user}</td><td>{$action}</td><td>{$timestamp}</td></tr>";
+                                $timestamp = $row['timestamp'] ?? null;
+                                $timestampFmt = $timestamp ? date('d/m/Y H:i', strtotime($timestamp)) : 'N/A';
+                                echo "<tr><td><span class='{$badge_cls}'>{$level}</span></td>"
+                                    . "<td><span class='adm-log-user'><i class='fas fa-user-circle' aria-hidden=\"true\"></i>{$user}</span></td>"
+                                    . "<td>{$action}</td>"
+                                    . "<td class='adm-log-time'>{$timestampFmt}</td></tr>";
                             }
                             ?>
                                         </tbody>
