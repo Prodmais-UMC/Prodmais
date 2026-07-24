@@ -271,7 +271,7 @@ $ppg_palette = [
             Stricto Sensu · Credenciados CAPES
         </div>
 
-        <h1 style="font-size:clamp(2.5rem,5.5vw,4.5rem);font-weight:900;line-height:1.05;letter-spacing:-2.5px;color:#f1f5f9;margin:0 0 1rem;">
+        <h1 style="font-size:clamp(1.85rem,5.5vw,4.5rem);font-weight:900;line-height:1.05;letter-spacing:-2.5px;color:#f1f5f9;margin:0 0 1rem;">
             Pós-Graduação<br>
             <span style="background:linear-gradient(135deg,#a78bfa 0%,#34d399 55%,#60a5fa 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">da UMC</span>
         </h1>

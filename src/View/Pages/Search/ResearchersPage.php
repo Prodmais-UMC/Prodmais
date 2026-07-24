@@ -238,7 +238,7 @@ $ppg_chip = [
             Corpo Docente · PPG UMC
         </div>
 
-        <h1 style="font-size:clamp(2.5rem,5.5vw,4.25rem);font-weight:900;line-height:1.05;letter-spacing:-2.5px;color:#f1f5f9;margin:0 0 1rem;">
+        <h1 style="font-size:clamp(1.85rem,5.5vw,4.25rem);font-weight:900;line-height:1.05;letter-spacing:-2.5px;color:#f1f5f9;margin:0 0 1rem;">
             Pesquisadores da
             <span style="background:linear-gradient(135deg,#60a5fa,#34d399);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">UMC</span>
         </h1>

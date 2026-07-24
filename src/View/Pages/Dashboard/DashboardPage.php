@@ -306,7 +306,7 @@ Navbar::display([
             Estatísticas · Produção Científica
         </div>
 
-        <h1 style="font-size:clamp(2.4rem,5vw,4rem);font-weight:900;line-height:1.05;letter-spacing:-2px;color:#f1f5f9;margin:0 0 1rem;">
+        <h1 style="font-size:clamp(1.8rem,5vw,4rem);font-weight:900;line-height:1.05;letter-spacing:-2px;color:#f1f5f9;margin:0 0 1rem;">
             Dashboard<br>
             <span style="background:linear-gradient(135deg,#60a5fa 0%,#34d399 55%,#a78bfa 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">da UMC</span>
         </h1>

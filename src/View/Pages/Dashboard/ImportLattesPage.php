@@ -170,7 +170,7 @@ $ppgs = getAllPPGs();
             background-size: 28px 28px;
             pointer-events: none;
         }
-        .page-header h1 { font-weight: 900; margin-bottom: 1rem; font-size: clamp(2.2rem, 5vw, 3.25rem); letter-spacing: -0.02em; line-height: 1.15; position: relative; z-index: 1; }
+        .page-header h1 { font-weight: 900; margin-bottom: 1rem; font-size: clamp(1.6rem, 5vw, 3.25rem); letter-spacing: -0.02em; line-height: 1.15; position: relative; z-index: 1; }
         .page-header .lead { font-size: 1.05rem; opacity: .7; font-weight: 400; position: relative; z-index: 1; }
 
         .card-umc-custom {

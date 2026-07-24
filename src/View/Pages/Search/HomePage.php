@@ -110,7 +110,7 @@ if ($elasticsearch_available) {
     50%       { opacity: .5; transform: scale(.7); }
 }
 .hero-title {
-    font-size: clamp(2.75rem, 6vw, 5rem);
+    font-size: clamp(1.85rem, 6vw, 5rem);
     font-weight: 900;
     line-height: 1.05;
     letter-spacing: -2.5px;
@@ -211,6 +211,13 @@ if ($elasticsearch_available) {
     max-width: 480px;
 }
 .hero-es-notice i { color: #fbbf24; flex-shrink: 0; }
+
+@media (max-width: 480px) {
+    /* Botão com white-space:nowrap não encolhia — espremia o campo de
+       busca até sobrar quase nada de espaço pra digitar no mobile. */
+    .hero-search-inner { flex-direction: column; }
+    .hero-search-btn { margin: 0; width: calc(100% - .75rem); justify-content: center; }
+}
 </style>
 <section class="home-hero">
     <div class="container text-center" style="position:relative;z-index:1;">

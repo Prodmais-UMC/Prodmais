@@ -441,7 +441,7 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
             Área Restrita · Administração
         </div>
 
-        <h1 style="font-size:clamp(2.2rem,5vw,3.75rem);font-weight:900;line-height:1.05;letter-spacing:-2px;color:#f1f5f9;margin:0 0 1rem;">
+        <h1 style="font-size:clamp(1.6rem,5vw,3.75rem);font-weight:900;line-height:1.05;letter-spacing:-2px;color:#f1f5f9;margin:0 0 1rem;">
             <i class="fas fa-cog me-3" style="color:#6366f1;"></i>Administração
         </h1>
 

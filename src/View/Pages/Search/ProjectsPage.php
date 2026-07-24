@@ -221,7 +221,7 @@ Navbar::display([
             Pesquisa & Inovação · UMC
         </div>
 
-        <h1 style="font-size:clamp(2.4rem,5vw,4rem);font-weight:900;line-height:1.05;letter-spacing:-2px;color:#f1f5f9;margin:0 0 1rem;">
+        <h1 style="font-size:clamp(1.8rem,5vw,4rem);font-weight:900;line-height:1.05;letter-spacing:-2px;color:#f1f5f9;margin:0 0 1rem;">
             Projetos de<br>
             <span style="background:linear-gradient(135deg,#34d399 0%,#0d9488 55%,#60a5fa 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Pesquisa</span>
         </h1>

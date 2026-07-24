@@ -517,33 +517,6 @@ body {
     .navbar-elegant .navbar-toggler { display: none !important; }
 }
 
-.navbar-elegant .navbar-toggler {
-    border: 1px solid var(--gray-200);
-    padding: 0.4rem 0.55rem;
-    border-radius: 8px;
-    background: transparent;
-    cursor: pointer;
-    transition: background 0.15s ease;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    align-items: center;
-    justify-content: center;
-}
-
-.navbar-elegant .navbar-toggler:hover {
-    background: var(--gray-100);
-}
-
-.navbar-toggler-bar {
-    display: block;
-    width: 20px;
-    height: 1.5px;
-    background: var(--gray-600);
-    border-radius: 2px;
-    transition: all 0.25s ease;
-}
-
 /* menu mobile expandido */
 @media (max-width: 991px) {
     .navbar-elegant .navbar-collapse {
