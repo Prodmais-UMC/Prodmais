@@ -39,7 +39,7 @@ foreach ($indexes as $idx => $description) {
                 ]
             ]
         ]);
-        
+
         echo "  ✅ Índice criado com sucesso!\n\n";
     } catch (Exception $e) {
         if (strpos($e->getMessage(), 'resource_already_exists_exception') !== false) {
@@ -53,6 +53,16 @@ foreach ($indexes as $idx => $description) {
         } else {
             echo "  ❌ Erro: " . $e->getMessage() . "\n\n";
         }
+    }
+
+    // Aplica os mappings sempre — inclusive em índice já existente, pra
+    // adicionar sub-campos .keyword que ainda não existam (não afeta
+    // campos que já têm mapeamento definido).
+    echo "  Aplicando mappings...\n";
+    if (applyMappings($idx, $client)) {
+        echo "  ✅ Mappings aplicados\n\n";
+    } else {
+        echo "  ⚠️  Não foi possível aplicar mappings (veja o log de erro)\n\n";
     }
 }
 

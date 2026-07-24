@@ -160,15 +160,20 @@ function applyMappings($indexName, $client) {
     // Mappings específicos por tipo de índice
     $mappings = [];
     
+    // Sub-campo .keyword pra permitir sort/filtro exato em cima de um
+    // campo text — sem isso, sort/term query em "<campo>.keyword" falha
+    // com "No mapping found" mesmo o campo existindo como texto.
+    $keywordSubfield = ['keyword' => ['type' => 'keyword', 'ignore_above' => 256]];
+
     if (strpos($indexName, '_cv') !== false) {
         // Mappings para currículos
         $mappings = [
             'properties' => [
-                'nome_completo' => ['type' => 'text', 'analyzer' => 'brazilian'],
+                'nome_completo' => ['type' => 'text', 'analyzer' => 'brazilian', 'fields' => $keywordSubfield],
                 'lattesID' => ['type' => 'keyword'],
                 'orcidID' => ['type' => 'keyword'],
                 'email' => ['type' => 'keyword'],
-                'instituicao' => ['type' => 'text'],
+                'instituicao' => ['type' => 'text', 'fields' => $keywordSubfield],
                 'ppg' => ['type' => 'keyword'],
                 'area_concentracao' => ['type' => 'keyword'],
                 'campus' => ['type' => 'keyword'],
@@ -180,7 +185,7 @@ function applyMappings($indexName, $client) {
         // Mappings para PPGs
         $mappings = [
             'properties' => [
-                'nome' => ['type' => 'text'],
+                'nome' => ['type' => 'text', 'fields' => $keywordSubfield],
                 'codigo_capes' => ['type' => 'keyword'],
                 'nivel' => ['type' => 'keyword'],
                 'campus' => ['type' => 'keyword'],
@@ -193,11 +198,11 @@ function applyMappings($indexName, $client) {
         // Mappings para projetos
         $mappings = [
             'properties' => [
-                'titulo' => ['type' => 'text', 'analyzer' => 'brazilian'],
+                'titulo' => ['type' => 'text', 'analyzer' => 'brazilian', 'fields' => $keywordSubfield],
                 'ano_inicio' => ['type' => 'integer'],
                 'ano_fim' => ['type' => 'integer'],
                 'situacao' => ['type' => 'keyword'],
-                'financiamento' => ['type' => 'text'],
+                'financiamento' => ['type' => 'text', 'fields' => $keywordSubfield],
                 'equipe' => ['type' => 'nested'],
                 'ppg' => ['type' => 'keyword']
             ]
@@ -206,8 +211,8 @@ function applyMappings($indexName, $client) {
         // Mappings para produções científicas
         $mappings = [
             'properties' => [
-                'titulo' => ['type' => 'text', 'analyzer' => 'brazilian'],
-                'autores' => ['type' => 'text', 'analyzer' => 'brazilian'],
+                'titulo' => ['type' => 'text', 'analyzer' => 'brazilian', 'fields' => $keywordSubfield],
+                'autores' => ['type' => 'text', 'analyzer' => 'brazilian', 'fields' => $keywordSubfield],
                 'ano' => ['type' => 'integer'],
                 'tipo' => ['type' => 'keyword'],
                 'doi' => ['type' => 'keyword'],
