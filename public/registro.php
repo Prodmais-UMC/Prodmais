@@ -701,7 +701,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             .auth-shell { flex-direction: column-reverse; }
 
             .brand-panel {
+                position: static;
                 flex: 0 0 auto;
+                width: 100%;
+                height: auto;
                 padding: 1.75rem 1.5rem;
                 justify-content: flex-start;
             }
