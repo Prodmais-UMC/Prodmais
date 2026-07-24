@@ -143,13 +143,20 @@ class LattesImporter {
         $pesquisador['total_producoes'] = $producoes['total'];
         $pesquisador['total_projetos'] = $projetos['total'];
 
-        // Banco relacional: salvar pesquisador
+        // Banco relacional: salvar pesquisador (upsert por lattesID — um
+        // currículo reimportado com dados atualizados deve substituir o
+        // registro antigo, não falhar silenciosamente na constraint UNIQUE)
         $db_pesq_id = null;
         if ($this->dbService) {
             try {
                 $db_pesq_id = $this->dbService->addPesquisador($pesquisador);
             } catch (\Exception $e) {
-                // Silenciar erro
+                try {
+                    $this->dbService->updatePesquisador($pesquisador);
+                } catch (\Exception $e2) {
+                    // Silenciar erro — indexação no Elasticsearch já
+                    // aconteceu e é a fonte de dados principal do sistema.
+                }
             }
         }
         // Banco relacional: salvar produções
