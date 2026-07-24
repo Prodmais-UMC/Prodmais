@@ -80,7 +80,7 @@ $results = [];
 $total   = 0;
 $client  = getElasticsearchClient();
 
-if ($client && (!empty($search_term) || !empty($filter_tipo) || !empty($filter_qualis) || !empty($filter_ppg) || !empty($filter_ano_inicio) || !empty($filter_ano_fim))) {
+if ($client) {
     try {
         $params = [
             'index' => $index,
