@@ -88,14 +88,37 @@ class Navbar extends Component {
                             if (count($partes) > 1) {
                                 $iniciais .= mb_strtoupper(mb_substr(end($partes), 0, 1));
                             }
+
+                            // Contador de cadastros pendentes — só pra admin, só bate no
+                            // banco se o papel for admin (evita custo pra todo mundo).
+                            $pendingCountNav = 0;
+                            if ($papel === 'admin') {
+                                try {
+                                    require_once __DIR__ . '/../../../Infrastructure/Database/MysqlConnectionFactory.php';
+                                    $pdoNav = criarConexaoMysql();
+                                    $pendingCountNav = (int) $pdoNav->query("SELECT COUNT(*) FROM usuarios_admin WHERE status = 'pendente'")->fetchColumn();
+                                } catch (\Throwable $e) {
+                                    // Silencioso — não deve quebrar a navbar em nenhuma página
+                                }
+                            }
                             ?>
                             <a class="nav-user-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <span class="nav-user-avatar"><?php echo htmlspecialchars($iniciais); ?></span>
                                 <span class="nav-user-greeting">Bem-vindo!</span>
+                                <?php if ($pendingCountNav > 0): ?>
+                                <span class="nav-pending-badge" title="<?php echo $pendingCountNav; ?> cadastro(s) pendente(s)"><?php echo $pendingCountNav; ?></span>
+                                <?php endif; ?>
                                 <i class="fas fa-chevron-down nav-user-caret" aria-hidden="true"></i>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end nav-user-menu">
-                                <li><a class="dropdown-item" href="<?php echo $painel_href; ?>"><i class="fas fa-gauge me-2" aria-hidden="true"></i>Painel administrativo</a></li>
+                                <li>
+                                    <a class="dropdown-item" href="<?php echo $painel_href; ?>">
+                                        <i class="fas fa-gauge me-2" aria-hidden="true"></i>Painel administrativo
+                                        <?php if ($pendingCountNav > 0): ?>
+                                        <span class="nav-pending-badge nav-pending-badge--inline"><?php echo $pendingCountNav; ?></span>
+                                        <?php endif; ?>
+                                    </a>
+                                </li>
                                 <?php if (in_array($papel, ['admin', 'pesquisador'])): ?>
                                 <li><a class="dropdown-item" href="/importar_lattes.php"><i class="fas fa-file-import me-2" aria-hidden="true"></i>Importar Lattes</a></li>
                                 <?php endif; ?>

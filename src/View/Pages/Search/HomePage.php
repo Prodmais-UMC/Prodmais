@@ -213,10 +213,18 @@ if ($elasticsearch_available) {
 .hero-es-notice i { color: #fbbf24; flex-shrink: 0; }
 
 @media (max-width: 480px) {
+    .hero-sub { font-size: .875rem; }
+
     /* Botão com white-space:nowrap não encolhia — espremia o campo de
        busca até sobrar quase nada de espaço pra digitar no mobile. */
     .hero-search-inner { flex-direction: column; }
-    .hero-search-btn { margin: 0; width: calc(100% - .75rem); justify-content: center; }
+    .hero-search-btn {
+        margin: 0;
+        width: 100%;
+        justify-content: center;
+        padding: .9rem 1.25rem;
+        border-radius: 0;
+    }
 }
 </style>
 <section class="home-hero">

@@ -22,6 +22,8 @@ if (!class_exists('LgpdComplianceService')) {
     require_once __DIR__ . '/../../../../src/Domain/Security/LgpdComplianceService.php';
 }
 
+require_once __DIR__ . '/../../../../src/Infrastructure/Database/MysqlConnectionFactory.php';
+
 $config_legacy = [];
 if (file_exists(__DIR__ . '/../../../../config/config.php')) {
     $config_legacy = require_once __DIR__ . '/../../../../config/config.php';
@@ -58,6 +60,56 @@ if (isset($_POST['expunge'])) {
         ? "{$removidos} log(s) com mais de 365 dias removido(s)."
         : 'Nenhum log com mais de 365 dias — nada a remover.';
 }
+
+// ── Aprovação de cadastros pendentes (somente admin) ──
+$souAdmin = ($_SESSION['papel'] ?? '') === 'admin';
+$pendingMsg = null;
+
+if ($souAdmin && (isset($_POST['approve_user']) || isset($_POST['reject_user']))) {
+    $pendingId = filter_input(INPUT_POST, 'user_id', FILTER_VALIDATE_INT);
+    if ($pendingId) {
+        try {
+            $pdoUsers = criarConexaoMysql();
+            $stmt = $pdoUsers->prepare("SELECT username, email FROM usuarios_admin WHERE id = ? AND status = 'pendente'");
+            $stmt->execute([$pendingId]);
+            $alvo = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($alvo) {
+                if (isset($_POST['approve_user'])) {
+                    $stmt = $pdoUsers->prepare("UPDATE usuarios_admin SET status = 'ativo' WHERE id = ?");
+                    $stmt->execute([$pendingId]);
+                    $log->log($_SESSION['user'], "Aprovou cadastro de {$alvo['username']} ({$alvo['email']})");
+                    $pendingMsg = "Cadastro de {$alvo['username']} aprovado — já pode fazer login.";
+                } else {
+                    $stmt = $pdoUsers->prepare("DELETE FROM usuarios_admin WHERE id = ?");
+                    $stmt->execute([$pendingId]);
+                    $log->log($_SESSION['user'], "Rejeitou cadastro de {$alvo['username']} ({$alvo['email']})");
+                    $pendingMsg = "Solicitação de {$alvo['username']} rejeitada e removida.";
+                }
+            } else {
+                $pendingMsg = 'Solicitação não encontrada (talvez já tenha sido tratada).';
+            }
+        } catch (\Exception $e) {
+            error_log('Erro ao aprovar/rejeitar cadastro: ' . $e->getMessage());
+            $pendingMsg = 'Erro ao processar a solicitação. Tente novamente.';
+        }
+    }
+}
+
+$pendingUsers = [];
+if ($souAdmin) {
+    try {
+        $pdoUsers = $pdoUsers ?? criarConexaoMysql();
+        $stmt = $pdoUsers->query(
+            "SELECT id, username, email, nome_completo, papel, criado_em
+             FROM usuarios_admin WHERE status = 'pendente' ORDER BY criado_em ASC"
+        );
+        $pendingUsers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (\Exception $e) {
+        error_log('Erro ao listar cadastros pendentes: ' . $e->getMessage());
+    }
+}
+$pendingCount = count($pendingUsers);
 
 $import_result = null;
 
@@ -170,6 +222,37 @@ $ppgs = getAllPPGs();
     .adm-tab-btn.active {
         background: linear-gradient(135deg,#4f46e5,#6366f1); color: white;
         box-shadow: 0 4px 14px rgba(79,70,229,.3);
+    }
+    .adm-tab-badge {
+        display: inline-flex; align-items: center; justify-content: center;
+        min-width: 20px; height: 20px; padding: 0 .375rem;
+        background: #ef4444; color: white; font-size: .7rem; font-weight: 800;
+        border-radius: 100px; line-height: 1;
+    }
+    .adm-tab-btn.active .adm-tab-badge { background: rgba(255,255,255,.25); }
+    /* ── Usuários pendentes ── */
+    .pending-card {
+        background: white; border-radius: 16px; border: 1px solid rgba(0,0,0,.07);
+        box-shadow: 0 2px 10px rgba(0,0,0,.05); padding: 1.25rem;
+        display: flex; flex-direction: column; gap: .875rem; margin-bottom: 1rem;
+    }
+    .pending-card-info { display: flex; flex-direction: column; gap: .2rem; }
+    .pending-card-name { font-weight: 700; color: #0f172a; font-size: .95rem; }
+    .pending-card-meta { font-size: .8125rem; color: #64748b; }
+    .pending-card-actions { display: flex; gap: .625rem; }
+    .pending-card-actions form { flex: 1; }
+    .pending-btn-approve, .pending-btn-reject {
+        width: 100%; display: flex; align-items: center; justify-content: center; gap: .4rem;
+        border: none; border-radius: 10px; padding: .7rem 1rem;
+        font-size: .875rem; font-weight: 700; cursor: pointer; font-family: 'Inter', sans-serif;
+    }
+    .pending-btn-approve { background: linear-gradient(135deg,#059669,#10b981); color: white; }
+    .pending-btn-reject { background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }
+    .pending-empty { text-align: center; padding: 3rem 1.5rem; color: #94a3b8; }
+    @media (min-width: 640px) {
+        .pending-card { flex-direction: row; align-items: center; justify-content: space-between; }
+        .pending-card-actions { flex-shrink: 0; width: auto; }
+        .pending-btn-approve, .pending-btn-reject { width: auto; }
     }
     /* ── Cards ── */
     .adm-card { background: white; border-radius: 20px; border: 1px solid rgba(0,0,0,.07); box-shadow: 0 2px 12px rgba(0,0,0,.06); overflow: hidden; margin-bottom: 1.5rem; }
@@ -466,10 +549,17 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
                 
                 <?php if (!empty($msg)) echo "<div class='alert alert-success'><i class='bi bi-check-circle'></i> $msg</div>"; ?>
                 <?php if (!empty($msg_error)) echo "<div class='alert alert-danger'><i class='bi bi-exclamation-triangle'></i> $msg_error</div>"; ?>
-                
+                <?php if (!empty($pendingMsg)) echo "<div class='alert alert-success'><i class='bi bi-check-circle'></i> " . htmlspecialchars($pendingMsg) . "</div>"; ?>
+
                 <!-- Navegação por abas -->
                 <div class="adm-tabs" id="adminTabs" role="tablist">
-                    <button class="adm-tab-btn active" id="researcher-tab" data-bs-toggle="tab" data-bs-target="#researcher" type="button" role="tab">
+                    <?php if ($souAdmin): ?>
+                    <button class="adm-tab-btn<?= $pendingCount > 0 ? ' active' : '' ?>" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending" type="button" role="tab">
+                        <i class="fas fa-user-clock" aria-hidden="true"></i> Usuários Pendentes
+                        <?php if ($pendingCount > 0): ?><span class="adm-tab-badge"><?= $pendingCount ?></span><?php endif; ?>
+                    </button>
+                    <?php endif; ?>
+                    <button class="adm-tab-btn<?= $pendingCount === 0 || !$souAdmin ? ' active' : '' ?>" id="researcher-tab" data-bs-toggle="tab" data-bs-target="#researcher" type="button" role="tab">
                         <i class="fas fa-user-plus" aria-hidden="true"></i> Adicionar Pesquisador
                     </button>
                     <button class="adm-tab-btn" id="bulk-tab" data-bs-toggle="tab" data-bs-target="#bulk" type="button" role="tab">
@@ -484,8 +574,48 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
                 </div>
 
                 <div class="tab-content" id="adminTabContent">
+                    <?php if ($souAdmin): ?>
+                    <!-- Aba: Usuários Pendentes -->
+                    <div class="tab-pane fade<?= $pendingCount > 0 ? ' show active' : '' ?>" id="pending" role="tabpanel">
+                        <?php if (empty($pendingUsers)): ?>
+                            <div class="pending-empty">
+                                <i class="fas fa-circle-check" style="font-size:2.5rem;opacity:.3;margin-bottom:1rem;display:block;"></i>
+                                Nenhuma solicitação de cadastro pendente no momento.
+                            </div>
+                        <?php else: ?>
+                            <?php foreach ($pendingUsers as $pu): ?>
+                            <div class="pending-card">
+                                <div class="pending-card-info">
+                                    <span class="pending-card-name"><?= htmlspecialchars($pu['nome_completo'] ?: $pu['username']) ?></span>
+                                    <span class="pending-card-meta">
+                                        <i class="fas fa-at" aria-hidden="true"></i> <?= htmlspecialchars($pu['username']) ?>
+                                        &nbsp;·&nbsp; <?= htmlspecialchars($pu['email']) ?>
+                                        &nbsp;·&nbsp; solicitou <strong><?= htmlspecialchars($pu['papel']) ?></strong>
+                                        &nbsp;·&nbsp; <?= date('d/m/Y', strtotime($pu['criado_em'])) ?>
+                                    </span>
+                                </div>
+                                <div class="pending-card-actions">
+                                    <form method="post">
+                                        <input type="hidden" name="user_id" value="<?= (int) $pu['id'] ?>">
+                                        <button type="submit" name="approve_user" class="pending-btn-approve">
+                                            <i class="fas fa-check" aria-hidden="true"></i> Aprovar
+                                        </button>
+                                    </form>
+                                    <form method="post" onsubmit="return confirm('Rejeitar e remover a solicitação de <?= htmlspecialchars(addslashes($pu['username'])) ?>?');">
+                                        <input type="hidden" name="user_id" value="<?= (int) $pu['id'] ?>">
+                                        <button type="submit" name="reject_user" class="pending-btn-reject">
+                                            <i class="fas fa-xmark" aria-hidden="true"></i> Rejeitar
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
+                    <?php endif; ?>
+
                     <!-- Aba: Adicionar Pesquisador Individual -->
-                    <div class="tab-pane fade show active" id="researcher" role="tabpanel">
+                    <div class="tab-pane fade<?= $pendingCount === 0 || !$souAdmin ? ' show active' : '' ?>" id="researcher" role="tabpanel">
                         <?php if ($import_result): ?>
                             <div class="adm-success mb-4">
                                 <h4><i class="fas fa-check-circle me-2" aria-hidden="true"></i>Importação Concluída!</h4>

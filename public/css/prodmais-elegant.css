@@ -473,6 +473,25 @@ body {
     color: #111827;
 }
 
+.nav-pending-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 .3rem;
+    background: #ef4444;
+    color: #fff;
+    font-size: .65rem;
+    font-weight: 800;
+    border-radius: 100px;
+    line-height: 1;
+}
+
+.nav-pending-badge--inline {
+    margin-left: .5rem;
+}
+
 .nav-user-caret {
     font-size: 0.6875rem;
     color: var(--gray-400);
