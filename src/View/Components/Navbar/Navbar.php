@@ -115,6 +115,55 @@ class Navbar extends Component {
                 </div>
             </div>
         </nav>
+
+        <?php if (!empty($_SESSION['flash_welcome'])): ?>
+        <div id="welcomeToast" class="welcome-toast" role="status" aria-live="polite">
+            <div class="welcome-toast-icon"><i class="fas fa-circle-check" aria-hidden="true"></i></div>
+            <div class="welcome-toast-body">
+                <strong>Bem-vindo de volta, <?php echo htmlspecialchars($_SESSION['flash_welcome']); ?>!</strong>
+                <span>Login realizado com sucesso.</span>
+            </div>
+            <button type="button" class="welcome-toast-close" onclick="document.getElementById('welcomeToast').remove()" aria-label="Fechar aviso">
+                <i class="fas fa-xmark" aria-hidden="true"></i>
+            </button>
+        </div>
+        <style>
+            .welcome-toast {
+                position: fixed;
+                top: 84px;
+                right: 1.25rem;
+                z-index: 1080;
+                display: flex;
+                align-items: flex-start;
+                gap: .75rem;
+                background: #fff;
+                border: 1px solid var(--gray-200, #e5e7eb);
+                border-radius: 14px;
+                box-shadow: 0 12px 32px rgba(0,0,0,.14);
+                padding: 1rem 1.1rem;
+                max-width: 340px;
+                animation: welcomeToastIn .35s ease both, welcomeToastOut .4s ease 4.6s both;
+            }
+            .welcome-toast-icon { color: #059669; font-size: 1.35rem; flex-shrink: 0; margin-top: .1rem; }
+            .welcome-toast-body { display: flex; flex-direction: column; gap: .15rem; font-size: .875rem; color: #0f172a; }
+            .welcome-toast-body strong { font-size: .9375rem; }
+            .welcome-toast-body span { color: #64748b; }
+            .welcome-toast-close { background: none; border: none; color: #94a3b8; cursor: pointer; padding: .1rem; margin-left: auto; flex-shrink: 0; }
+            .welcome-toast-close:hover { color: #475569; }
+            @keyframes welcomeToastIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+            @keyframes welcomeToastOut { to { opacity: 0; transform: translateY(-10px); } }
+            @media (max-width: 480px) {
+                .welcome-toast { left: 1rem; right: 1rem; max-width: none; top: 76px; }
+            }
+        </style>
+        <script>
+            setTimeout(function () {
+                var toast = document.getElementById('welcomeToast');
+                if (toast) toast.remove();
+            }, 5000);
+        </script>
+        <?php unset($_SESSION['flash_welcome']); ?>
+        <?php endif; ?>
         <?php
     }
 }

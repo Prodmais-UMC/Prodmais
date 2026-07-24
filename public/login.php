@@ -39,6 +39,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $result  = $auth->login($username, $password);
 
         if ($result['sucesso']) {
+            $primeiroNome = explode(' ', trim($_SESSION['nome_completo'] ?? $username))[0];
+            $_SESSION['flash_welcome'] = $primeiroNome;
+
             $destino = in_array($_SESSION['papel'] ?? '', ['admin', 'pesquisador']) ? '/admin.php' : '/dashboard.php';
             header('Location: ' . $destino);
             exit;
