@@ -111,6 +111,61 @@ if ($souAdmin) {
 }
 $pendingCount = count($pendingUsers);
 
+// ── Gerenciamento de todos os usuários (somente admin) ──
+$manageMsg = null;
+$meuId = (int) ($_SESSION['user_id'] ?? 0);
+
+if ($souAdmin && (isset($_POST['update_role']) || isset($_POST['delete_account']))) {
+    $alvoId = filter_input(INPUT_POST, 'account_id', FILTER_VALIDATE_INT);
+
+    if ($alvoId === $meuId) {
+        $manageMsg = 'Você não pode alterar o papel nem excluir a própria conta por aqui.';
+    } elseif ($alvoId) {
+        try {
+            $pdoUsers = $pdoUsers ?? criarConexaoMysql();
+            $stmt = $pdoUsers->prepare("SELECT username, email, papel FROM usuarios_admin WHERE id = ?");
+            $stmt->execute([$alvoId]);
+            $alvo = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$alvo) {
+                $manageMsg = 'Usuário não encontrado (talvez já tenha sido removido).';
+            } elseif (isset($_POST['update_role'])) {
+                $novoPapel = filter_input(INPUT_POST, 'novo_papel', FILTER_SANITIZE_SPECIAL_CHARS);
+                if (in_array($novoPapel, ['admin', 'pesquisador', 'visualizador'], true)) {
+                    $stmt = $pdoUsers->prepare("UPDATE usuarios_admin SET papel = ? WHERE id = ?");
+                    $stmt->execute([$novoPapel, $alvoId]);
+                    $log->log($_SESSION['user'], "Alterou papel de {$alvo['username']}: {$alvo['papel']} -> {$novoPapel}");
+                    $manageMsg = "Papel de {$alvo['username']} alterado para {$novoPapel}.";
+                } else {
+                    $manageMsg = 'Papel inválido.';
+                }
+            } else {
+                $stmt = $pdoUsers->prepare("DELETE FROM usuarios_admin WHERE id = ?");
+                $stmt->execute([$alvoId]);
+                $log->log($_SESSION['user'], "Excluiu a conta de {$alvo['username']} ({$alvo['email']})");
+                $manageMsg = "Conta de {$alvo['username']} excluída.";
+            }
+        } catch (\Exception $e) {
+            error_log('Erro ao gerenciar usuário: ' . $e->getMessage());
+            $manageMsg = 'Erro ao processar a solicitação. Tente novamente.';
+        }
+    }
+}
+
+$allUsers = [];
+if ($souAdmin) {
+    try {
+        $pdoUsers = $pdoUsers ?? criarConexaoMysql();
+        $stmt = $pdoUsers->query(
+            "SELECT id, username, email, nome_completo, papel, status, criado_em, ultimo_login
+             FROM usuarios_admin ORDER BY nome_completo ASC"
+        );
+        $allUsers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (\Exception $e) {
+        error_log('Erro ao listar usuários: ' . $e->getMessage());
+    }
+}
+
 $import_result = null;
 
 // Processar upload de pesquisador específico - VERSÃO MELHORADA COM PPGs
@@ -550,6 +605,7 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
                 <?php if (!empty($msg)) echo "<div class='alert alert-success'><i class='bi bi-check-circle'></i> $msg</div>"; ?>
                 <?php if (!empty($msg_error)) echo "<div class='alert alert-danger'><i class='bi bi-exclamation-triangle'></i> $msg_error</div>"; ?>
                 <?php if (!empty($pendingMsg)) echo "<div class='alert alert-success'><i class='bi bi-check-circle'></i> " . htmlspecialchars($pendingMsg) . "</div>"; ?>
+                <?php if (!empty($manageMsg)) echo "<div class='alert alert-success'><i class='bi bi-check-circle'></i> " . htmlspecialchars($manageMsg) . "</div>"; ?>
 
                 <!-- Navegação por abas -->
                 <div class="adm-tabs" id="adminTabs" role="tablist">
@@ -557,6 +613,9 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
                     <button class="adm-tab-btn<?= $pendingCount > 0 ? ' active' : '' ?>" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending" type="button" role="tab">
                         <i class="fas fa-user-clock" aria-hidden="true"></i> Usuários Pendentes
                         <?php if ($pendingCount > 0): ?><span class="adm-tab-badge"><?= $pendingCount ?></span><?php endif; ?>
+                    </button>
+                    <button class="adm-tab-btn" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button" role="tab">
+                        <i class="fas fa-users-gear" aria-hidden="true"></i> Gerenciar Usuários
                     </button>
                     <?php endif; ?>
                     <button class="adm-tab-btn<?= $pendingCount === 0 || !$souAdmin ? ' active' : '' ?>" id="researcher-tab" data-bs-toggle="tab" data-bs-target="#researcher" type="button" role="tab">
@@ -607,6 +666,64 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
                                             <i class="fas fa-xmark" aria-hidden="true"></i> Rejeitar
                                         </button>
                                     </form>
+                                </div>
+                            </div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </div>
+
+                    <!-- Aba: Gerenciar Usuários -->
+                    <div class="tab-pane fade" id="users" role="tabpanel">
+                        <?php if (empty($allUsers)): ?>
+                            <div class="pending-empty">
+                                <i class="fas fa-users-slash" style="font-size:2.5rem;opacity:.3;margin-bottom:1rem;display:block;"></i>
+                                Nenhum usuário cadastrado ainda.
+                            </div>
+                        <?php else: ?>
+                            <?php foreach ($allUsers as $au):
+                                $statusBadgeCls = 'adm-badge-error';
+                                if ($au['status'] === 'ativo') {
+                                    $statusBadgeCls = 'adm-badge-info';
+                                } elseif ($au['status'] === 'pendente') {
+                                    $statusBadgeCls = 'adm-badge-warning';
+                                }
+                            ?>
+                            <div class="pending-card">
+                                <div class="pending-card-info">
+                                    <span class="pending-card-name">
+                                        <?= htmlspecialchars($au['nome_completo'] ?: $au['username']) ?>
+                                        <?php if ((int) $au['id'] === $meuId): ?><span class="adm-badge adm-badge-info" style="margin-left:.5rem;">Você</span><?php endif; ?>
+                                        <span class="adm-badge <?= $statusBadgeCls ?>" style="margin-left:.4rem;"><?= htmlspecialchars($au['status']) ?></span>
+                                    </span>
+                                    <span class="pending-card-meta">
+                                        <i class="fas fa-at" aria-hidden="true"></i> <?= htmlspecialchars($au['username']) ?>
+                                        &nbsp;·&nbsp; <?= htmlspecialchars($au['email']) ?>
+                                        &nbsp;·&nbsp; cadastrado em <?= date('d/m/Y', strtotime($au['criado_em'])) ?>
+                                        <?php if (!empty($au['ultimo_login'])): ?>&nbsp;·&nbsp; último login <?= date('d/m/Y H:i', strtotime($au['ultimo_login'])) ?><?php endif; ?>
+                                    </span>
+                                </div>
+                                <div class="pending-card-actions">
+                                    <?php if ((int) $au['id'] === $meuId): ?>
+                                        <span class="pending-card-meta" style="align-self:center;">Gerencie sua própria conta em "Alterar senha"</span>
+                                    <?php else: ?>
+                                    <form method="post" style="display:flex;gap:.5rem;align-items:center;flex:1;">
+                                        <input type="hidden" name="account_id" value="<?= (int) $au['id'] ?>">
+                                        <select name="novo_papel" class="adm-form-select" style="flex:1;">
+                                            <option value="admin" <?= $au['papel'] === 'admin' ? 'selected' : '' ?>>Admin</option>
+                                            <option value="pesquisador" <?= $au['papel'] === 'pesquisador' ? 'selected' : '' ?>>Pesquisador</option>
+                                            <option value="visualizador" <?= $au['papel'] === 'visualizador' ? 'selected' : '' ?>>Visualizador</option>
+                                        </select>
+                                        <button type="submit" name="update_role" class="pending-btn-approve" style="width:auto;white-space:nowrap;">
+                                            <i class="fas fa-save" aria-hidden="true"></i> Salvar
+                                        </button>
+                                    </form>
+                                    <form method="post" onsubmit="return confirm('Excluir permanentemente a conta de <?= htmlspecialchars(addslashes($au['username'])) ?>?');">
+                                        <input type="hidden" name="account_id" value="<?= (int) $au['id'] ?>">
+                                        <button type="submit" name="delete_account" class="pending-btn-reject">
+                                            <i class="fas fa-trash" aria-hidden="true"></i> Excluir
+                                        </button>
+                                    </form>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                             <?php endforeach; ?>
