@@ -252,6 +252,7 @@ Navbar::display([
 .dash-hero-stat + .dash-hero-stat { border-left: 1px solid rgba(255,255,255,.1); }
 .dash-hero-stat-num { font-size: 1.75rem; font-weight: 900; color: #f1f5f9; line-height: 1; letter-spacing: -1px; margin-bottom: .2rem; }
 .dash-hero-stat-lbl { font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: rgba(241,245,249,.4); }
+@media (max-width: 767px) { .dash-hero-stats { display: none; } }
 
 /* ── Chart cards ── */
 .dash-chart-card {

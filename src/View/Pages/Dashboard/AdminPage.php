@@ -1303,8 +1303,69 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
             const processingBtn = document.getElementById('processingBtn');
             if (submitBtn) submitBtn.style.display = 'none';
             if (processingBtn) processingBtn.style.display = 'block';
-        });
+    });
     }
+
+    // ── Mobile drawer ──
+    (function () {
+        const toggle  = document.getElementById('sidebarToggle');
+        const overlay = document.getElementById('drawerOverlay');
+        const drawer  = document.getElementById('mobileDrawer');
+        const icon    = document.getElementById('sidebarToggleIcon');
+        if (!toggle || !overlay || !drawer) return;
+
+        function openDrawer() {
+            drawer.classList.add('open');
+            overlay.classList.add('open');
+            toggle.setAttribute('aria-expanded', 'true');
+            if (icon) { icon.classList.replace('fa-bars', 'fa-times'); }
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDrawer() {
+            drawer.classList.remove('open');
+            overlay.classList.remove('open');
+            toggle.setAttribute('aria-expanded', 'false');
+            if (icon) { icon.classList.replace('fa-times', 'fa-bars'); }
+            document.body.style.overflow = '';
+        }
+
+        toggle.addEventListener('click', function () {
+            drawer.classList.contains('open') ? closeDrawer() : openDrawer();
+        });
+
+        overlay.addEventListener('click', closeDrawer);
+
+        // Botões dentro do drawer disparam a aba correspondente no desktop e fecham
+        drawer.querySelectorAll('[data-bs-target]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                const targetId = btn.getAttribute('data-bs-target'); // e.g. "#pending"
+                const desktopBtn = document.querySelector('#adminTabs [data-bs-target="' + targetId + '"]');
+                if (desktopBtn) {
+                    // Ativa via Bootstrap Tab API
+                    const bsTab = bootstrap.Tab.getOrCreateInstance(desktopBtn);
+                    bsTab.show();
+                    // Sincroniza classe active no drawer
+                    drawer.querySelectorAll('.adm-tab-btn').forEach(function (b) { b.classList.remove('active'); });
+                    btn.classList.add('active');
+                }
+                closeDrawer();
+                // Rola suavemente pro início do conteúdo
+                const main = document.querySelector('.adm-main');
+                if (main) main.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+
+        // Sincroniza estado active do drawer quando o Bootstrap Tab muda (pelo sidebar desktop)
+        document.querySelectorAll('#adminTabs [data-bs-toggle="tab"]').forEach(function (desktopBtn) {
+            desktopBtn.addEventListener('shown.bs.tab', function () {
+                const target = desktopBtn.getAttribute('data-bs-target');
+                drawer.querySelectorAll('.adm-tab-btn').forEach(function (b) {
+                    b.classList.toggle('active', b.getAttribute('data-bs-target') === target);
+                });
+            });
+        });
+    }());
     </script>
 </body>
 
