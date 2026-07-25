@@ -256,35 +256,113 @@ $ppgs = getAllPPGs();
         background-image: radial-gradient(rgba(255,255,255,.05) 1px, transparent 1px);
         background-size: 28px 28px; pointer-events: none;
     }
-    /* ── Tabs ── */
-    .adm-tabs {
-        display: flex; gap: .375rem;
-        background: white; border: 1px solid rgba(0,0,0,.08);
-        border-radius: 16px; padding: .625rem;
-        box-shadow: 0 2px 12px rgba(0,0,0,.06);
-        margin-bottom: 2rem;
-        flex-wrap: wrap;
+    /* ══ Sidebar Layout ══ */
+    .adm-layout {
+        display: flex;
+        gap: 0;
+        align-items: flex-start;
+        position: relative;
     }
+
+    /* ── Sidebar ── */
+    .adm-sidebar {
+        width: 260px;
+        flex-shrink: 0;
+        background: white;
+        border-radius: 20px;
+        border: 1px solid rgba(0,0,0,.08);
+        box-shadow: 0 4px 20px rgba(0,0,0,.07);
+        overflow: hidden;
+        position: sticky;
+        top: 80px;
+    }
+    .adm-sidebar-header {
+        background: linear-gradient(135deg,#4f46e5,#6366f1);
+        padding: 1.25rem 1.5rem;
+        display: flex; align-items: center; gap: .625rem;
+    }
+    .adm-sidebar-header span {
+        color: white; font-weight: 700; font-size: .875rem; letter-spacing: .02em;
+    }
+    .adm-sidebar-header i { color: rgba(255,255,255,.75); font-size: .9rem; }
+    .adm-sidebar-nav { padding: .625rem; }
     .adm-tab-btn {
-        flex: 1; min-width: 140px;
-        display: flex; align-items: center; justify-content: center; gap: .5rem;
-        border: none; background: transparent; border-radius: 10px;
-        padding: .75rem 1.25rem; font-size: .875rem; font-weight: 600; color: #64748b;
-        cursor: pointer; transition: all .2s ease; white-space: nowrap;
-        font-family: 'Inter', sans-serif;
+        display: flex; align-items: center; gap: .75rem; width: 100%;
+        border: none; background: transparent; border-radius: 12px;
+        padding: .8rem 1rem; font-size: .875rem; font-weight: 600; color: #64748b;
+        cursor: pointer; transition: all .2s ease; text-align: left;
+        font-family: 'Inter', sans-serif; margin-bottom: .25rem;
     }
+    .adm-tab-btn i { width: 18px; text-align: center; flex-shrink: 0; }
     .adm-tab-btn:hover { background: #f1f5f9; color: #4f46e5; }
     .adm-tab-btn.active {
         background: linear-gradient(135deg,#4f46e5,#6366f1); color: white;
         box-shadow: 0 4px 14px rgba(79,70,229,.3);
     }
+    .adm-tab-label { flex: 1; }
     .adm-tab-badge {
         display: inline-flex; align-items: center; justify-content: center;
         min-width: 20px; height: 20px; padding: 0 .375rem;
         background: #ef4444; color: white; font-size: .7rem; font-weight: 800;
-        border-radius: 100px; line-height: 1;
+        border-radius: 100px; line-height: 1; flex-shrink: 0;
     }
-    .adm-tab-btn.active .adm-tab-badge { background: rgba(255,255,255,.25); }
+    .adm-tab-btn.active .adm-tab-badge { background: rgba(255,255,255,.3); }
+    .adm-sidebar-divider {
+        height: 1px; background: rgba(0,0,0,.07); margin: .375rem .625rem;
+    }
+
+    /* ── Main content area ── */
+    .adm-main { flex: 1; min-width: 0; }
+
+    /* ── Mobile sidebar toggle ── */
+    .adm-sidebar-toggle {
+        display: none;
+        position: fixed; bottom: 1.25rem; right: 1.25rem; z-index: 1050;
+        width: 52px; height: 52px; border-radius: 16px;
+        background: linear-gradient(135deg,#4f46e5,#6366f1);
+        border: none; color: white; font-size: 1.25rem;
+        box-shadow: 0 8px 24px rgba(79,70,229,.45);
+        cursor: pointer; transition: transform .2s, box-shadow .2s;
+        align-items: center; justify-content: center;
+    }
+    .adm-sidebar-toggle:hover { transform: scale(1.08); box-shadow: 0 12px 30px rgba(79,70,229,.55); }
+
+    /* ── Mobile drawer ── */
+    .adm-drawer-overlay {
+        display: none;
+        position: fixed; inset: 0; z-index: 1040;
+        background: rgba(0,0,0,.45); backdrop-filter: blur(3px);
+    }
+    .adm-drawer-overlay.open { display: block; }
+    .adm-drawer {
+        position: fixed; bottom: 0; left: 0; right: 0; z-index: 1045;
+        background: white; border-radius: 24px 24px 0 0;
+        padding: .5rem .625rem 1.5rem;
+        box-shadow: 0 -8px 40px rgba(0,0,0,.18);
+        transform: translateY(100%);
+        transition: transform .3s cubic-bezier(.32,.72,0,1);
+    }
+    .adm-drawer.open { transform: translateY(0); }
+    .adm-drawer-handle {
+        width: 40px; height: 4px; border-radius: 99px;
+        background: #cbd5e1; margin: .75rem auto 1rem;
+    }
+    .adm-drawer-title {
+        font-size: .7rem; font-weight: 700; letter-spacing: .08em;
+        text-transform: uppercase; color: #94a3b8;
+        padding: 0 .5rem .5rem;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 767px) {
+        .adm-sidebar { display: none; }
+        .adm-sidebar-toggle { display: flex; }
+        .adm-layout { display: block; }
+    }
+    @media (min-width: 768px) {
+        .adm-layout { gap: 1.75rem; }
+        .adm-drawer-overlay, .adm-drawer, .adm-sidebar-toggle { display: none !important; }
+    }
     /* ── Usuários pendentes ── */
     .pending-card {
         background: white; border-radius: 16px; border: 1px solid rgba(0,0,0,.07);
@@ -311,7 +389,7 @@ $ppgs = getAllPPGs();
     }
     /* ── Cards ── */
     .adm-card { background: white; border-radius: 20px; border: 1px solid rgba(0,0,0,.07); box-shadow: 0 2px 12px rgba(0,0,0,.06); overflow: hidden; margin-bottom: 1.5rem; }
-    .adm-card-header { background: linear-gradient(135deg,#4f46e5,#6366f1); padding: 1.25rem 1.75rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
+    .adm-card-header { background: linear-gradient(135deg,#4f46e5,#6366f1); padding: 1.25rem 1.75rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; border-radius: 0; }
     .adm-card-header h5 { margin: 0; color: white; font-weight: 700; font-size: 1rem; }
     .adm-card-body { padding: 1.75rem; }
     /* ── Info box ── */
@@ -344,12 +422,12 @@ $ppgs = getAllPPGs();
     .adm-btn-danger { background: linear-gradient(135deg,#dc2626,#ef4444); color: white !important; }
     /* ── Log table ── */
     .adm-table { width: 100%; border-collapse: collapse; }
-    .adm-table th { background: linear-gradient(135deg,#4f46e5,#6366f1); color: white; font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 1rem 1.25rem; text-align: left; }
+    .adm-table th { background: linear-gradient(135deg,#4f46e5,#6366f1); color: white; font-size: .7rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; padding: 1rem 1.25rem; text-align: left; border-radius: 0; }
     .adm-table td { padding: .9rem 1.25rem; font-size: .875rem; color: #374151; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
     .adm-table tbody tr:last-child td { border-bottom: none; }
     .adm-table tbody tr:nth-child(even) td { background: #fafafe; }
     .adm-table tbody tr:hover td { background: rgba(99,102,241,.06); }
-    .adm-table-wrap { border-radius: 16px; overflow: hidden; border: 1px solid rgba(0,0,0,.08); box-shadow: 0 2px 10px rgba(0,0,0,.04); }
+    .adm-table-wrap { border-radius: 0; overflow: hidden; border: 1px solid rgba(0,0,0,.08); box-shadow: 0 2px 10px rgba(0,0,0,.04); }
     .adm-log-user { display: inline-flex; align-items: center; gap: .4rem; font-weight: 600; color: #312e81; }
     .adm-log-user i { color: #818cf8; font-size: .8rem; }
     .adm-log-time { color: #94a3b8; font-size: .8rem; white-space: nowrap; }
@@ -600,37 +678,57 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
 
 <section class="adm-section">
     <div class="container">
-        <div class="col-md-10 offset-md-1">
-                
-                <?php if (!empty($msg)) echo "<div class='alert alert-success'><i class='bi bi-check-circle'></i> $msg</div>"; ?>
-                <?php if (!empty($msg_error)) echo "<div class='alert alert-danger'><i class='bi bi-exclamation-triangle'></i> $msg_error</div>"; ?>
-                <?php if (!empty($pendingMsg)) echo "<div class='alert alert-success'><i class='bi bi-check-circle'></i> " . htmlspecialchars($pendingMsg) . "</div>"; ?>
-                <?php if (!empty($manageMsg)) echo "<div class='alert alert-success'><i class='bi bi-check-circle'></i> " . htmlspecialchars($manageMsg) . "</div>"; ?>
 
-                <!-- Navegação por abas -->
-                <div class="adm-tabs" id="adminTabs" role="tablist">
+        <!-- ── Alertas globais ── -->
+        <?php if (!empty($msg)) echo "<div class='alert alert-success mb-3'><i class='bi bi-check-circle me-2'></i>$msg</div>"; ?>
+        <?php if (!empty($msg_error)) echo "<div class='alert alert-danger mb-3'><i class='bi bi-exclamation-triangle me-2'></i>$msg_error</div>"; ?>
+        <?php if (!empty($pendingMsg)) echo "<div class='alert alert-success mb-3'><i class='bi bi-check-circle me-2'></i>" . htmlspecialchars($pendingMsg) . "</div>"; ?>
+        <?php if (!empty($manageMsg)) echo "<div class='alert alert-success mb-3'><i class='bi bi-check-circle me-2'></i>" . htmlspecialchars($manageMsg) . "</div>"; ?>
+
+        <!-- ── Layout: sidebar + conteúdo ── -->
+        <div class="adm-layout">
+
+            <!-- ══ SIDEBAR (desktop) ══ -->
+            <aside class="adm-sidebar" aria-label="Navegação do painel">
+                <div class="adm-sidebar-header">
+                    <i class="fas fa-cog"></i>
+                    <span>Painel Admin</span>
+                </div>
+                <nav class="adm-sidebar-nav" id="adminTabs" role="tablist">
                     <?php if ($souAdmin): ?>
-                    <button class="adm-tab-btn<?= $pendingCount > 0 ? ' active' : '' ?>" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending" type="button" role="tab">
-                        <i class="fas fa-user-clock" aria-hidden="true"></i> Usuários Pendentes
+                    <button class="adm-tab-btn<?= $pendingCount > 0 ? ' active' : '' ?>" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending" type="button" role="tab" aria-controls="pending">
+                        <i class="fas fa-user-clock" aria-hidden="true"></i>
+                        <span class="adm-tab-label">Usuários Pendentes</span>
                         <?php if ($pendingCount > 0): ?><span class="adm-tab-badge"><?= $pendingCount ?></span><?php endif; ?>
                     </button>
-                    <button class="adm-tab-btn" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button" role="tab">
-                        <i class="fas fa-users-gear" aria-hidden="true"></i> Gerenciar Usuários
+                    <button class="adm-tab-btn" id="users-tab" data-bs-toggle="tab" data-bs-target="#users" type="button" role="tab" aria-controls="users">
+                        <i class="fas fa-users-gear" aria-hidden="true"></i>
+                        <span class="adm-tab-label">Gerenciar Usuários</span>
                     </button>
+                    <div class="adm-sidebar-divider"></div>
                     <?php endif; ?>
-                    <button class="adm-tab-btn<?= $pendingCount === 0 || !$souAdmin ? ' active' : '' ?>" id="researcher-tab" data-bs-toggle="tab" data-bs-target="#researcher" type="button" role="tab">
-                        <i class="fas fa-user-plus" aria-hidden="true"></i> Adicionar Pesquisador
+                    <button class="adm-tab-btn<?= $pendingCount === 0 || !$souAdmin ? ' active' : '' ?>" id="researcher-tab" data-bs-toggle="tab" data-bs-target="#researcher" type="button" role="tab" aria-controls="researcher">
+                        <i class="fas fa-user-plus" aria-hidden="true"></i>
+                        <span class="adm-tab-label">Adicionar Pesquisador</span>
                     </button>
-                    <button class="adm-tab-btn" id="bulk-tab" data-bs-toggle="tab" data-bs-target="#bulk" type="button" role="tab">
-                        <i class="fas fa-upload" aria-hidden="true"></i> Upload em Lote
+                    <button class="adm-tab-btn" id="bulk-tab" data-bs-toggle="tab" data-bs-target="#bulk" type="button" role="tab" aria-controls="bulk">
+                        <i class="fas fa-upload" aria-hidden="true"></i>
+                        <span class="adm-tab-label">Upload em Lote</span>
                     </button>
-                    <button class="adm-tab-btn" id="logs-tab" data-bs-toggle="tab" data-bs-target="#logs" type="button" role="tab">
-                        <i class="fas fa-file-alt" aria-hidden="true"></i> Logs do Sistema
+                    <div class="adm-sidebar-divider"></div>
+                    <button class="adm-tab-btn" id="logs-tab" data-bs-toggle="tab" data-bs-target="#logs" type="button" role="tab" aria-controls="logs">
+                        <i class="fas fa-file-alt" aria-hidden="true"></i>
+                        <span class="adm-tab-label">Logs do Sistema</span>
                     </button>
-                    <button class="adm-tab-btn" id="lgpd-tab" data-bs-toggle="tab" data-bs-target="#lgpd" type="button" role="tab">
-                        <i class="fas fa-shield-alt" aria-hidden="true"></i> Conformidade LGPD
+                    <button class="adm-tab-btn" id="lgpd-tab" data-bs-toggle="tab" data-bs-target="#lgpd" type="button" role="tab" aria-controls="lgpd">
+                        <i class="fas fa-shield-alt" aria-hidden="true"></i>
+                        <span class="adm-tab-label">Conformidade LGPD</span>
                     </button>
-                </div>
+                </nav>
+            </aside>
+
+            <!-- ══ CONTEÚDO ══ -->
+            <div class="adm-main">
 
                 <div class="tab-content" id="adminTabContent">
                     <?php if ($souAdmin): ?>
@@ -992,16 +1090,60 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
                     </div>
                 </div>
 
-                <div class="text-center mt-4">
+                <div class="text-center mt-4 mb-2">
                     <a href="/" class="adm-back-link">
                         <i class="fas fa-arrow-left" aria-hidden="true"></i> Voltar ao Início
                     </a>
                 </div>
                 <style>.adm-back-link{display:inline-flex;align-items:center;gap:.5rem;color:#64748b;font-size:.875rem;font-weight:600;text-decoration:none;padding:.6rem 1.25rem;border:1.5px solid rgba(0,0,0,.1);border-radius:10px;transition:all .2s}.adm-back-link:hover,.adm-back-link:focus{border-color:#6366f1;color:#4f46e5}</style>
-            </div>
-        </div>
-    </div>
+
+            </div><!-- /.adm-main -->
+        </div><!-- /.adm-layout -->
+    </div><!-- /.container -->
 </section>
+
+<!-- ══ MOBILE: botão flutuante + drawer ══ -->
+<button class="adm-sidebar-toggle" id="sidebarToggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobileDrawer">
+    <i class="fas fa-bars" id="sidebarToggleIcon"></i>
+</button>
+
+<div class="adm-drawer-overlay" id="drawerOverlay" role="presentation"></div>
+
+<div class="adm-drawer" id="mobileDrawer" role="dialog" aria-modal="true" aria-label="Menu de navegação">
+    <div class="adm-drawer-handle"></div>
+    <div class="adm-drawer-title">Navegação</div>
+    <nav id="mobileAdminNav">
+        <?php if ($souAdmin): ?>
+        <button class="adm-tab-btn<?= $pendingCount > 0 ? ' active' : '' ?>" data-bs-target="#pending" type="button">
+            <i class="fas fa-user-clock" aria-hidden="true"></i>
+            <span class="adm-tab-label">Usuários Pendentes</span>
+            <?php if ($pendingCount > 0): ?><span class="adm-tab-badge"><?= $pendingCount ?></span><?php endif; ?>
+        </button>
+        <button class="adm-tab-btn" data-bs-target="#users" type="button">
+            <i class="fas fa-users-gear" aria-hidden="true"></i>
+            <span class="adm-tab-label">Gerenciar Usuários</span>
+        </button>
+        <div class="adm-sidebar-divider"></div>
+        <?php endif; ?>
+        <button class="adm-tab-btn<?= $pendingCount === 0 || !$souAdmin ? ' active' : '' ?>" data-bs-target="#researcher" type="button">
+            <i class="fas fa-user-plus" aria-hidden="true"></i>
+            <span class="adm-tab-label">Adicionar Pesquisador</span>
+        </button>
+        <button class="adm-tab-btn" data-bs-target="#bulk" type="button">
+            <i class="fas fa-upload" aria-hidden="true"></i>
+            <span class="adm-tab-label">Upload em Lote</span>
+        </button>
+        <div class="adm-sidebar-divider"></div>
+        <button class="adm-tab-btn" data-bs-target="#logs" type="button">
+            <i class="fas fa-file-alt" aria-hidden="true"></i>
+            <span class="adm-tab-label">Logs do Sistema</span>
+        </button>
+        <button class="adm-tab-btn" data-bs-target="#lgpd" type="button">
+            <i class="fas fa-shield-alt" aria-hidden="true"></i>
+            <span class="adm-tab-label">Conformidade LGPD</span>
+        </button>
+    </nav>
+</div>
 
 <?php Footer::display(); ?>
 
