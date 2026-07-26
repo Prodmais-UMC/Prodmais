@@ -140,20 +140,6 @@ HeroSection::display([
 <section class="page-section page-section-gray">
     <div class="container">
 
-        <?php if (empty($results)): ?>
-        <div class="empty-state">
-            <div class="empty-state-icon"><i class="fas fa-search-minus" aria-hidden="true"></i></div>
-            <h3 class="empty-state-title">Nenhuma produção encontrada</h3>
-            <p class="empty-state-sub">
-                Não foram encontradas produções para <strong>"<?php echo htmlspecialchars($search_term); ?>"</strong>.<br>
-                Verifique a ortografia, tente termos mais genéricos ou use sinônimos.
-            </p>
-            <a href="/index_umc.php" class="btn-primary-ds mt-3">
-                <i class="fas fa-home me-2" aria-hidden="true"></i>Voltar ao Início
-            </a>
-        </div>
-        <?php else: ?>
-
         <!-- Mobile: FAB + overlay que abrem o painel de filtros como bottom-sheet -->
         <button type="button" class="filter-fab" id="filterFabBtn" aria-label="Abrir filtros" aria-expanded="false" aria-controls="resultFilterPanel">
             <i class="fas fa-sliders" aria-hidden="true"></i>
@@ -268,6 +254,20 @@ HeroSection::display([
 
             <!-- Coluna de Resultados -->
             <div class="col-lg-9">
+
+        <?php if (empty($results)): ?>
+        <div class="empty-state">
+            <div class="empty-state-icon"><i class="fas fa-search-minus" aria-hidden="true"></i></div>
+            <h3 class="empty-state-title">Nenhuma produção encontrada</h3>
+            <p class="empty-state-sub">
+                Não foram encontradas produções para <strong>"<?php echo htmlspecialchars($search_term); ?>"</strong>.<br>
+                Verifique a ortografia, tente termos mais genéricos, use sinônimos ou ajuste os filtros ao lado.
+            </p>
+            <a href="/index_umc.php" class="btn-primary-ds mt-3">
+                <i class="fas fa-home me-2" aria-hidden="true"></i>Voltar ao Início
+            </a>
+        </div>
+        <?php else: ?>
 
         <?php foreach ($results as $index => $hit):
             $source          = $hit['_source'];
@@ -498,10 +498,10 @@ HeroSection::display([
         </nav>
         <?php endif; ?>
 
+        <?php endif; ?>
+
             </div><!-- fecha col-lg-9 -->
         </div><!-- fecha row -->
-
-        <?php endif; ?>
     </div>
 </section>
 
