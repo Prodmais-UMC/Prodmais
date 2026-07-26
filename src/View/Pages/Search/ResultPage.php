@@ -154,10 +154,17 @@ HeroSection::display([
         </div>
         <?php else: ?>
 
+        <!-- Mobile: FAB + overlay que abrem o painel de filtros como bottom-sheet -->
+        <button type="button" class="filter-fab" id="filterFabBtn" aria-label="Abrir filtros" aria-expanded="false" aria-controls="resultFilterPanel">
+            <i class="fas fa-filter" aria-hidden="true"></i>
+        </button>
+        <div class="filter-drawer-overlay" id="filterDrawerOverlay"></div>
+
         <div class="row">
             <!-- Sidebar de Filtros -->
             <div class="col-lg-3 mb-4">
-                <div class="filter-panel">
+                <div class="filter-panel" id="resultFilterPanel">
+                    <span class="filter-drawer-handle" aria-hidden="true"></span>
                     <h5 class="filter-panel-title">
                         <i class="fas fa-filter" aria-hidden="true"></i> Filtros
                     </h5>
@@ -501,5 +508,32 @@ HeroSection::display([
 <?php Footer::display(); ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+(function () {
+    var fab     = document.getElementById('filterFabBtn');
+    var overlay = document.getElementById('filterDrawerOverlay');
+    var panel   = document.getElementById('resultFilterPanel');
+    if (!fab || !overlay || !panel) return;
+
+    function openPanel() {
+        panel.classList.add('open');
+        overlay.classList.add('open');
+        fab.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closePanel() {
+        panel.classList.remove('open');
+        overlay.classList.remove('open');
+        fab.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+    }
+
+    fab.addEventListener('click', function () {
+        panel.classList.contains('open') ? closePanel() : openPanel();
+    });
+    overlay.addEventListener('click', closePanel);
+})();
+</script>
 </body>
 </html>

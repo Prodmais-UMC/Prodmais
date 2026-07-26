@@ -369,7 +369,10 @@ $ppgs = getAllPPGs();
         box-shadow: 0 2px 10px rgba(0,0,0,.05); padding: 1.25rem;
         display: flex; flex-direction: column; gap: .875rem; margin-bottom: 1rem;
     }
-    .pending-card-info { display: flex; flex-direction: column; gap: .2rem; }
+    .pending-card-top { display: flex; align-items: center; gap: .75rem; flex: 1; min-width: 0; }
+    .pending-card-avatar { display: none; flex-shrink: 0; }
+    .pending-mobile-badge { display: none; }
+    .pending-card-info { display: flex; flex-direction: column; gap: .2rem; min-width: 0; }
     .pending-card-name { font-weight: 700; color: #0f172a; font-size: .95rem; }
     .pending-card-meta { font-size: .8125rem; color: #64748b; }
     .pending-card-actions { display: flex; gap: .625rem; }
@@ -386,6 +389,45 @@ $ppgs = getAllPPGs();
         .pending-card { flex-direction: row; align-items: center; justify-content: space-between; }
         .pending-card-actions { flex-shrink: 0; width: auto; }
         .pending-btn-approve, .pending-btn-reject { width: auto; }
+    }
+    /* ── Redesign mobile: avatar com iniciais + badges mais legíveis ── */
+    @media (max-width: 767px) {
+        .pending-card {
+            padding: 1rem 1.1rem;
+            border-radius: 18px;
+            gap: .75rem;
+        }
+        .pending-card-avatar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 12px;
+            background: linear-gradient(135deg,#4f46e5,#6366f1);
+            color: white;
+            font-weight: 700;
+            font-size: .9rem;
+            box-shadow: 0 4px 10px rgba(79,70,229,.25);
+        }
+        .pending-card-name {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: .35rem;
+            font-size: .9rem;
+        }
+        .pending-card-meta {
+            display: block;
+            line-height: 1.5;
+        }
+        .adm-badge {
+            font-size: .625rem;
+            padding: .18rem .55rem;
+        }
+        .pending-mobile-badge {
+            display: inline-flex;
+        }
     }
     /* ── Cards ── */
     .adm-card { background: white; border-radius: 20px; border: 1px solid rgba(0,0,0,.07); box-shadow: 0 2px 12px rgba(0,0,0,.06); overflow: hidden; margin-bottom: 1.5rem; }
@@ -433,6 +475,7 @@ $ppgs = getAllPPGs();
     .adm-log-time { color: #94a3b8; font-size: .8rem; white-space: nowrap; }
     .adm-badge { display: inline-flex; align-items: center; padding: .2rem .65rem; border-radius: 100px; font-size: .68rem; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; }
     .adm-badge-info    { background: rgba(59,130,246,.12); color: #1d4ed8; }
+    .adm-badge-success { background: rgba(16,185,129,.12); color: #059669; }
     .adm-badge-warning { background: rgba(245,158,11,.12); color: #b45309; }
     .adm-badge-error   { background: rgba(239,68,68,.12);  color: #b91c1c; }
     /* ── Alert info ── */
@@ -740,16 +783,25 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
                                 Nenhuma solicitação de cadastro pendente no momento.
                             </div>
                         <?php else: ?>
-                            <?php foreach ($pendingUsers as $pu): ?>
+                            <?php foreach ($pendingUsers as $pu):
+                                $puNome    = $pu['nome_completo'] ?: $pu['username'];
+                                $puInicial = mb_strtoupper(mb_substr(trim($puNome), 0, 1));
+                            ?>
                             <div class="pending-card">
-                                <div class="pending-card-info">
-                                    <span class="pending-card-name"><?= htmlspecialchars($pu['nome_completo'] ?: $pu['username']) ?></span>
-                                    <span class="pending-card-meta">
-                                        <i class="fas fa-at" aria-hidden="true"></i> <?= htmlspecialchars($pu['username']) ?>
-                                        &nbsp;·&nbsp; <?= htmlspecialchars($pu['email']) ?>
-                                        &nbsp;·&nbsp; solicitou <strong><?= htmlspecialchars($pu['papel']) ?></strong>
-                                        &nbsp;·&nbsp; <?= date('d/m/Y', strtotime($pu['criado_em'])) ?>
-                                    </span>
+                                <div class="pending-card-top">
+                                    <span class="pending-card-avatar" aria-hidden="true"><?= htmlspecialchars($puInicial) ?></span>
+                                    <div class="pending-card-info">
+                                        <span class="pending-card-name">
+                                            <?= htmlspecialchars($puNome) ?>
+                                            <span class="adm-badge adm-badge-warning pending-mobile-badge">Pendente</span>
+                                        </span>
+                                        <span class="pending-card-meta">
+                                            <i class="fas fa-at" aria-hidden="true"></i> <?= htmlspecialchars($pu['username']) ?>
+                                            &nbsp;·&nbsp; <?= htmlspecialchars($pu['email']) ?>
+                                            &nbsp;·&nbsp; solicitou <strong><?= htmlspecialchars($pu['papel']) ?></strong>
+                                            &nbsp;·&nbsp; <?= date('d/m/Y', strtotime($pu['criado_em'])) ?>
+                                        </span>
+                                    </div>
                                 </div>
                                 <div class="pending-card-actions">
                                     <form method="post">
@@ -781,24 +833,29 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
                             <?php foreach ($allUsers as $au):
                                 $statusBadgeCls = 'adm-badge-error';
                                 if ($au['status'] === 'ativo') {
-                                    $statusBadgeCls = 'adm-badge-info';
+                                    $statusBadgeCls = 'adm-badge-success';
                                 } elseif ($au['status'] === 'pendente') {
                                     $statusBadgeCls = 'adm-badge-warning';
                                 }
+                                $auNome    = $au['nome_completo'] ?: $au['username'];
+                                $auInicial = mb_strtoupper(mb_substr(trim($auNome), 0, 1));
                             ?>
                             <div class="pending-card">
-                                <div class="pending-card-info">
-                                    <span class="pending-card-name">
-                                        <?= htmlspecialchars($au['nome_completo'] ?: $au['username']) ?>
-                                        <?php if ((int) $au['id'] === $meuId): ?><span class="adm-badge adm-badge-info" style="margin-left:.5rem;">Você</span><?php endif; ?>
-                                        <span class="adm-badge <?= $statusBadgeCls ?>" style="margin-left:.4rem;"><?= htmlspecialchars($au['status']) ?></span>
-                                    </span>
-                                    <span class="pending-card-meta">
-                                        <i class="fas fa-at" aria-hidden="true"></i> <?= htmlspecialchars($au['username']) ?>
-                                        &nbsp;·&nbsp; <?= htmlspecialchars($au['email']) ?>
-                                        &nbsp;·&nbsp; cadastrado em <?= date('d/m/Y', strtotime($au['criado_em'])) ?>
-                                        <?php if (!empty($au['ultimo_login'])): ?>&nbsp;·&nbsp; último login <?= date('d/m/Y H:i', strtotime($au['ultimo_login'])) ?><?php endif; ?>
-                                    </span>
+                                <div class="pending-card-top">
+                                    <span class="pending-card-avatar" aria-hidden="true"><?= htmlspecialchars($auInicial) ?></span>
+                                    <div class="pending-card-info">
+                                        <span class="pending-card-name">
+                                            <?= htmlspecialchars($auNome) ?>
+                                            <?php if ((int) $au['id'] === $meuId): ?><span class="adm-badge adm-badge-info" style="margin-left:.5rem;">Você</span><?php endif; ?>
+                                            <span class="adm-badge <?= $statusBadgeCls ?>" style="margin-left:.4rem;"><?= htmlspecialchars($au['status']) ?></span>
+                                        </span>
+                                        <span class="pending-card-meta">
+                                            <i class="fas fa-at" aria-hidden="true"></i> <?= htmlspecialchars($au['username']) ?>
+                                            &nbsp;·&nbsp; <?= htmlspecialchars($au['email']) ?>
+                                            &nbsp;·&nbsp; cadastrado em <?= date('d/m/Y', strtotime($au['criado_em'])) ?>
+                                            <?php if (!empty($au['ultimo_login'])): ?>&nbsp;·&nbsp; último login <?= date('d/m/Y H:i', strtotime($au['ultimo_login'])) ?><?php endif; ?>
+                                        </span>
+                                    </div>
                                 </div>
                                 <div class="pending-card-actions">
                                     <?php if ((int) $au['id'] === $meuId): ?>

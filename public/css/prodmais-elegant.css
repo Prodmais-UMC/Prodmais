@@ -536,15 +536,24 @@ body {
     .navbar-elegant .navbar-toggler { display: none !important; }
 }
 
-/* menu mobile expandido */
+/* menu mobile — off-canvas lateral (desliza da direita pra esquerda ao abrir,
+   e da esquerda pra direita ao fechar; nativo do Bootstrap Offcanvas, some
+   automaticamente em >=992px via .navbar-expand-lg .offcanvas do próprio Bootstrap) */
 @media (max-width: 991px) {
-    .navbar-elegant .navbar-collapse {
-        background: #fff;
-        border-top: 1px solid var(--gray-100);
-        padding: 0.75rem 0 1rem;
-        margin-top: 0;
-        border-radius: 0 0 12px 12px;
-        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    .navbar-elegant .offcanvas {
+        width: min(300px, 82vw);
+    }
+    .navbar-elegant .offcanvas-header {
+        border-bottom: 1px solid var(--gray-100);
+        padding: 1rem 1.25rem;
+    }
+    .navbar-elegant .offcanvas-title {
+        font-weight: 700;
+        font-size: 1rem;
+        color: var(--gray-900);
+    }
+    .navbar-elegant .offcanvas-body {
+        padding: 0.75rem 1rem 1.5rem;
     }
     .navbar-elegant .navbar-nav {
         flex-direction: column;
@@ -768,7 +777,13 @@ select {
 }
 
 .navbar-toggler:focus {
-    box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.2);
+    box-shadow: none;
+    outline: none;
+}
+
+/* Só mostra indicação de foco para navegação por teclado — não "fica marcado" ao tocar/clicar */
+.navbar-toggler:focus-visible {
+    box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.25);
 }
 
 .navbar-toggler:hover {
@@ -781,22 +796,7 @@ select {
     height: 2px;
     background: var(--gray-700);
     border-radius: 2px;
-    transition: all 0.25s ease;
-    transform-origin: center;
     margin: 5px auto;
-}
-
-.navbar-toggler[aria-expanded="true"] .navbar-toggler-bar:nth-child(1) {
-    transform: translateY(7px) rotate(45deg);
-}
-
-.navbar-toggler[aria-expanded="true"] .navbar-toggler-bar:nth-child(2) {
-    opacity: 0;
-    transform: scaleX(0);
-}
-
-.navbar-toggler[aria-expanded="true"] .navbar-toggler-bar:nth-child(3) {
-    transform: translateY(-7px) rotate(-45deg);
 }
 
 /* Tabelas responsive no mobile */
@@ -1036,6 +1036,26 @@ img[loading="lazy"].loaded {
 @media (max-width: 575px) {
     .stat-card { padding: 1.1rem; }
     .stat-card-value { font-size: 1.875rem; }
+}
+
+/* Mobile (grid 2 colunas): garante que "Ver todos" fique sempre no rodapé do
+   card, mesmo quando o card vizinho na mesma linha tem um label mais alto
+   (ex.: "Produções Científicas" quebra em 2 linhas, "Pesquisadores" não) */
+@media (max-width: 991px) {
+    .stat-card {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .stat-card-content {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+
+    .stat-card-link {
+        margin-top: auto;
+    }
 }
 
 /* ═══════════════════════════════════════════════════
@@ -1804,6 +1824,83 @@ mark.search-highlight {
 }
 
 .filter-count { margin-left: auto; font-size: 0.72rem; color: var(--gray-400); font-weight: 500; }
+
+/* ═══════════════════════════════════════════════════
+   A1.7b — FAB DE FILTROS (mobile) + BOTTOM-SHEET
+   Reaproveitado nas páginas com painel de filtros lateral (Resultados,
+   Projetos). Desktop mantém o painel como sidebar sticky; no mobile o
+   painel some da tela e só aparece como bottom-sheet ao clicar no FAB,
+   no mesmo padrão visual já usado no painel administrativo.
+═══════════════════════════════════════════════════ */
+.filter-fab {
+    display: none;
+    position: fixed;
+    bottom: 1.25rem;
+    right: 1.25rem;
+    z-index: 1050;
+    width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #4f46e5, #6366f1);
+    border: none;
+    color: white;
+    font-size: 1.25rem;
+    box-shadow: 0 8px 24px rgba(79, 70, 229, .45);
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    transition: transform .2s, box-shadow .2s;
+}
+
+.filter-fab:hover {
+    transform: scale(1.08);
+    box-shadow: 0 12px 30px rgba(79, 70, 229, .55);
+}
+
+.filter-drawer-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1040;
+    background: rgba(0, 0, 0, .45);
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+}
+
+.filter-drawer-overlay.open { display: block; }
+
+.filter-drawer-handle {
+    display: none;
+    width: 40px;
+    height: 4px;
+    border-radius: 99px;
+    background: var(--gray-300);
+    margin: 0 auto .75rem;
+}
+
+@media (max-width: 991px) {
+    .filter-fab { display: flex; }
+    .filter-drawer-handle { display: block; }
+
+    .filter-panel {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: auto;
+        z-index: 1045;
+        max-height: 85vh;
+        overflow-y: auto;
+        border-radius: 24px 24px 0 0;
+        box-shadow: 0 -8px 40px rgba(0, 0, 0, .18);
+        transform: translateY(100%);
+        transition: transform .3s cubic-bezier(.32, .72, 0, 1);
+    }
+
+    .filter-panel.open {
+        transform: translateY(0);
+    }
+}
 
 /* ═══════════════════════════════════════════════════
    A1.8 — EXPORT BAR

@@ -271,6 +271,13 @@ Navbar::display([
 .dash-chart-card h5 i { color: #1a56db; }
 .dash-chart-container { height: 280px; position: relative; }
 
+/* Mobile: reduz o padding lateral do card pra dar mais largura ao próprio
+   gráfico, já que os labels dos PPGs (eixo Y) competem por espaço horizontal */
+@media (max-width: 767px) {
+    .dash-chart-card { padding: 1.25rem 0.75rem; }
+    .dash-chart-container { height: 260px; }
+}
+
 /* ── Quick access cards ── */
 .dash-quick-card {
     display: flex; align-items: center; gap: 1rem;
@@ -592,6 +599,7 @@ if (!qualisData || qualisData.length === 0 || qualisData.every(v => v === 0)) {
 
 // Produções por PPG
 const ctxPPG = document.getElementById('chartProducoesPorPPG').getContext('2d');
+const isMobilePPG = window.matchMedia('(max-width: 767px)').matches;
 new Chart(ctxPPG, {
     type: 'bar',
     data: {
@@ -629,6 +637,18 @@ new Chart(ctxPPG, {
                 beginAtZero: true,
                 ticks: {
                     precision: 0
+                }
+            },
+            y: {
+                ticks: {
+                    font: { size: isMobilePPG ? 10 : 12 },
+                    callback: function (value) {
+                        const label = this.getLabelForValue(value);
+                        if (isMobilePPG && label.length > 16) {
+                            return label.slice(0, 14) + '…';
+                        }
+                        return label;
+                    }
                 }
             }
         }

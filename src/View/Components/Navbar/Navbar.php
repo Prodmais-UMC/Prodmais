@@ -23,7 +23,7 @@ class Navbar extends Component {
                 <!-- Toggler mobile -->
                 <button class="navbar-toggler"
                         type="button"
-                        data-bs-toggle="collapse"
+                        data-bs-toggle="offcanvas"
                         data-bs-target="#navbarNav"
                         aria-controls="navbarNav"
                         aria-expanded="false"
@@ -33,8 +33,13 @@ class Navbar extends Component {
                     <span class="navbar-toggler-bar"></span>
                 </button>
 
-                <!-- Links -->
-                <div class="collapse navbar-collapse" id="navbarNav">
+                <!-- Links (off-canvas no mobile; navbar normal a partir de lg) -->
+                <div class="offcanvas offcanvas-end navbar-collapse" tabindex="-1" id="navbarNav" aria-labelledby="navbarNavLabel">
+                    <div class="offcanvas-header d-lg-none">
+                        <h2 class="offcanvas-title" id="navbarNavLabel">Menu</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fechar menu"></button>
+                    </div>
+                    <div class="offcanvas-body d-lg-flex">
                     <ul class="navbar-nav ms-auto align-items-center">
                         <li class="nav-item">
                             <a class="nav-link-elegant <?php echo $activePage === 'home' ? 'active' : ''; ?>"
@@ -135,6 +140,7 @@ class Navbar extends Component {
                         </li>
                         <?php endif; ?>
                     </ul>
+                    </div>
                 </div>
             </div>
         </nav>

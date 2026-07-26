@@ -137,6 +137,27 @@ Navbar::display([
         overflow-y: auto;
     }
 }
+/* Mobile: painel de filtros vira bottom-sheet acionado pelo .filter-fab
+   (classes .filter-fab/.filter-drawer-overlay vêm de prodmais-elegant.css) */
+@media (max-width: 991px) {
+    .proj-filter-panel {
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        top: auto;
+        z-index: 1045;
+        max-height: 85vh;
+        overflow-y: auto;
+        border-radius: 24px 24px 0 0;
+        box-shadow: 0 -8px 40px rgba(0, 0, 0, .18);
+        transform: translateY(100%);
+        transition: transform .3s cubic-bezier(.32, .72, 0, 1);
+    }
+    .proj-filter-panel.open {
+        transform: translateY(0);
+    }
+}
 .proj-filter-title {
     font-size: 0.8rem;
     font-weight: 700;
@@ -248,11 +269,18 @@ Navbar::display([
 <!-- Projetos Section -->
 <section class="proj-section">
     <div class="container">
+        <!-- Mobile: FAB + overlay que abrem o painel de filtros como bottom-sheet -->
+        <button type="button" class="filter-fab" id="filterFabBtn" aria-label="Abrir filtros" aria-expanded="false" aria-controls="projFilterPanel">
+            <i class="fas fa-filter" aria-hidden="true"></i>
+        </button>
+        <div class="filter-drawer-overlay" id="filterDrawerOverlay"></div>
+
         <div class="row g-4">
             <!-- Sidebar de Filtros -->
             <div class="col-lg-3">
-                <div class="proj-filter-panel">
+                <div class="proj-filter-panel" id="projFilterPanel">
                     <div class="proj-filter-body">
+                        <span class="filter-drawer-handle" aria-hidden="true"></span>
                         <p class="proj-filter-title">
                             <i class="fas fa-filter" aria-hidden="true"></i>
                             Filtros
@@ -498,5 +526,32 @@ Navbar::display([
 <?php Footer::display(); ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+(function () {
+    var fab     = document.getElementById('filterFabBtn');
+    var overlay = document.getElementById('filterDrawerOverlay');
+    var panel   = document.getElementById('projFilterPanel');
+    if (!fab || !overlay || !panel) return;
+
+    function openPanel() {
+        panel.classList.add('open');
+        overlay.classList.add('open');
+        fab.setAttribute('aria-expanded', 'true');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closePanel() {
+        panel.classList.remove('open');
+        overlay.classList.remove('open');
+        fab.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+    }
+
+    fab.addEventListener('click', function () {
+        panel.classList.contains('open') ? closePanel() : openPanel();
+    });
+    overlay.addEventListener('click', closePanel);
+})();
+</script>
 </body>
 </html>

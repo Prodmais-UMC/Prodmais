@@ -269,6 +269,20 @@ Navbar::display([
     transition: filter .2s;
 }
 .presearch-refine-submit:hover { filter: brightness(1.1); }
+
+@media (max-width: 575px) {
+    .presearch-refine-inner {
+        flex-wrap: wrap;
+        overflow: visible;
+    }
+    .presearch-refine-inner input {
+        flex-basis: 100%;
+    }
+    .presearch-refine-submit {
+        width: calc(100% - .75rem);
+        justify-content: center;
+    }
+}
 </style>
 
 <section class="presearch-hero">
