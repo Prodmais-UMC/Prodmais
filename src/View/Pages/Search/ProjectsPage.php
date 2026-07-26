@@ -149,6 +149,7 @@ Navbar::display([
         z-index: 1045;
         max-height: 85vh;
         overflow-y: auto;
+        overscroll-behavior: contain;
         border-radius: 24px 24px 0 0;
         box-shadow: 0 -8px 40px rgba(0, 0, 0, .18);
         transform: translateY(100%);
@@ -271,7 +272,7 @@ Navbar::display([
     <div class="container">
         <!-- Mobile: FAB + overlay que abrem o painel de filtros como bottom-sheet -->
         <button type="button" class="filter-fab" id="filterFabBtn" aria-label="Abrir filtros" aria-expanded="false" aria-controls="projFilterPanel">
-            <i class="fas fa-filter" aria-hidden="true"></i>
+            <i class="fas fa-sliders" aria-hidden="true"></i>
         </button>
         <div class="filter-drawer-overlay" id="filterDrawerOverlay"></div>
 
@@ -531,6 +532,7 @@ Navbar::display([
     var fab     = document.getElementById('filterFabBtn');
     var overlay = document.getElementById('filterDrawerOverlay');
     var panel   = document.getElementById('projFilterPanel');
+    var handle  = panel ? panel.querySelector('.filter-drawer-handle') : null;
     if (!fab || !overlay || !panel) return;
 
     var scrollY = 0;
@@ -556,6 +558,7 @@ Navbar::display([
     function openPanel() {
         panel.classList.add('open');
         overlay.classList.add('open');
+        fab.classList.add('is-hidden');
         fab.setAttribute('aria-expanded', 'true');
         lockBackgroundScroll();
     }
@@ -563,6 +566,7 @@ Navbar::display([
     function closePanel() {
         panel.classList.remove('open');
         overlay.classList.remove('open');
+        fab.classList.remove('is-hidden');
         fab.setAttribute('aria-expanded', 'false');
         unlockBackgroundScroll();
     }
@@ -571,6 +575,7 @@ Navbar::display([
         panel.classList.contains('open') ? closePanel() : openPanel();
     });
     overlay.addEventListener('click', closePanel);
+    if (handle) handle.addEventListener('click', closePanel);
 })();
 </script>
 </body>

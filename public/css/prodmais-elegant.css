@@ -541,7 +541,7 @@ body {
    automaticamente em >=992px via .navbar-expand-lg .offcanvas do próprio Bootstrap) */
 @media (max-width: 991px) {
     .navbar-elegant .offcanvas {
-        width: min(320px, 85vw);
+        width: min(260px, 75vw);
     }
     .navbar-elegant .offcanvas-header {
         border-bottom: 1px solid var(--gray-100);
@@ -568,18 +568,23 @@ body {
         border-bottom: 1px solid var(--gray-100);
     }
     .nav-link-elegant {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        width: 100%;
         padding: 1.1rem 1.5rem;
         border-radius: 0;
-        font-size: 1rem;
+        font-size: 1.0625rem;
         font-weight: 500;
         color: var(--gray-600);
+        text-align: right;
         border-bottom: none;
         top: 0;
     }
-    .nav-link-elegant i {
-        width: 1.25rem;
-        text-align: center;
-        color: var(--gray-400);
+    /* Ícones somem no drawer mobile — só texto, alinhado à direita.
+       Exceção: a setinha do acordeão de usuário é funcional, não decorativa. */
+    .navbar-elegant .offcanvas .nav-link-elegant > i:not(.nav-user-accordion-caret) {
+        display: none;
     }
     .nav-link-elegant.active {
         background: var(--gray-50);
@@ -587,14 +592,53 @@ body {
         font-weight: 700;
         border-bottom: none;
     }
-    .nav-link-elegant.active i {
-        color: var(--primary);
-    }
     .nav-cta-admin {
         margin: 1.25rem 1.5rem 0;
         justify-content: center;
     }
     .nav-divider { display: none; }
+
+    /* Acordeão do usuário (substitui o dropdown redondo, só no mobile) */
+    .nav-user-accordion-toggle {
+        background: none;
+        border: none;
+        cursor: pointer;
+        gap: 0.65rem;
+    }
+    .nav-user-accordion-name {
+        font-weight: 500;
+        max-width: 150px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        text-align: left;
+    }
+    .nav-user-accordion-caret {
+        font-size: 0.75rem;
+        color: var(--gray-400);
+        transition: transform 0.25s ease;
+    }
+    .nav-user-accordion-toggle[aria-expanded="true"] .nav-user-accordion-caret {
+        transform: rotate(180deg);
+    }
+    .nav-user-accordion-toggle[aria-expanded="true"] {
+        background: var(--gray-50);
+        color: var(--primary);
+        font-weight: 700;
+    }
+    .nav-user-accordion-panel {
+        background: var(--gray-50);
+    }
+    .nav-link-elegant--sub {
+        padding: 0.85rem 1.5rem;
+        font-size: 0.9375rem;
+        font-weight: 500;
+        color: var(--gray-500);
+        border-bottom: 1px solid var(--gray-100);
+    }
+    .nav-user-accordion-panel .nav-link-elegant--sub:last-child {
+        border-bottom: none;
+    }
 }
 
 /* ========== BADGES MODERNOS ========== */
@@ -1852,7 +1896,9 @@ mark.search-highlight {
     position: fixed;
     bottom: 1.25rem;
     right: 1.25rem;
-    z-index: 1050;
+    /* Abaixo do menu off-canvas (backdrop 1040 / painel 1045) — nunca deve
+       flutuar por cima do menu mobile quando ele estiver aberto. */
+    z-index: 1020;
     width: 52px;
     height: 52px;
     border-radius: 16px;
@@ -1864,12 +1910,19 @@ mark.search-highlight {
     cursor: pointer;
     align-items: center;
     justify-content: center;
-    transition: transform .2s, box-shadow .2s;
+    transition: transform .2s, box-shadow .2s, opacity .2s;
 }
 
 .filter-fab:hover {
     transform: scale(1.08);
     box-shadow: 0 12px 30px rgba(79, 70, 229, .55);
+}
+
+/* Escondido enquanto o próprio bottom-sheet de filtros está aberto */
+.filter-fab.is-hidden {
+    opacity: 0;
+    transform: scale(0.7);
+    pointer-events: none;
 }
 
 .filter-drawer-overlay {
@@ -1891,6 +1944,7 @@ mark.search-highlight {
     border-radius: 99px;
     background: var(--gray-300);
     margin: 0 auto .75rem;
+    cursor: pointer;
 }
 
 @media (max-width: 991px) {
@@ -1906,6 +1960,7 @@ mark.search-highlight {
         z-index: 1045;
         max-height: 85vh;
         overflow-y: auto;
+        overscroll-behavior: contain;
         border-radius: 24px 24px 0 0;
         box-shadow: 0 -8px 40px rgba(0, 0, 0, .18);
         transform: translateY(100%);

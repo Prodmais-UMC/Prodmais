@@ -34,13 +34,13 @@ class Navbar extends Component {
                 </button>
 
                 <!-- Links (off-canvas no mobile; navbar normal a partir de lg) -->
-                <div class="offcanvas offcanvas-end navbar-collapse" tabindex="-1" id="navbarNav" aria-labelledby="navbarNavLabel">
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="navbarNav" aria-labelledby="navbarNavLabel">
                     <div class="offcanvas-header d-lg-none">
                         <h2 class="offcanvas-title" id="navbarNavLabel">Menu</h2>
                         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Fechar menu"></button>
                     </div>
                     <div class="offcanvas-body d-lg-flex">
-                    <ul class="navbar-nav ms-auto align-items-center">
+                    <ul class="navbar-nav ms-auto">
                         <li class="nav-item">
                             <a class="nav-link-elegant <?php echo $activePage === 'home' ? 'active' : ''; ?>"
                                href="/index_umc.php"
@@ -82,31 +82,32 @@ class Navbar extends Component {
                             <span class="nav-divider" aria-hidden="true"></span>
                         </li>
                         <?php if (!empty($_SESSION['user_id'])): ?>
-                        <li class="nav-item dropdown">
-                            <?php
-                            $nome_completo = $_SESSION['nome_completo'] ?? $_SESSION['username'] ?? 'Usuário';
-                            $papel         = $_SESSION['papel'] ?? '';
-                            $painel_href   = in_array($papel, ['admin', 'pesquisador']) ? '/admin.php' : '/dashboard.php';
+                        <?php
+                        $nome_completo = $_SESSION['nome_completo'] ?? $_SESSION['username'] ?? 'Usuário';
+                        $papel         = $_SESSION['papel'] ?? '';
+                        $painel_href   = in_array($papel, ['admin', 'pesquisador']) ? '/admin.php' : '/dashboard.php';
 
-                            $partes    = preg_split('/\s+/', trim($nome_completo));
-                            $iniciais  = mb_strtoupper(mb_substr($partes[0], 0, 1));
-                            if (count($partes) > 1) {
-                                $iniciais .= mb_strtoupper(mb_substr(end($partes), 0, 1));
-                            }
+                        $partes    = preg_split('/\s+/', trim($nome_completo));
+                        $iniciais  = mb_strtoupper(mb_substr($partes[0], 0, 1));
+                        if (count($partes) > 1) {
+                            $iniciais .= mb_strtoupper(mb_substr(end($partes), 0, 1));
+                        }
 
-                            // Contador de cadastros pendentes — só pra admin, só bate no
-                            // banco se o papel for admin (evita custo pra todo mundo).
-                            $pendingCountNav = 0;
-                            if ($papel === 'admin') {
-                                try {
-                                    require_once __DIR__ . '/../../../Infrastructure/Database/MysqlConnectionFactory.php';
-                                    $pdoNav = criarConexaoMysql();
-                                    $pendingCountNav = (int) $pdoNav->query("SELECT COUNT(*) FROM usuarios_admin WHERE status = 'pendente'")->fetchColumn();
-                                } catch (\Throwable $e) {
-                                    // Silencioso — não deve quebrar a navbar em nenhuma página
-                                }
+                        // Contador de cadastros pendentes — só pra admin, só bate no
+                        // banco se o papel for admin (evita custo pra todo mundo).
+                        $pendingCountNav = 0;
+                        if ($papel === 'admin') {
+                            try {
+                                require_once __DIR__ . '/../../../Infrastructure/Database/MysqlConnectionFactory.php';
+                                $pdoNav = criarConexaoMysql();
+                                $pendingCountNav = (int) $pdoNav->query("SELECT COUNT(*) FROM usuarios_admin WHERE status = 'pendente'")->fetchColumn();
+                            } catch (\Throwable $e) {
+                                // Silencioso — não deve quebrar a navbar em nenhuma página
                             }
-                            ?>
+                        }
+                        ?>
+                        <!-- Desktop: avatar redondo + dropdown (inalterado) -->
+                        <li class="nav-item dropdown d-none d-lg-flex align-items-center">
                             <a class="nav-user-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <span class="nav-user-avatar"><?php echo htmlspecialchars($iniciais); ?></span>
                                 <span class="nav-user-greeting">Bem-vindo!</span>
@@ -131,6 +132,32 @@ class Navbar extends Component {
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item text-danger" href="/logout.php"><i class="fas fa-arrow-right-from-bracket me-2" aria-hidden="true"></i>Sair</a></li>
                             </ul>
+                        </li>
+
+                        <!-- Mobile: acordeão em vez de dropdown -->
+                        <li class="nav-item d-lg-none nav-user-accordion">
+                            <button type="button" class="nav-link-elegant nav-user-accordion-toggle"
+                                    data-bs-toggle="collapse" data-bs-target="#navUserAccordion"
+                                    aria-expanded="false" aria-controls="navUserAccordion">
+                                <?php if ($pendingCountNav > 0): ?>
+                                <span class="nav-pending-badge" title="<?php echo $pendingCountNav; ?> cadastro(s) pendente(s)"><?php echo $pendingCountNav; ?></span>
+                                <?php endif; ?>
+                                <span class="nav-user-accordion-name"><?php echo htmlspecialchars($nome_completo); ?></span>
+                                <i class="fas fa-chevron-down nav-user-accordion-caret" aria-hidden="true"></i>
+                            </button>
+                            <div class="collapse nav-user-accordion-panel" id="navUserAccordion">
+                                <a class="nav-link-elegant nav-link-elegant--sub" href="<?php echo $painel_href; ?>">
+                                    Painel administrativo
+                                    <?php if ($pendingCountNav > 0): ?>
+                                    <span class="nav-pending-badge nav-pending-badge--inline"><?php echo $pendingCountNav; ?></span>
+                                    <?php endif; ?>
+                                </a>
+                                <?php if (in_array($papel, ['admin', 'pesquisador'])): ?>
+                                <a class="nav-link-elegant nav-link-elegant--sub" href="/importar_lattes.php">Importar Lattes</a>
+                                <?php endif; ?>
+                                <a class="nav-link-elegant nav-link-elegant--sub" href="/trocar-senha.php">Alterar senha</a>
+                                <a class="nav-link-elegant nav-link-elegant--sub text-danger" href="/logout.php">Sair</a>
+                            </div>
                         </li>
                         <?php else: ?>
                         <li class="nav-item">

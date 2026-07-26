@@ -156,7 +156,7 @@ HeroSection::display([
 
         <!-- Mobile: FAB + overlay que abrem o painel de filtros como bottom-sheet -->
         <button type="button" class="filter-fab" id="filterFabBtn" aria-label="Abrir filtros" aria-expanded="false" aria-controls="resultFilterPanel">
-            <i class="fas fa-filter" aria-hidden="true"></i>
+            <i class="fas fa-sliders" aria-hidden="true"></i>
         </button>
         <div class="filter-drawer-overlay" id="filterDrawerOverlay"></div>
 
@@ -513,6 +513,7 @@ HeroSection::display([
     var fab     = document.getElementById('filterFabBtn');
     var overlay = document.getElementById('filterDrawerOverlay');
     var panel   = document.getElementById('resultFilterPanel');
+    var handle  = panel ? panel.querySelector('.filter-drawer-handle') : null;
     if (!fab || !overlay || !panel) return;
 
     var scrollY = 0;
@@ -538,6 +539,7 @@ HeroSection::display([
     function openPanel() {
         panel.classList.add('open');
         overlay.classList.add('open');
+        fab.classList.add('is-hidden');
         fab.setAttribute('aria-expanded', 'true');
         lockBackgroundScroll();
     }
@@ -545,6 +547,7 @@ HeroSection::display([
     function closePanel() {
         panel.classList.remove('open');
         overlay.classList.remove('open');
+        fab.classList.remove('is-hidden');
         fab.setAttribute('aria-expanded', 'false');
         unlockBackgroundScroll();
     }
@@ -553,6 +556,7 @@ HeroSection::display([
         panel.classList.contains('open') ? closePanel() : openPanel();
     });
     overlay.addEventListener('click', closePanel);
+    if (handle) handle.addEventListener('click', closePanel);
 })();
 </script>
 </body>
