@@ -90,7 +90,7 @@ $ppgs = getAllPPGs();
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="/css/umc-theme.css" rel="stylesheet">
-    <link href="/css/prodmais-elegant.css?v=4" rel="stylesheet">
+    <link href="/css/prodmais-elegant.css?v=5" rel="stylesheet">
 
     <style>
         body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }

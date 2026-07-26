@@ -104,7 +104,7 @@ error_log("PPG.php - Debug Final: " . json_encode($debug_info));
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/prodmais-elegant.css?v=4">
+    <link rel="stylesheet" href="/css/prodmais-elegant.css?v=5">
     <link rel="stylesheet" href="/css/umc-theme.css">
     <style>
         .pagination-btn {

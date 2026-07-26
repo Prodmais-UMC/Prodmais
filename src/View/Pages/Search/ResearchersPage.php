@@ -70,7 +70,7 @@ if ($client === null || empty($pesquisadores)) {
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     
     <!-- CSS Elegante Profissional -->
-    <link rel="stylesheet" href="/css/prodmais-elegant.css?v=4">
+    <link rel="stylesheet" href="/css/prodmais-elegant.css?v=5">
     <link rel="stylesheet" href="/css/umc-theme.css">
     
 </head>

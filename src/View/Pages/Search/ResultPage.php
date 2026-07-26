@@ -114,7 +114,7 @@ $total_pages = ceil($total / $limit);
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/prodmais-elegant.css?v=4">
+    <link rel="stylesheet" href="/css/prodmais-elegant.css?v=5">
     <link rel="stylesheet" href="/css/umc-theme.css">
 </head>
 <body>
@@ -515,18 +515,38 @@ HeroSection::display([
     var panel   = document.getElementById('resultFilterPanel');
     if (!fab || !overlay || !panel) return;
 
+    var scrollY = 0;
+
+    function lockBackgroundScroll() {
+        scrollY = window.scrollY;
+        document.body.style.position = 'fixed';
+        document.body.style.top = '-' + scrollY + 'px';
+        document.body.style.left = '0';
+        document.body.style.right = '0';
+        document.body.style.width = '100%';
+    }
+
+    function unlockBackgroundScroll() {
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.left = '';
+        document.body.style.right = '';
+        document.body.style.width = '';
+        window.scrollTo(0, scrollY);
+    }
+
     function openPanel() {
         panel.classList.add('open');
         overlay.classList.add('open');
         fab.setAttribute('aria-expanded', 'true');
-        document.body.style.overflow = 'hidden';
+        lockBackgroundScroll();
     }
 
     function closePanel() {
         panel.classList.remove('open');
         overlay.classList.remove('open');
         fab.setAttribute('aria-expanded', 'false');
-        document.body.style.overflow = '';
+        unlockBackgroundScroll();
     }
 
     fab.addEventListener('click', function () {

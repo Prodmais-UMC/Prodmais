@@ -491,7 +491,7 @@ $ppgs = getAllPPGs();
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
     <link href="/css/umc-theme.css" rel="stylesheet">
-    <link href="/css/prodmais-elegant.css?v=4" rel="stylesheet">
+    <link href="/css/prodmais-elegant.css?v=5" rel="stylesheet">
     
     <style>
         body {
@@ -1371,12 +1371,32 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
         const icon    = document.getElementById('sidebarToggleIcon');
         if (!toggle || !overlay || !drawer) return;
 
+        let scrollY = 0;
+
+        function lockBackgroundScroll() {
+            scrollY = window.scrollY;
+            document.body.style.position = 'fixed';
+            document.body.style.top = '-' + scrollY + 'px';
+            document.body.style.left = '0';
+            document.body.style.right = '0';
+            document.body.style.width = '100%';
+        }
+
+        function unlockBackgroundScroll() {
+            document.body.style.position = '';
+            document.body.style.top = '';
+            document.body.style.left = '';
+            document.body.style.right = '';
+            document.body.style.width = '';
+            window.scrollTo(0, scrollY);
+        }
+
         function openDrawer() {
             drawer.classList.add('open');
             overlay.classList.add('open');
             toggle.setAttribute('aria-expanded', 'true');
             if (icon) { icon.classList.replace('fa-bars', 'fa-times'); }
-            document.body.style.overflow = 'hidden';
+            lockBackgroundScroll();
         }
 
         function closeDrawer() {
@@ -1384,7 +1404,7 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
             overlay.classList.remove('open');
             toggle.setAttribute('aria-expanded', 'false');
             if (icon) { icon.classList.replace('fa-times', 'fa-bars'); }
-            document.body.style.overflow = '';
+            unlockBackgroundScroll();
         }
 
         toggle.addEventListener('click', function () {

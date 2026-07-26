@@ -541,39 +541,57 @@ body {
    automaticamente em >=992px via .navbar-expand-lg .offcanvas do próprio Bootstrap) */
 @media (max-width: 991px) {
     .navbar-elegant .offcanvas {
-        width: min(300px, 82vw);
+        width: min(320px, 85vw);
     }
     .navbar-elegant .offcanvas-header {
         border-bottom: 1px solid var(--gray-100);
-        padding: 1rem 1.25rem;
+        padding: 1.25rem 1.5rem;
     }
     .navbar-elegant .offcanvas-title {
         font-weight: 700;
-        font-size: 1rem;
+        font-size: 1.375rem;
         color: var(--gray-900);
     }
+    .navbar-elegant .offcanvas-header .btn-close {
+        font-size: 0.85rem;
+        opacity: 0.6;
+    }
     .navbar-elegant .offcanvas-body {
-        padding: 0.75rem 1rem 1.5rem;
+        padding: 0;
     }
     .navbar-elegant .navbar-nav {
         flex-direction: column;
-        gap: 0.125rem;
+        gap: 0;
         align-items: stretch;
     }
+    .navbar-elegant .navbar-nav > .nav-item {
+        border-bottom: 1px solid var(--gray-100);
+    }
     .nav-link-elegant {
-        padding: 0.65rem 1rem;
-        border-radius: 8px;
-        font-size: 0.9375rem;
+        padding: 1.1rem 1.5rem;
+        border-radius: 0;
+        font-size: 1rem;
+        font-weight: 500;
+        color: var(--gray-600);
         border-bottom: none;
         top: 0;
     }
+    .nav-link-elegant i {
+        width: 1.25rem;
+        text-align: center;
+        color: var(--gray-400);
+    }
     .nav-link-elegant.active {
-        background: #eff6ff;
+        background: var(--gray-50);
+        color: var(--primary);
+        font-weight: 700;
         border-bottom: none;
     }
+    .nav-link-elegant.active i {
+        color: var(--primary);
+    }
     .nav-cta-admin {
-        margin-left: 0;
-        margin-top: 0.5rem;
+        margin: 1.25rem 1.5rem 0;
         justify-content: center;
     }
     .nav-divider { display: none; }
@@ -776,14 +794,11 @@ select {
     transition: background var(--transition-fast);
 }
 
-.navbar-toggler:focus {
-    box-shadow: none;
-    outline: none;
-}
-
-/* Só mostra indicação de foco para navegação por teclado — não "fica marcado" ao tocar/clicar */
-.navbar-toggler:focus-visible {
-    box-shadow: 0 0 0 3px rgba(26, 86, 219, 0.25);
+.navbar-toggler:focus,
+.navbar-toggler:focus-visible,
+.navbar-toggler:active {
+    box-shadow: none !important;
+    outline: none !important;
 }
 
 .navbar-toggler:hover {

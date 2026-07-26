@@ -84,7 +84,7 @@ $total_results = $count_producoes + $count_pesquisadores + $count_projetos;
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/css/umc-theme.css">
-    <link rel="stylesheet" href="/css/prodmais-elegant.css?v=4">
+    <link rel="stylesheet" href="/css/prodmais-elegant.css?v=5">
 
 </head>
 <body>
