@@ -234,6 +234,11 @@ Navbar::display([
     position: relative; overflow: hidden;
     padding: 5.5rem 0 3.5rem;
 }
+@media (max-width: 767px) {
+    .dash-hero { padding: 3rem 0 2.25rem; }
+    .dash-hero-badge { margin-bottom: 1.25rem !important; }
+    .dash-hero-break { display: none; }
+}
 .dash-hero::before {
     content: '';
     position: absolute; inset: 0;
@@ -309,13 +314,13 @@ Navbar::display([
 <section class="dash-hero">
     <div class="container text-center" style="position:relative;z-index:1;">
 
-        <div style="display:inline-flex;align-items:center;gap:.5rem;background:rgba(26,86,219,.15);border:1px solid rgba(26,86,219,.3);border-radius:100px;padding:.375rem 1rem;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#93c5fd;margin-bottom:1.75rem;">
+        <div class="dash-hero-badge" style="display:inline-flex;align-items:center;gap:.5rem;background:rgba(26,86,219,.15);border:1px solid rgba(26,86,219,.3);border-radius:100px;padding:.375rem 1rem;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#93c5fd;margin-bottom:1.75rem;">
             <i class="fas fa-chart-line" style="font-size:.7rem;"></i>
             Estatísticas · Produção Científica
         </div>
 
         <h1 style="font-size:clamp(1.8rem,5vw,4rem);font-weight:900;line-height:1.05;letter-spacing:-2px;color:#f1f5f9;margin:0 0 1rem;">
-            Dashboard<br>
+            Dashboard<br class="dash-hero-break">
             <span style="background:linear-gradient(135deg,#60a5fa 0%,#34d399 55%,#a78bfa 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">da UMC</span>
         </h1>
 
