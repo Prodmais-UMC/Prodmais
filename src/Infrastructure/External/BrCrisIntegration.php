@@ -12,14 +12,27 @@ class BrCrisIntegration
     private $config;
     private $apiUrl;
     private $institutionId;
+    private $apiKey;
     private $timeout;
-    
+
     public function __construct($config)
     {
         $this->config = $config;
         $this->apiUrl = $config['integrations']['brcris']['api_url'] ?? 'https://brcris.ibict.br/api';
         $this->institutionId = $config['integrations']['brcris']['institution_id'] ?? 'UMC';
+        $this->apiKey = $config['integrations']['brcris']['api_key'] ?? '';
         $this->timeout = 30;
+    }
+
+    /**
+     * A integração com o BrCris exige credencial emitida pela IBICT após
+     * cadastro institucional formal — isso é um processo administrativo,
+     * não uma configuração de código. Sem a chave, não há como autenticar
+     * nenhuma chamada real à API.
+     */
+    public function isConfigured(): bool
+    {
+        return !empty($this->apiKey);
     }
     
     /**
@@ -27,13 +40,22 @@ class BrCrisIntegration
      */
     public function syncInstitutionData($programData)
     {
+        if (!$this->isConfigured()) {
+            return [
+                'success' => false,
+                'synced_records' => 0,
+                'errors' => ['BrCris não configurado — falta a credencial de API emitida pela IBICT após o cadastro institucional. Isso é uma etapa administrativa, não de código.'],
+                'warnings' => []
+            ];
+        }
+
         $syncResults = [
             'success' => true,
             'synced_records' => 0,
             'errors' => [],
             'warnings' => []
         ];
-        
+
         try {
             // Preparar dados no formato BrCris
             $brcrisData = $this->prepareBrCrisData($programData);
@@ -127,7 +149,8 @@ class BrCrisIntegration
                 'header' => [
                     'Content-Type: application/json',
                     'User-Agent: Prodmais-UMC/1.0',
-                    'X-Institution-ID: ' . $this->institutionId
+                    'X-Institution-ID: ' . $this->institutionId,
+                    'Authorization: Bearer ' . $this->apiKey
                 ],
                 'content' => $postData,
                 'timeout' => $this->timeout

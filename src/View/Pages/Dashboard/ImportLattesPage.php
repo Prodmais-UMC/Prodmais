@@ -7,6 +7,7 @@
 require_once __DIR__ . '/../../../../config/config_umc.php';
 require_once __DIR__ . '/../../../../src/UmcFunctions.php';
 require_once __DIR__ . '/../../../../src/Domain/Importers/LattesImporter.php';
+require_once __DIR__ . '/../../../../src/Domain/Security/LgpdComplianceService.php';
 
 use App\View\Components\Navbar\Navbar;
 use App\View\Components\Footer\Footer;
@@ -20,7 +21,6 @@ if (!in_array(papelEfetivo(), ['admin', 'pesquisador'], true)) {
     exibirAcessoNegado('A importação de currículos é restrita a administradores e pesquisadores.');
 }
 
-$message = '';
 $error = '';
 $result = null;
 
@@ -63,7 +63,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['lattes_xml'])) {
         $importer = new \ProdmaisUMC\LattesImporter();
         $result = $importer->importFromXML($filepath, $ppg, $area);
 
-        $message = "✅ Currículo importado com sucesso!";
+        // Registrar o Termo de Ciência e Consentimento do docente (LGPD),
+        // conforme previsto na proposta do projeto — opcional, mas fica
+        // registrado se foi ou não obtido no momento da importação.
+        $configLgpd = file_exists(__DIR__ . '/../../../../config/config.php')
+            ? require_once __DIR__ . '/../../../../config/config.php'
+            : [];
+        $lgpdConsentService = new LgpdComplianceService(is_array($configLgpd) ? $configLgpd : []);
+        $consentimentoObtido = isset($_POST['consentimento_docente']);
+        $lgpdConsentService->recordConsent(
+            $result['lattesID'] ?? $filename,
+            'research_participation',
+            $consentimentoObtido
+        );
     } catch (Exception $e) {
         $error = $e->getMessage();
     }
@@ -421,6 +433,15 @@ $ppgs = getAllPPGs();
                                         <span id="fileName"></span>
                                         <span class="badge bg-secondary" id="fileSize"></span>
                                     </div>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <div class="form-check" style="background:rgba(99,102,241,.05);border:1px solid rgba(99,102,241,.15);border-radius:12px;padding:1rem 1rem 1rem 2.75rem;">
+                                    <input class="form-check-input" type="checkbox" id="consentimento_docente" name="consentimento_docente" style="margin-left:-2rem;margin-top:.3rem;">
+                                    <label class="form-check-label" for="consentimento_docente" style="font-size:.85rem;color:#475569;">
+                                        <strong>Termo de Ciência e Consentimento (LGPD)</strong> — o docente foi informado de que seus dados de produção científica serão exibidos de forma nominal no Prodmais UMC, com base no art. 7º, §4º da LGPD (dados manifestamente públicos), e consentiu com essa exibição. Marcar esta caixa registra o consentimento junto ao currículo importado. Opcional — a importação segue mesmo sem marcar.
+                                    </label>
                                 </div>
                             </div>
 

@@ -497,6 +497,29 @@ class LgpdComplianceService
     private function recordDeletion($userId, $reason, $backupId) { }
     private function arrayToXml($array) { return '<?xml version="1.0"?><data></data>'; }
     private function arrayToCsv($array) { return 'csv,data'; }
-    private function getResearchConsentText() { return 'Texto do consentimento para pesquisa...'; }
-    private function getDataProcessingConsentText() { return 'Texto do consentimento para tratamento...'; }
+    /**
+     * Rascunho de texto de consentimento — redigido a partir dos princípios
+     * já descritos no projeto PIVIC (art. 6º e 7º, §4º da LGPD). Precisa de
+     * revisão pela área jurídica da instituição antes de ser tratado como
+     * termo definitivo.
+     */
+    private function getResearchConsentText()
+    {
+        return 'O Prodmais UMC exibe, de forma nominal, dados de produção científica extraídos '
+            . 'do seu Currículo Lattes público (nome, produções, PPG e áreas de atuação), com '
+            . 'base no art. 7º, §4º da LGPD, que permite o tratamento de dados manifestamente '
+            . 'tornados públicos pelo titular. Este termo registra sua ciência sobre essa '
+            . 'exibição e sobre o uso dos dados exclusivamente para fins de gestão acadêmica, '
+            . 'autoavaliação institucional e prestação de contas dos Programas de Pós-Graduação '
+            . 'da UMC, sem finalidade comercial. Você pode solicitar a exclusão ou correção dos '
+            . 'seus dados a qualquer momento junto à coordenação do seu programa.';
+    }
+
+    private function getDataProcessingConsentText()
+    {
+        return 'Autorizo o tratamento dos meus dados curriculares e de produção científica pelo '
+            . 'sistema Prodmais UMC, para fins de indexação, análise bibliométrica e geração de '
+            . 'relatórios institucionais, conforme descrito no Relatório de Impacto à Proteção '
+            . 'de Dados (DPIA) do projeto.';
+    }
 }

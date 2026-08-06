@@ -22,6 +22,10 @@ if (!class_exists('LgpdComplianceService')) {
     require_once __DIR__ . '/../../../../src/Domain/Security/LgpdComplianceService.php';
 }
 
+if (!class_exists('BrCrisIntegration')) {
+    require_once __DIR__ . '/../../../../src/Infrastructure/External/BrCrisIntegration.php';
+}
+
 require_once __DIR__ . '/../../../../src/Infrastructure/Database/MysqlConnectionFactory.php';
 
 $config_legacy = [];
@@ -52,6 +56,8 @@ $log->log($_SESSION['user'], 'Acesso à área administrativa');
 $lgpdService = new LgpdComplianceService($config_legacy);
 $dpiaReport = $lgpdService->generateDpiaReport();
 $complianceStatus = $lgpdService->getComplianceStatus();
+$brCris = new BrCrisIntegration($config_legacy);
+$brCrisConfigurado = $brCris->isConfigured();
 
 if (isset($_POST['expunge'])) {
     $removidos = $log->expungeOld(365);
@@ -213,8 +219,18 @@ if (isset($_POST['upload_researcher']) && isset($_FILES['lattes_xml'])) {
         $importer = new \ProdmaisUMC\LattesImporter();
         $import_result = $importer->importFromXML($filepath, $ppg, $area);
 
-        $msg = "✅ Currículo importado com sucesso!";
-        
+        // Registrar o Termo de Ciência e Consentimento do docente (LGPD),
+        // conforme previsto na proposta do projeto — opcional, mas fica
+        // registrado se foi ou não obtido no momento da importação.
+        $lgpdConsentServiceAdd = new LgpdComplianceService($config_legacy);
+        $lgpdConsentServiceAdd->recordConsent(
+            $import_result['lattesID'] ?? $filename,
+            'research_participation',
+            isset($_POST['consentimento_docente'])
+        );
+
+        $msg = "Currículo importado com sucesso!";
+
         $log->log('INFO', 'Pesquisador adicionado via admin', [
             'file' => $filename,
             'ppg' => $ppg,
@@ -469,7 +485,23 @@ $ppgs = getAllPPGs();
     .adm-success h4 { color: #065f46; font-weight: 700; margin-bottom: 1.25rem; }
     /* ── Form controls ── */
     .adm-form-label { font-size: .875rem; font-weight: 600; color: #374151; margin-bottom: .5rem; display: block; }
-    .adm-form-select { width: 100%; border: 1.5px solid rgba(0,0,0,.12); border-radius: 10px; padding: .65rem 1rem; font-size: .9rem; color: #1e293b; background: white; transition: border-color .2s; }
+    .adm-form-select {
+        width: 100%;
+        border: 1.5px solid rgba(0,0,0,.12);
+        border-radius: 10px;
+        padding: .65rem 2.25rem .65rem 1rem;
+        font-size: .9rem;
+        color: #1e293b;
+        background-color: white;
+        transition: border-color .2s;
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%2364748b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M4 6l4 4 4-4'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right .85rem center;
+        background-size: 12px;
+    }
     .adm-form-select:focus { outline: none; border-color: #6366f1; box-shadow: 0 0 0 3px rgba(99,102,241,.12); }
     /* ── Buttons ── */
     .adm-btn-primary { display: block; width: 100%; background: linear-gradient(135deg,#4f46e5,#6366f1); color: white; border: none; border-radius: 12px; padding: .9rem 2rem; font-size: .95rem; font-weight: 700; cursor: pointer; transition: filter .2s, transform .2s; box-shadow: 0 4px 14px rgba(79,70,229,.3); font-family: 'Inter', sans-serif; }
@@ -1061,6 +1093,15 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
                                         </div>
                                     </div>
 
+                                    <div class="mb-4">
+                                        <div class="form-check" style="background:rgba(99,102,241,.05);border:1px solid rgba(99,102,241,.15);border-radius:12px;padding:1rem 1rem 1rem 2.75rem;">
+                                            <input class="form-check-input" type="checkbox" id="consentimento_docente" name="consentimento_docente" style="margin-left:-2rem;margin-top:.3rem;">
+                                            <label class="form-check-label" for="consentimento_docente" style="font-size:.85rem;color:#475569;">
+                                                <strong>Termo de Ciência e Consentimento (LGPD)</strong> — o docente foi informado de que seus dados de produção científica serão exibidos de forma nominal no Prodmais UMC, com base no art. 7º, §4º da LGPD, e consentiu com essa exibição. Opcional — a importação segue mesmo sem marcar.
+                                            </label>
+                                        </div>
+                                    </div>
+
                                     <button type="submit" name="upload_researcher" class="adm-btn-primary" id="submitBtn">
                                         <i class="fas fa-cloud-upload-alt me-2" aria-hidden="true"></i>Importar Currículo Lattes
                                     </button>
@@ -1208,6 +1249,38 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
                                     <?php endforeach; ?>
                                 </ul>
                                 <?php endforeach; ?>
+                            </div>
+                        </div>
+
+                        <div class="adm-card">
+                            <div class="adm-card-header">
+                                <h5><i class="fas fa-plug me-2" aria-hidden="true"></i>Integrações Externas</h5>
+                            </div>
+                            <div class="adm-card-body">
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <div class="adm-stat-item" style="display:flex;align-items:center;gap:.75rem;">
+                                            <i class="fab fa-orcid" style="color:#059669;font-size:1.25rem;"></i>
+                                            <div>
+                                                <div style="font-weight:700;color:#312e81;font-size:.9rem;">ORCID</div>
+                                                <div style="font-size:.8rem;color:#059669;">Ativo — enriquece o perfil do pesquisador na importação (API pública, sem credencial necessária)</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="adm-stat-item" style="display:flex;align-items:center;gap:.75rem;background:<?= $brCrisConfigurado ? 'linear-gradient(135deg,#ede9fe,#ddd6fe)' : 'linear-gradient(135deg,#fef3c7,#fde68a)' ?>;">
+                                            <i class="fas fa-network-wired" style="color:<?= $brCrisConfigurado ? '#059669' : '#b45309' ?>;font-size:1.25rem;"></i>
+                                            <div>
+                                                <div style="font-weight:700;color:#312e81;font-size:.9rem;">BrCris</div>
+                                                <?php if ($brCrisConfigurado): ?>
+                                                <div style="font-size:.8rem;color:#059669;">Ativo — credenciais configuradas</div>
+                                                <?php else: ?>
+                                                <div style="font-size:.8rem;color:#92400e;">Pendente — integração implementada, aguardando credencial de API da IBICT (cadastro institucional, fora do escopo de código)</div>
+                                                <?php endif; ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

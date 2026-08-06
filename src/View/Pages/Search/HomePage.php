@@ -324,6 +324,34 @@ $ppg_colors = [
     'Ciência e Tecnologia em Saúde'   => ['from' => '#7c3aed', 'to' => '#5b21b6', 'light' => '#ede9fe', 'text' => '#4c1d95', 'icon' => 'flask'],
 ];
 ?>
+<style>
+.ppg-cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    color: white;
+    font-size: .875rem;
+    font-weight: 700;
+    padding: .6rem 1.25rem;
+    border-radius: 10px;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,.15);
+    transition: filter .2s ease, box-shadow .2s ease;
+    white-space: nowrap;
+}
+.ppg-cta-btn:hover, .ppg-cta-btn:focus-visible {
+    filter: brightness(.87);
+    box-shadow: 0 6px 18px rgba(0,0,0,.22);
+}
+.ppg-cta-btn .fa-arrow-right { transition: transform .2s ease; }
+.ppg-cta-btn:hover .fa-arrow-right, .ppg-cta-btn:focus-visible .fa-arrow-right {
+    animation: ppgArrowNudge .85s ease-in-out infinite;
+}
+@keyframes ppgArrowNudge {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(4px); }
+}
+</style>
 <section class="page-section page-section-gray">
     <div class="container">
         <div style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:3rem;">
@@ -343,7 +371,7 @@ $ppg_colors = [
                 $c = $ppg_colors[$slug] ?? $ppg_colors['Engenharia Biomédica'];
             ?>
             <div class="col-12 col-lg-6 fade-in-up" style="animation-delay:<?= $i * 0.1 ?>s">
-                <div style="background:white;border-radius:20px;overflow:hidden;border:1px solid var(--gray-200);box-shadow:0 2px 16px rgba(0,0,0,.06);transition:all .3s cubic-bezier(.4,0,.2,1);height:100%;display:flex;flex-direction:column;" onmouseover="this.style.transform='translateY(-6px)';this.style.boxShadow='0 16px 40px rgba(0,0,0,.12)'" onmouseout="this.style.transform='';this.style.boxShadow='0 2px 16px rgba(0,0,0,.06)'">
+                <div style="background:white;border-radius:20px;overflow:hidden;border:1px solid var(--gray-200);box-shadow:0 2px 16px rgba(0,0,0,.06);height:100%;display:flex;flex-direction:column;">
 
                     <!-- Colored Header Band -->
                     <div style="background:linear-gradient(135deg,<?= $c['from'] ?>,<?= $c['to'] ?>);padding:1.75rem 1.75rem 1.25rem;position:relative;overflow:hidden;">
@@ -377,7 +405,7 @@ $ppg_colors = [
                     <!-- Footer -->
                     <div style="padding:1.25rem 1.75rem;border-top:1px solid var(--gray-100);display:flex;align-items:center;justify-content:space-between;gap:1rem;">
                         <span style="font-size:.8rem;color:var(--gray-400);font-family:'Courier New',monospace;letter-spacing:.02em;"><?= htmlspecialchars($ppg['codigo_capes']) ?></span>
-                        <a href="/ppg.php?ppg=<?= urlencode($ppg['nome']) ?>" style="display:inline-flex;align-items:center;gap:.5rem;background:linear-gradient(135deg,<?= $c['from'] ?>,<?= $c['to'] ?>);color:white;font-size:.875rem;font-weight:700;padding:.6rem 1.25rem;border-radius:10px;text-decoration:none;box-shadow:0 4px 12px rgba(0,0,0,.15);transition:all .25s ease;white-space:nowrap;" onmouseover="this.style.transform='translateY(-1px)';this.style.boxShadow='0 6px 18px rgba(0,0,0,.2)'" onmouseout="this.style.transform='';this.style.boxShadow='0 4px 12px rgba(0,0,0,.15)'">
+                        <a href="/ppg.php?ppg=<?= urlencode($ppg['nome']) ?>" class="ppg-cta-btn" style="background:linear-gradient(135deg,<?= $c['from'] ?>,<?= $c['to'] ?>);">
                             Ver Produções <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>

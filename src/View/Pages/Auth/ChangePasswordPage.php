@@ -664,16 +664,18 @@ novaSenha?.addEventListener('input', () => {
 confirmarSenha?.addEventListener('input', checkMatch);
 
 function checkMatch() {
-    if (!confirmarSenha.value) { matchIndicator.textContent = ''; return; }
+    if (!confirmarSenha.value) { matchIndicator.innerHTML = ''; return; }
     const match = novaSenha.value === confirmarSenha.value;
-    matchIndicator.textContent = match ? '✓ Senhas coincidem' : '✗ Senhas não coincidem';
+    matchIndicator.innerHTML = match
+        ? '<i class="fas fa-circle-check" aria-hidden="true"></i> Senhas coincidem'
+        : '<i class="fas fa-circle-xmark" aria-hidden="true"></i> Senhas não coincidem';
     matchIndicator.style.color = match ? '#10b981' : '#ef4444';
 }
 
 document.getElementById('changeForm')?.addEventListener('submit', function(e) {
     if (novaSenha.value !== confirmarSenha.value) {
         e.preventDefault();
-        matchIndicator.textContent = '✗ Senhas não coincidem';
+        matchIndicator.innerHTML = '<i class="fas fa-circle-xmark" aria-hidden="true"></i> Senhas não coincidem';
         matchIndicator.style.color = '#ef4444';
         confirmarSenha.focus();
     }

@@ -288,11 +288,13 @@ $ppg_chip = [
         <div class="row g-3 g-md-4" id="pesquisadoresList">
             <?php foreach ($pesquisadores as $idx => $p):
                 $nome       = $p['nome_completo'] ?? 'Nome não informado';
-                $orcid      = $p['orcid'] ?? '';
+                $orcid      = $p['orcidID'] ?? $p['orcid'] ?? '';
                 $lattes     = $p['id_lattes'] ?? '';
                 $atualizado = $p['data_atualizacao_cv'] ?? '';
                 $email      = $p['email'] ?? '';
                 $ppg        = $p['ppg'] ?? '';
+                $orcidVerificado  = !empty($p['orcid_verificado']);
+                $orcidTotalObras  = (int) ($p['orcid_total_obras'] ?? 0);
                 $partes     = preg_split('/\s+/', trim($nome));
                 $iniciais   = strtoupper(substr($partes[0], 0, 1) . (isset($partes[1]) ? substr($partes[1], 0, 1) : ''));
                 $pal        = $avatar_palettes[$idx % count($avatar_palettes)];
@@ -329,6 +331,9 @@ $ppg_chip = [
                         <?php endif; ?>
                         <?php if ($email): ?>
                         <span><i class="fas fa-envelope"></i> <?= htmlspecialchars($email) ?></span>
+                        <?php endif; ?>
+                        <?php if ($orcidVerificado): ?>
+                        <span><i class="fab fa-orcid" style="color:#a6ce39;"></i> ORCID verificado<?= $orcidTotalObras > 0 ? " · {$orcidTotalObras} obra(s)" : '' ?></span>
                         <?php endif; ?>
                         <?php if (!$lattes && !$atualizado && !$email): ?>
                         <span><i class="fas fa-university"></i> Pesquisador do PPG UMC</span>

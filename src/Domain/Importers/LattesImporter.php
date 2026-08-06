@@ -19,6 +19,7 @@ class LattesImporter {
     private $campus_default = 'Mogi das Cruzes';
     private $dbService = null;
     private $openAlexFetcher = null;
+    private $orcidFetcher = null;
     // Configurações de memória para currículos extensos
     private $max_execution_time = 600; // 10 minutos
     private $memory_limit = '512M';
@@ -31,6 +32,9 @@ class LattesImporter {
         
         // Inicializar enriquecedor OpenAlex
         $this->openAlexFetcher = new \OpenAlexFetcher($config, $config['app']['email'] ?? null);
+
+        // Inicializar enriquecedor ORCID (API pública, sem autenticação necessária)
+        $this->orcidFetcher = new \OrcidFetcher($config);
         
         // Banco relacional
         try {
@@ -519,7 +523,23 @@ class LattesImporter {
             echo "⚠️ Elasticsearch não disponível. Pesquisador não indexado.\n";
             return false;
         }
-        
+
+        // Enriquecer com dados públicos do ORCID, se o pesquisador tiver ID cadastrado
+        if ($this->orcidFetcher && !empty($pesquisador['orcidID'])) {
+            try {
+                $perfilOrcid = $this->orcidFetcher->getProfile($pesquisador['orcidID']);
+                if ($perfilOrcid) {
+                    $obrasOrcid = $this->orcidFetcher->getWorks($pesquisador['orcidID']);
+                    $pesquisador['orcid_verificado'] = true;
+                    $pesquisador['orcid_biografia'] = $perfilOrcid['biography'] ?? null;
+                    $pesquisador['orcid_total_obras'] = count($obrasOrcid);
+                    $pesquisador['orcid_sincronizado_em'] = date('Y-m-d H:i:s');
+                }
+            } catch (\Exception $e) {
+                // Silenciar erro de rede para não travar a importação — mesmo padrão do OpenAlex
+            }
+        }
+
         try {
             $params = [
                 'index' => $this->index_cv,
