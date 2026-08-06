@@ -9,6 +9,7 @@ namespace ProdmaisUMC;
 
 require_once __DIR__ . '/../../../config/config_umc.php';
 require_once __DIR__ . '/../../UmcFunctions.php';
+require_once __DIR__ . '/../../Infrastructure/Database/MysqlConnectionFactory.php';
 
 class LattesImporter {
     private $client;
@@ -20,6 +21,7 @@ class LattesImporter {
     private $dbService = null;
     private $openAlexFetcher = null;
     private $orcidFetcher = null;
+    private $pdoQualis = null;
     // Configurações de memória para currículos extensos
     private $max_execution_time = 600; // 10 minutos
     private $memory_limit = '512M';
@@ -41,6 +43,13 @@ class LattesImporter {
             $this->dbService = new \DatabaseService($config ?? []);
         } catch (\Exception $e) {
             $this->dbService = null;
+        }
+
+        // Conexão para consulta da base Qualis CAPES (tabela qualis_capes no MySQL)
+        try {
+            $this->pdoQualis = \criarConexaoMysql();
+        } catch (\Exception $e) {
+            $this->pdoQualis = null;
         }
         // Configurar limites para currículos extensos
         set_time_limit($this->max_execution_time);
@@ -516,6 +525,28 @@ class LattesImporter {
     }
 
     /**
+     * Consulta o estrato Qualis de um periódico pelo ISSN, na base carregada
+     * manualmente pelo admin (aba "Base Qualis (CAPES)"). Retorna null se a
+     * base não estiver carregada ou o ISSN não for encontrado.
+     */
+    private function buscarQualisPorIssn($issn) {
+        if (!$this->pdoQualis) {
+            return null;
+        }
+        try {
+            $stmt = $this->pdoQualis->prepare(
+                "SELECT estrato FROM qualis_capes WHERE issn = ? ORDER BY estrato ASC LIMIT 1"
+            );
+            $stmt->execute([trim($issn)]);
+            $estrato = $stmt->fetchColumn();
+            return $estrato ?: null;
+        } catch (\Exception $e) {
+            // Tabela pode ainda não existir se ninguém carregou a base ainda
+            return null;
+        }
+    }
+
+    /**
      * Indexar pesquisador no Elasticsearch
      */
     private function indexPesquisador($pesquisador) {
@@ -578,6 +609,14 @@ class LattesImporter {
                     $producao = $this->openAlexFetcher->enrichProduction($producao);
                 } catch (\Exception $e) {
                     // Silenciar erro de rede para não travar a importação
+                }
+            }
+
+            // Cruzar com a base Qualis CAPES pelo ISSN (só artigos em periódico têm ISSN)
+            if (empty($producao['qualis']) && !empty($producao['issn'])) {
+                $estratoQualis = $this->buscarQualisPorIssn($producao['issn']);
+                if ($estratoQualis) {
+                    $producao['qualis'] = $estratoQualis;
                 }
             }
 

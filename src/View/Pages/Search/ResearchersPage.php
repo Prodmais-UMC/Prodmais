@@ -154,9 +154,7 @@ $ppg_chip = [
     display: flex;
     flex-direction: column;
     height: 100%;
-    transition: transform .22s ease, box-shadow .22s ease;
 }
-.rc-card:hover { transform: translateY(-5px); box-shadow: 0 10px 28px rgba(0,0,0,.1); }
 .rc-avatar {
     width: 54px;
     height: 54px;

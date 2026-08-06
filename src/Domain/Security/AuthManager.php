@@ -221,56 +221,29 @@ class AuthManager {
      */
     private function enviarEmailRecuperacao($email, $nome, $link) {
         $assunto = "Recuperacao de Senha - Prodmais UMC";
-        
-        $mensagem = "
-        <html>
-        <head>
-            <style>
-                body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
-                .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-                .header { background: linear-gradient(135deg, #1e40af, #3b82f6); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
-                .content { background: #f8f9fa; padding: 30px; border-radius: 0 0 10px 10px; }
-                .button { display: inline-block; padding: 15px 30px; background: #1e40af; color: white; text-decoration: none; border-radius: 8px; margin: 20px 0; }
-                .footer { text-align: center; margin-top: 30px; color: #666; font-size: 12px; }
-                .warning { background: #fff3cd; border-left: 4px solid #ffc107; padding: 15px; margin: 20px 0; }
-            </style>
-        </head>
-        <body>
-            <div class='container'>
-                <div class='header'>
-                    <h1>Recuperacao de Senha</h1>
-                    <p>Sistema Prodmais UMC</p>
-                </div>
-                <div class='content'>
-                    <p>Ola, <strong>{$nome}</strong></p>
-                    <p>Recebemos uma solicitacao para redefinir sua senha no sistema Prodmais UMC.</p>
-                    <p>Clique no botao abaixo para criar uma nova senha:</p>
-                    <p style='text-align: center;'>
-                        <a href='{$link}' class='button'>Redefinir Senha</a>
-                    </p>
-                    <p>Ou copie e cole este link no navegador:</p>
-                    <p style='word-break: break-all; background: white; padding: 10px; border-radius: 5px;'>{$link}</p>
-                    
-                    <div class='warning'>
-                        <strong>⚠ Importante:</strong>
-                        <ul>
-                            <li>Este link expira em 1 hora</li>
-                            <li>Se voce nao solicitou esta alteracao, ignore este email</li>
-                            <li>Nunca compartilhe este link com outras pessoas</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class='footer'>
-                    <p>&copy; " . date('Y') . " Universidade de Mogi das Cruzes</p>
-                    <p>Este e um email automatico, nao responda</p>
-                </div>
+
+        $corpo = "
+            <p>Ola, <strong>{$nome}</strong></p>
+            <p>Recebemos uma solicitacao para redefinir sua senha no sistema Prodmais UMC.</p>
+            <p>Clique no botao abaixo para criar uma nova senha:</p>
+            <p style='text-align: center;'>
+                <a href='{$link}' class='button'>Redefinir Senha</a>
+            </p>
+            <p>Ou copie e cole este link no navegador:</p>
+            <p style='word-break: break-all; background: white; padding: 10px; border-radius: 5px;'>{$link}</p>
+
+            <div class='warning'>
+                <strong>⚠ Importante:</strong>
+                <ul>
+                    <li>Este link expira em 1 hora</li>
+                    <li>Se voce nao solicitou esta alteracao, ignore este email</li>
+                    <li>Nunca compartilhe este link com outras pessoas</li>
+                </ul>
             </div>
-        </body>
-        </html>
         ";
-        
+
         $emailService = new \EmailService();
-        return $emailService->enviar($email, $assunto, $mensagem);
+        return $emailService->enviar($email, $assunto, $emailService->envelope('Recuperação de Senha', $corpo));
     }
     
     /**

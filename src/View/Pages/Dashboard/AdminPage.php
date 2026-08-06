@@ -75,8 +75,101 @@ if (isset($_POST['expunge_all'])) {
     $msg = "{$removidos} log(s) removido(s). Histórico zerado.";
 }
 
-// ── Aprovação de cadastros pendentes (somente admin) ──
 $souAdmin = papelEfetivo() === 'admin';
+
+// ── Base Qualis CAPES: garante a tabela e conta quantos registros existem ──
+$qualisCreateTableSql = "CREATE TABLE IF NOT EXISTS qualis_capes (
+    issn VARCHAR(20) NOT NULL,
+    area_avaliacao VARCHAR(150) NOT NULL DEFAULT '',
+    estrato VARCHAR(5) NOT NULL,
+    titulo_periodico VARCHAR(255) NULL,
+    atualizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    PRIMARY KEY (issn, area_avaliacao),
+    INDEX idx_issn (issn)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci";
+
+$qualisTotal = 0;
+$qualisMsg = null;
+if ($souAdmin) {
+    try {
+        $pdoQualis = criarConexaoMysql();
+        $pdoQualis->exec($qualisCreateTableSql);
+        $qualisTotal = (int) $pdoQualis->query("SELECT COUNT(*) FROM qualis_capes")->fetchColumn();
+    } catch (\Exception $e) {
+        error_log('Erro ao acessar base Qualis: ' . $e->getMessage());
+    }
+}
+
+// ── Upload da base Qualis CAPES (somente admin) ──
+if ($souAdmin && isset($_POST['upload_qualis']) && isset($_FILES['qualis_csv'])) {
+    try {
+        $upload = $_FILES['qualis_csv'];
+        if ($upload['error'] !== UPLOAD_ERR_OK) {
+            throw new \Exception('Erro no upload do arquivo.');
+        }
+
+        $handle = fopen($upload['tmp_name'], 'r');
+        if (!$handle) {
+            throw new \Exception('Não foi possível ler o arquivo enviado.');
+        }
+
+        $primeiraLinha = fgets($handle);
+        rewind($handle);
+        $delimitador = substr_count((string) $primeiraLinha, ';') > substr_count((string) $primeiraLinha, ',') ? ';' : ',';
+
+        $cabecalho = fgetcsv($handle, 0, $delimitador);
+        $cabecalho = array_map(function ($c) {
+            return strtolower(trim((string) $c));
+        }, $cabecalho ?: []);
+
+        $colIssn = array_search('issn', $cabecalho, true);
+        $colEstrato = array_search('estrato', $cabecalho, true);
+        $colArea = array_search('area_avaliacao', $cabecalho, true);
+        if ($colArea === false) {
+            $colArea = array_search('área de avaliação', $cabecalho, true);
+        }
+        $colTitulo = array_search('titulo_periodico', $cabecalho, true);
+        if ($colTitulo === false) {
+            $colTitulo = array_search('título', $cabecalho, true);
+        }
+
+        if ($colIssn === false || $colEstrato === false) {
+            throw new \Exception('O arquivo precisa ter pelo menos as colunas "issn" e "estrato".');
+        }
+
+        $pdoQualisUpload = criarConexaoMysql();
+        $pdoQualisUpload->exec($qualisCreateTableSql);
+
+        $stmt = $pdoQualisUpload->prepare("
+            INSERT INTO qualis_capes (issn, area_avaliacao, estrato, titulo_periodico)
+            VALUES (?, ?, ?, ?)
+            ON DUPLICATE KEY UPDATE estrato = VALUES(estrato), titulo_periodico = VALUES(titulo_periodico)
+        ");
+
+        $linhasCarregadas = 0;
+        while (($linha = fgetcsv($handle, 0, $delimitador)) !== false) {
+            $issn = trim((string) ($linha[$colIssn] ?? ''));
+            $estrato = trim((string) ($linha[$colEstrato] ?? ''));
+            if ($issn === '' || $estrato === '') {
+                continue;
+            }
+            $area = $colArea !== false ? trim((string) ($linha[$colArea] ?? '')) : '';
+            $titulo = $colTitulo !== false ? trim((string) ($linha[$colTitulo] ?? '')) : null;
+            $stmt->execute([$issn, $area, $estrato, $titulo ?: null]);
+            $linhasCarregadas++;
+        }
+        fclose($handle);
+
+        $log->log($_SESSION['user'], "Carregou base Qualis CAPES: {$linhasCarregadas} registro(s)");
+        $qualisMsg = "{$linhasCarregadas} registro(s) da base Qualis carregado(s)/atualizado(s).";
+        $qualisTotal = (int) $pdoQualisUpload->query("SELECT COUNT(*) FROM qualis_capes")->fetchColumn();
+    } catch (\Exception $e) {
+        error_log('Erro ao processar upload da base Qualis: ' . $e->getMessage());
+        $qualisMsg = 'Erro ao processar o arquivo: ' . $e->getMessage();
+    }
+}
+
+// ── Aprovação de cadastros pendentes (somente admin) ──
 $pendingMsg = null;
 
 if ($souAdmin && (isset($_POST['approve_user']) || isset($_POST['reject_user']))) {
@@ -781,6 +874,9 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
         if (!empty($manageMsg)) {
             $admToasts[] = ['type' => 'success', 'text' => $manageMsg];
         }
+        if (!empty($qualisMsg)) {
+            $admToasts[] = ['type' => str_starts_with($qualisMsg, 'Erro') ? 'error' : 'success', 'text' => $qualisMsg];
+        }
         ?>
         <?php if (!empty($admToasts)): ?>
         <div class="adm-toast-stack" aria-live="polite">
@@ -848,6 +944,10 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
                     <button class="adm-tab-btn" id="lgpd-tab" data-bs-toggle="tab" data-bs-target="#lgpd" type="button" role="tab" aria-controls="lgpd">
                         <i class="fas fa-shield-alt" aria-hidden="true"></i>
                         <span class="adm-tab-label">Conformidade LGPD</span>
+                    </button>
+                    <button class="adm-tab-btn" id="qualis-tab" data-bs-toggle="tab" data-bs-target="#qualis" type="button" role="tab" aria-controls="qualis">
+                        <i class="fas fa-star" aria-hidden="true"></i>
+                        <span class="adm-tab-label">Base Qualis (CAPES)</span>
                     </button>
                     <div class="adm-sidebar-divider"></div>
                     <button class="adm-tab-btn" id="guia-tab" data-bs-toggle="tab" data-bs-target="#guia" type="button" role="tab" aria-controls="guia">
@@ -1290,6 +1390,49 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
                         </div>
                     </div>
 
+                    <!-- Aba: Base Qualis (CAPES) -->
+                    <div class="tab-pane fade" id="qualis" role="tabpanel">
+                        <div class="adm-card">
+                            <div class="adm-card-header">
+                                <h5><i class="fas fa-star me-2" aria-hidden="true"></i>Base Qualis (CAPES)</h5>
+                            </div>
+                            <div class="adm-card-body">
+                                <div class="adm-info-box">
+                                    <h6>Por que a "Distribuição por Qualis" do Dashboard fica vazia?</h6>
+                                    <p style="color:#1e1b4b;margin:0;">Nenhuma produção tem o campo Qualis preenchido porque isso depende de uma base de referência (ISSN → estrato) que a CAPES publica periodicamente — o sistema não inventa essa classificação sozinho. Envie o arquivo abaixo para carregar essa base.</p>
+                                </div>
+
+                                <div style="display:flex;align-items:center;gap:.75rem;margin-bottom:1.5rem;">
+                                    <div class="adm-stat-item" style="background:linear-gradient(135deg,#ede9fe,#ddd6fe);padding:1rem 1.5rem;">
+                                        <p class="stat-number" style="font-size:1.5rem;"><?= number_format($qualisTotal, 0, ',', '.') ?></p>
+                                        <p class="stat-label">Registros carregados na base</p>
+                                    </div>
+                                </div>
+
+                                <form method="post" enctype="multipart/form-data">
+                                    <div class="mb-4">
+                                        <label class="adm-form-label" for="qualis_csv">Arquivo CSV da classificação Qualis</label>
+                                        <input class="adm-form-select" type="file" id="qualis_csv" name="qualis_csv" accept=".csv" required>
+                                        <small style="color:#64748b;font-size:.8rem;display:block;margin-top:.5rem;line-height:1.6;">
+                                            O arquivo precisa ter cabeçalho com pelo menos as colunas <code>issn</code> e <code>estrato</code>
+                                            (aceita <code>;</code> ou <code>,</code> como separador). Colunas opcionais:
+                                            <code>area_avaliacao</code> e <code>titulo_periodico</code>. Reenviar o mesmo ISSN
+                                            atualiza o estrato em vez de duplicar.
+                                        </small>
+                                    </div>
+                                    <button type="submit" name="upload_qualis" class="adm-btn-primary" style="width:auto;padding:.75rem 2rem;">
+                                        <i class="fas fa-cloud-upload-alt me-2" aria-hidden="true"></i>Carregar base
+                                    </button>
+                                </form>
+
+                                <div class="adm-info-box" style="margin-top:1.75rem;margin-bottom:0;">
+                                    <h6>Depois de carregar a base</h6>
+                                    <p style="color:#1e1b4b;margin:0;">O cruzamento por ISSN acontece automaticamente nas próximas importações de currículo. Produções já indexadas antes do carregamento não são reclassificadas sozinhas — reimporte os currículos já cadastrados (aba "Adicionar Pesquisador" ou "Upload em Lote") pra elas ganharem o Qualis retroativamente.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                     <!-- Aba: Guia do Usuário -->
                     <div class="tab-pane fade" id="guia" role="tabpanel">
                         <div class="adm-card">
@@ -1475,6 +1618,14 @@ $guiaSecoes = [
             <p>Mostra o status geral de conformidade, o Relatório de Impacto à Proteção de Dados (DPIA) — com botão para <strong>"Baixar DPIA (JSON)"</strong> — e o status das integrações externas: ORCID (ativo, enriquece o perfil do pesquisador automaticamente na importação) e BrCris (implementado, aguardando credencial de API da IBICT, uma etapa institucional, não de código).</p>
         ',
     ],
+    [
+        'icon' => 'fa-star',
+        'titulo' => 'Painel Admin — Base Qualis (CAPES)',
+        'corpo' => '
+            <p>O gráfico "Distribuição por Qualis" do Dashboard só funciona depois de carregar aqui a base de referência da CAPES (ISSN → estrato Qualis), em um arquivo CSV com colunas <code>issn</code> e <code>estrato</code>.</p>
+            <p>Depois de carregar, novas importações de currículo já cruzam o ISSN automaticamente. Currículos importados antes de carregar a base precisam ser <strong>reimportados</strong> para ganhar a classificação Qualis retroativamente.</p>
+        ',
+    ],
 ];
 
 foreach ($guiaSecoes as $gi => $secao):
@@ -1551,6 +1702,10 @@ foreach ($guiaSecoes as $gi => $secao):
         <button class="adm-tab-btn" data-bs-target="#lgpd" type="button">
             <i class="fas fa-shield-alt" aria-hidden="true"></i>
             <span class="adm-tab-label">Conformidade LGPD</span>
+        </button>
+        <button class="adm-tab-btn" data-bs-target="#qualis" type="button">
+            <i class="fas fa-star" aria-hidden="true"></i>
+            <span class="adm-tab-label">Base Qualis (CAPES)</span>
         </button>
         <div class="adm-sidebar-divider"></div>
         <button class="adm-tab-btn" data-bs-target="#guia" type="button">
