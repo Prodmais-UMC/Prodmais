@@ -436,7 +436,8 @@ Navbar::display([
             </div>
         </div>
 
-        <!-- Cards de Acesso Rápido -->
+        <!-- Cards de Acesso Rápido (não exibido para o papel visualizador) -->
+        <?php if (papelEfetivo() !== 'visualizador'): ?>
         <div class="row g-3 g-md-4">
             <div class="col-12">
                 <span class="dash-section-title">Atalhos</span>
@@ -479,6 +480,7 @@ Navbar::display([
                 </a>
             </div>
         </div>
+        <?php endif; ?>
     </div>
 </section>
 
