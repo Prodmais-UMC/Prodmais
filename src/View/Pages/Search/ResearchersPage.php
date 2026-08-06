@@ -260,7 +260,7 @@ $ppg_chip = [
     <div class="container">
 
         <!-- Barra de busca -->
-        <div class="rc-search-wrap">
+        <div class="rc-search-wrap" data-autocomplete-wrap>
             <div style="font-size:.8125rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:.06em;">
                 <i class="fas fa-filter" style="margin-right:.4rem;"></i> Filtrar pesquisadores
             </div>
@@ -270,6 +270,7 @@ $ppg_chip = [
                        id="searchPesquisador"
                        placeholder="Buscar por nome..."
                        onkeyup="filterPesquisadores()"
+                       data-autocomplete="pesquisador"
                        aria-label="Filtrar pesquisadores por nome">
             </div>
             <div id="searchStats" class="rc-stats" role="status" aria-live="polite"></div>
@@ -362,6 +363,7 @@ $ppg_chip = [
 
 <!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/autocomplete.js"></script>
 
 <script>
 function filterPesquisadores() {

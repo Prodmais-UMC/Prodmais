@@ -249,13 +249,14 @@ if ($elasticsearch_available) {
         </div>
         <?php endif; ?>
 
-        <div class="hero-search-wrap">
+        <div class="hero-search-wrap" data-autocomplete-wrap>
             <form action="/presearch.php" method="POST">
                 <div class="hero-search-inner">
                     <input type="search"
                            name="search"
                            placeholder="Pesquise produções, pesquisadores, projetos..."
                            aria-label="Buscar produções científicas"
+                           data-autocomplete="pesquisador"
                            required>
                     <button type="submit" class="hero-search-btn">
                         <i class="fas fa-search"></i> Buscar
@@ -449,6 +450,7 @@ $ppg_colors = [
 <?php Footer::display(); ?>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/autocomplete.js"></script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
