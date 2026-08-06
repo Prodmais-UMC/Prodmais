@@ -4,6 +4,8 @@
  * Gerencia login, recuperacao de senha e sessoes seguras
  */
 
+require_once __DIR__ . '/../../Infrastructure/External/EmailService.php';
+
 class AuthManager {
     private $db;
     private $max_tentativas = 5;
@@ -267,11 +269,8 @@ class AuthManager {
         </html>
         ";
         
-        $headers = "MIME-Version: 1.0\r\n";
-        $headers .= "Content-type: text/html; charset=UTF-8\r\n";
-        $headers .= "From: Prodmais UMC <noreply@umc.br>\r\n";
-        
-        return mail($email, $assunto, $mensagem, $headers);
+        $emailService = new \EmailService();
+        return $emailService->enviar($email, $assunto, $mensagem);
     }
     
     /**

@@ -898,7 +898,7 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
                                             <i class="fas fa-check" aria-hidden="true"></i> Aprovar
                                         </button>
                                     </form>
-                                    <form method="post" onsubmit="return confirm('Rejeitar e remover a solicitação de <?= htmlspecialchars(addslashes($pu['username'])) ?>?');">
+                                    <form method="post" data-confirm="Rejeitar e remover a solicitação de <?= htmlspecialchars(addslashes($pu['username'])) ?>?">
                                         <input type="hidden" name="user_id" value="<?= (int) $pu['id'] ?>">
                                         <button type="submit" name="reject_user" class="pending-btn-reject">
                                             <i class="fas fa-xmark" aria-hidden="true"></i> Rejeitar
@@ -963,7 +963,7 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
                                             <i class="fas fa-save" aria-hidden="true"></i> Salvar
                                         </button>
                                     </form>
-                                    <form method="post" onsubmit="return confirm('Excluir permanentemente a conta de <?= htmlspecialchars(addslashes($au['username'])) ?>?');">
+                                    <form method="post" data-confirm="Excluir permanentemente a conta de <?= htmlspecialchars(addslashes($au['username'])) ?>?">
                                         <input type="hidden" name="account_id" value="<?= (int) $au['id'] ?>">
                                         <button type="submit" name="delete_account" class="pending-btn-reject">
                                             <i class="fas fa-trash" aria-hidden="true"></i> Excluir
@@ -1091,6 +1091,12 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
                                                 <strong id="fileName"></strong> (<span id="fileSize"></span>)
                                             </div>
                                         </div>
+                                        <div id="fileError" class="mt-2 d-none">
+                                            <div style="background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.25);border-radius:10px;padding:.75rem 1rem;font-size:.875rem;color:#991b1b;">
+                                                <i class="fas fa-triangle-exclamation me-2" aria-hidden="true"></i>
+                                                <span id="fileErrorText"></span>
+                                            </div>
+                                        </div>
                                     </div>
 
                                     <div class="mb-4">
@@ -1146,7 +1152,7 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
                                             <i class="fas fa-trash me-1" aria-hidden="true"></i>Expurgar Antigos
                                         </button>
                                     </form>
-                                    <form method="post" class="d-inline" onsubmit="return confirm('Isso apaga TODOS os logs do sistema, sem volta. Confirma?');">
+                                    <form method="post" class="d-inline" data-confirm="Isso apaga TODOS os logs do sistema, sem volta. Confirma?">
                                         <button name="expunge_all" value="1" class="adm-btn-primary adm-btn-danger" style="width:auto;padding:.5rem 1.1rem;font-size:.8rem;" title="Apaga todo o histórico de logs imediatamente">
                                             <i class="fas fa-eraser me-1" aria-hidden="true"></i>Limpar Tudo
                                         </button>
@@ -1343,9 +1349,56 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
 
 <?php Footer::display(); ?>
 
+<!-- Modal de confirmação (substitui o confirm() nativo do navegador) -->
+<div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content modal-content-ds">
+            <div class="modal-header-ds">
+                <h5 class="modal-title"><i class="fas fa-triangle-exclamation me-2" aria-hidden="true"></i>Confirmar ação</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body modal-body-ds" id="confirmModalBody"></div>
+            <div class="modal-footer modal-footer-ds">
+                <button type="button" class="btn-outline-ds btn-outline-ds--sm" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="adm-btn-primary adm-btn-danger" id="confirmModalOk" style="width:auto;padding:.6rem 1.25rem;">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    
+
+    <script>
+    (function () {
+        var modalEl = document.getElementById('confirmModal');
+        var modal = new bootstrap.Modal(modalEl);
+        var body = document.getElementById('confirmModalBody');
+        var okBtn = document.getElementById('confirmModalOk');
+        var pendingForm = null;
+
+        document.querySelectorAll('form[data-confirm]').forEach(function (form) {
+            form.addEventListener('submit', function (e) {
+                if (form.dataset.confirmed === '1') {
+                    return;
+                }
+                e.preventDefault();
+                pendingForm = form;
+                body.textContent = form.dataset.confirm;
+                modal.show();
+            });
+        });
+
+        okBtn.addEventListener('click', function () {
+            if (pendingForm) {
+                pendingForm.dataset.confirmed = '1';
+                modal.hide();
+                pendingForm.submit();
+            }
+        });
+    })();
+    </script>
+
     <!-- JavaScript para Administração -->
     <script>
     // Configuração de dados
@@ -1487,11 +1540,17 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
     const uploadFormEl = document.getElementById('uploadForm');
     if (uploadFormEl) {
         uploadFormEl.addEventListener('submit', function(e) {
+            const fileErrorEl = document.getElementById('fileError');
+            if (fileErrorEl) {
+                fileErrorEl.classList.add('d-none');
+            }
+
             // Validar se arquivo foi selecionado
             const fileInput = document.getElementById('lattes_xml');
             if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
                 e.preventDefault();
-                alert('Por favor, selecione um arquivo XML antes de enviar.');
+                document.getElementById('fileErrorText').textContent = 'Selecione um arquivo XML antes de enviar.';
+                fileErrorEl.classList.remove('d-none');
                 return false;
             }
             

@@ -434,6 +434,12 @@ $ppgs = getAllPPGs();
                                         <span class="badge bg-secondary" id="fileSize"></span>
                                     </div>
                                 </div>
+                                <div id="fileError" class="mt-2 d-none">
+                                    <div class="alert alert-danger mb-0">
+                                        <i class="bi bi-exclamation-triangle"></i>
+                                        <span id="fileErrorText"></span>
+                                    </div>
+                                </div>
                             </div>
 
                             <div class="mb-4">
@@ -598,22 +604,29 @@ $ppgs = getAllPPGs();
         }
 
         // Form submission
+        function mostrarErroArquivo(mensagem) {
+            document.getElementById('fileErrorText').textContent = mensagem;
+            document.getElementById('fileError').classList.remove('d-none');
+        }
+
         document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            document.getElementById('fileError').classList.add('d-none');
+
             // Validar se o arquivo foi selecionado
             if (!fileInput.files || fileInput.files.length === 0) {
                 e.preventDefault();
-                alert('Por favor, selecione um arquivo XML do currículo Lattes.');
+                mostrarErroArquivo('Selecione um arquivo XML do currículo Lattes antes de enviar.');
                 return false;
             }
-            
+
             // Validar se é XML
             const file = fileInput.files[0];
             if (!file.name.toLowerCase().endsWith('.xml')) {
                 e.preventDefault();
-                alert('Por favor, selecione um arquivo XML válido.');
+                mostrarErroArquivo('Selecione um arquivo XML válido — outros formatos não são aceitos.');
                 return false;
             }
-            
+
             document.getElementById('submitBtn').style.display = 'none';
             document.getElementById('processingBtn').style.display = 'block';
         });
