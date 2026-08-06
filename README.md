@@ -64,7 +64,7 @@ Guia de migração para infraestrutura institucional:
 - ✅ **Gestão de usuários**: aprovação de cadastros, troca de papel, exclusão de contas, notificação por e-mail (Resend).
 - ✅ **LGPD**: relatório de impacto (DPIA), logs de auditoria, anonimização e Termo de Ciência e Consentimento.
 - ✅ **Exportação**: BibTeX, RIS, CSV, JSON e XML via API (`/api/export.php`).
-- ✅ **Guia do Usuário** completo embutido no painel administrativo.
+- ✅ **Guia do Usuário** completo, embutido no painel administrativo e também em site próprio: [guia-usuario.vercel.app](https://guia-usuario.vercel.app/).
 
 ---
 
@@ -83,6 +83,16 @@ A identidade visual do Prodmais (cores, tipografia, componentes, padrões de UI)
 **[design-system-fawn-three.vercel.app](https://design-system-fawn-three.vercel.app/)**
 
 Use essa referência antes de criar ou alterar qualquer tela do sistema, para manter consistência visual entre as páginas.
+
+---
+
+## 📖 Guia do Usuário
+
+Documentação completa de uso, passo a passo, de todas as telas do sistema:
+
+**[guia-usuario.vercel.app](https://guia-usuario.vercel.app/)**
+
+Código-fonte em [`guia-usuario/`](guia-usuario/) — site estático, sem build, mesmo padrão do Design System.
 
 ---
 

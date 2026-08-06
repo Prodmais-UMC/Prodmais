@@ -1,5 +1,7 @@
 # Prodmais UMC — Guia do Usuário
 
+**No ar em: [guia-usuario.vercel.app](https://guia-usuario.vercel.app/)**
+
 Site estático de documentação, no mesmo estilo dos Claude Code Docs: barra
 lateral de navegação, sumário "Nesta seção" à direita, busca e tema
 claro/escuro. Sem build step — é HTML + CSS + JS puro, assim como o
