@@ -449,6 +449,50 @@ if (php_sapi_name() !== 'cli') {
 }
 
 /**
+ * Exibe uma página de acesso negado (403) e encerra a execução.
+ * Usar no lugar de redirecionar silenciosamente quando o papel do
+ * usuário não tem permissão para a página atual.
+ */
+function exibirAcessoNegado(string $mensagem = 'Você não tem permissão para acessar esta página.'): void {
+    http_response_code(403);
+    ?>
+    <!DOCTYPE html>
+    <html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>403 - Acesso negado - PRODMAIS UMC</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="/css/prodmais-elegant.css?v=5">
+        <link rel="stylesheet" href="/css/umc-theme.css">
+    </head>
+    <body>
+        <?php \App\View\Components\Navbar\Navbar::display(['active_page' => '']); ?>
+        <section style="min-height:60vh;display:flex;align-items:center;justify-content:center;padding:4rem 1.5rem;">
+            <div style="text-align:center;max-width:420px;">
+                <div style="width:72px;height:72px;border-radius:20px;background:rgba(239,68,68,.1);display:flex;align-items:center;justify-content:center;margin:0 auto 1.5rem;">
+                    <i class="fas fa-lock" style="font-size:1.75rem;color:#dc2626;" aria-hidden="true"></i>
+                </div>
+                <h1 style="font-size:2.25rem;font-weight:800;color:#0f172a;margin-bottom:.5rem;">403</h1>
+                <p style="color:#64748b;margin-bottom:1.75rem;"><?php echo htmlspecialchars($mensagem); ?></p>
+                <div style="display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;">
+                    <button type="button" onclick="window.location.reload()" class="btn-outline-ds btn-outline-ds--sm">
+                        <i class="fas fa-rotate-right" aria-hidden="true"></i> Atualizar
+                    </button>
+                    <a href="/index_umc.php" class="btn-outline-ds btn-outline-ds--sm">
+                        <i class="fas fa-house" aria-hidden="true"></i> Voltar ao início
+                    </a>
+                </div>
+            </div>
+        </section>
+    </body>
+    </html>
+    <?php
+    exit;
+}
+
+/**
  * Papel do usuário logado, respeitando o modo de pré-visualização.
  * Só contas com `conta_sistema` (marcadas no banco, ex: desenvolvedor) podem
  * ter `papel_preview` na sessão — usuários comuns sempre recebem o papel real.

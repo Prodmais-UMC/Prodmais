@@ -120,6 +120,7 @@ class Navbar extends Component {
                                 <i class="fas fa-chevron-down nav-user-caret" aria-hidden="true"></i>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end nav-user-menu">
+                                <?php if (in_array($papel, ['admin', 'pesquisador'])): ?>
                                 <li>
                                     <a class="dropdown-item" href="<?php echo $painel_href; ?>">
                                         <i class="fas fa-gauge me-2" aria-hidden="true"></i>Painel administrativo
@@ -128,6 +129,7 @@ class Navbar extends Component {
                                         <?php endif; ?>
                                     </a>
                                 </li>
+                                <?php endif; ?>
                                 <?php if (in_array($papel, ['admin', 'pesquisador'])): ?>
                                 <li><a class="dropdown-item" href="/importar_lattes.php"><i class="fas fa-file-import me-2" aria-hidden="true"></i>Importar Lattes</a></li>
                                 <?php endif; ?>
@@ -162,12 +164,14 @@ class Navbar extends Component {
                                 <i class="fas fa-chevron-down nav-user-accordion-caret" aria-hidden="true"></i>
                             </button>
                             <div class="collapse nav-user-accordion-panel" id="navUserAccordion">
+                                <?php if (in_array($papel, ['admin', 'pesquisador'])): ?>
                                 <a class="nav-link-elegant nav-link-elegant--sub" href="<?php echo $painel_href; ?>">
                                     Painel administrativo
                                     <?php if ($pendingCountNav > 0): ?>
                                     <span class="nav-pending-badge nav-pending-badge--inline"><?php echo $pendingCountNav; ?></span>
                                     <?php endif; ?>
                                 </a>
+                                <?php endif; ?>
                                 <?php if (in_array($papel, ['admin', 'pesquisador'])): ?>
                                 <a class="nav-link-elegant nav-link-elegant--sub" href="/importar_lattes.php">Importar Lattes</a>
                                 <?php endif; ?>

@@ -39,8 +39,7 @@ if (empty($_SESSION['user_id']) && empty($_SESSION['user'])) {
 }
 // Painel administrativo é restrito a admin e pesquisador — visualizador não tem permissão
 if (!in_array(papelEfetivo(), ['admin', 'pesquisador'], true)) {
-    header('Location: /dashboard.php');
-    exit;
+    exibirAcessoNegado('O painel administrativo é restrito a administradores e pesquisadores.');
 }
 // Compatibilidade: garante que $_SESSION['user'] existe para código legado abaixo
 if (empty($_SESSION['user']) && !empty($_SESSION['username'])) {

@@ -16,10 +16,8 @@ if (empty($_SESSION['user_id']) && empty($_SESSION['user'])) {
     header('Location: /login.php');
     exit;
 }
-require_once __DIR__ . '/../../../../src/UmcFunctions.php';
 if (!in_array(papelEfetivo(), ['admin', 'pesquisador'], true)) {
-    header('Location: /dashboard.php');
-    exit;
+    exibirAcessoNegado('A importação de currículos é restrita a administradores e pesquisadores.');
 }
 
 $message = '';
