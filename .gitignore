@@ -130,6 +130,7 @@ dist/
 
 # Spec-kit — specs locais, não sobem para produção
 .specify/
+AGENT_RULES.md
 *.spec.local.md
 
 # Planos e memória do Claude Code (contexto local)
