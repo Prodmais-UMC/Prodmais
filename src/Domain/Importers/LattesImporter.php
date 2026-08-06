@@ -581,10 +581,11 @@ class LattesImporter {
                 }
             }
 
-            // Adicionar dados do PPG
+            // Adicionar dados do PPG e do pesquisador dono do currículo
             $producao['ppg'] = $pesquisador['ppg'];
             $producao['area_concentracao'] = $pesquisador['area_concentracao'];
             $producao['campus'] = $pesquisador['campus'];
+            $producao['pesquisador_nome'] = $pesquisador['nome_completo'];
             
             try {
                 $id = md5($producao['titulo'] . $producao['ano'] . $producao['lattesID']);

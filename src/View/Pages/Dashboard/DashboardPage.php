@@ -340,19 +340,6 @@ Navbar::display([
     background-size: 28px 28px;
     pointer-events: none;
 }
-.dash-hero-stats {
-    display: flex; align-items: center; justify-content: center; gap: 0;
-    margin-top: 2.5rem;
-    border: 1px solid rgba(255,255,255,.1); border-radius: 14px;
-    overflow: hidden; background: rgba(255,255,255,.04);
-    backdrop-filter: blur(8px); max-width: 540px; margin-left: auto; margin-right: auto;
-}
-.dash-hero-stat { flex:1; padding: 1.1rem 1.25rem; text-align: center; }
-.dash-hero-stat + .dash-hero-stat { border-left: 1px solid rgba(255,255,255,.1); }
-.dash-hero-stat-num { font-size: 1.75rem; font-weight: 900; color: #f1f5f9; line-height: 1; letter-spacing: -1px; margin-bottom: .2rem; }
-.dash-hero-stat-lbl { font-size: .65rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em; color: rgba(241,245,249,.4); }
-@media (max-width: 767px) { .dash-hero-stats { display: none; } }
-
 /* ── Chart cards ── */
 .dash-chart-card {
     background: white;
@@ -421,25 +408,6 @@ Navbar::display([
         <p style="font-size:1rem;color:rgba(241,245,249,.5);max-width:480px;margin:0 auto;line-height:1.6;">
             Visão completa da produção científica dos Programas de Pós-Graduação
         </p>
-
-        <div class="dash-hero-stats">
-            <div class="dash-hero-stat">
-                <div class="dash-hero-stat-num"><?= number_format($stats['producoes']) ?></div>
-                <div class="dash-hero-stat-lbl">Produções</div>
-            </div>
-            <div class="dash-hero-stat">
-                <div class="dash-hero-stat-num"><?= number_format($stats['pesquisadores']) ?></div>
-                <div class="dash-hero-stat-lbl">Pesquisadores</div>
-            </div>
-            <div class="dash-hero-stat">
-                <div class="dash-hero-stat-num"><?= $stats['ppgs'] ?></div>
-                <div class="dash-hero-stat-lbl">PPGs</div>
-            </div>
-            <div class="dash-hero-stat">
-                <div class="dash-hero-stat-num"><?= number_format($stats['projetos']) ?></div>
-                <div class="dash-hero-stat-lbl">Projetos</div>
-            </div>
-        </div>
 
     </div>
 </section>
