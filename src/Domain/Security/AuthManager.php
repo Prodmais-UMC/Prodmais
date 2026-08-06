@@ -50,12 +50,23 @@ class AuthManager {
     public function login($username, $password) {
         try {
             // Verificar se usuario esta bloqueado
-            $stmt = $this->db->prepare("
-                SELECT id, username, email, password_hash, tentativas_login, bloqueado_ate, nome_completo, status, papel, conta_sistema
-                FROM usuarios_admin
-                WHERE username = ? OR email = ?
-            ");
-            $stmt->execute([$username, $username]);
+            try {
+                $stmt = $this->db->prepare("
+                    SELECT id, username, email, password_hash, tentativas_login, bloqueado_ate, nome_completo, status, papel, conta_sistema
+                    FROM usuarios_admin
+                    WHERE username = ? OR email = ?
+                ");
+                $stmt->execute([$username, $username]);
+            } catch (PDOException $e) {
+                // Coluna conta_sistema pode ainda não existir se a migração não rodou —
+                // login não pode depender disso pra não derrubar o acesso de ninguém.
+                $stmt = $this->db->prepare("
+                    SELECT id, username, email, password_hash, tentativas_login, bloqueado_ate, nome_completo, status, papel
+                    FROM usuarios_admin
+                    WHERE username = ? OR email = ?
+                ");
+                $stmt->execute([$username, $username]);
+            }
             $usuario = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if (!$usuario) {
@@ -120,7 +131,7 @@ class AuthManager {
             $_SESSION['user']          = $usuario['username']; // compatibilidade com admin.php
             $_SESSION['nome_completo'] = $usuario['nome_completo'];
             $_SESSION['papel']         = $usuario['papel'];
-            $_SESSION['conta_sistema'] = (bool) $usuario['conta_sistema'];
+            $_SESSION['conta_sistema'] = (bool) ($usuario['conta_sistema'] ?? false);
             $_SESSION['criado_em']     = time();
             $_SESSION['ultima_atividade'] = time();
             
