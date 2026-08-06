@@ -1,0 +1,556 @@
+/**
+ * UMC Theme - Identidade Visual Oficial
+ * Baseado no site oficial: https://www.umc.br/
+ * CORES OFICIAIS: Azul Royal (#004B93) e Branco (#FFFFFF)
+ */
+
+:root {
+    /* Cores Oficiais UMC */
+    --umc-azul-royal: #004B93;      /* Azul principal UMC */
+    --umc-azul-escuro: #003366;     /* Azul escuro */
+    --umc-azul-claro: #0066cc;      /* Azul claro */
+    --umc-amarelo: #FFD100;         /* Amarelo destaque */
+    --umc-cinza-escuro: #333333;
+    --umc-cinza-medio: #666666;
+    --umc-cinza-claro: #f5f5f5;
+    --umc-branco: #ffffff;
+    
+    /* Gradientes */
+    --umc-gradient-primary: linear-gradient(135deg, #004B93 0%, #0066cc 100%);
+    --umc-gradient-secondary: linear-gradient(135deg, #0066cc 0%, #3399ff 100%);
+    
+    /* Sombras Elevadas */
+    --umc-shadow-sm: 0 4px 12px rgba(0, 75, 147, 0.08);
+    --umc-shadow-md: 0 8px 24px rgba(0, 75, 147, 0.12);
+    --umc-shadow-lg: 0 16px 48px rgba(0, 75, 147, 0.18);
+    
+    /* Glassmorphism */
+    --umc-glass-bg: rgba(255, 255, 255, 0.7);
+    --umc-glass-border: rgba(255, 255, 255, 0.3);
+    --umc-glass-blur: blur(12px);
+    
+    /* Transições Suaves */
+    --umc-transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* Glass Effect Utility */
+.glass-panel {
+    background: var(--umc-glass-bg);
+    backdrop-filter: var(--umc-glass-blur);
+    -webkit-backdrop-filter: var(--umc-glass-blur);
+    border: 1px solid var(--umc-glass-border);
+    box-shadow: var(--umc-shadow-md);
+}
+
+/* Base */
+body {
+    font-family: 'Inter', 'Roboto', sans-serif;
+    color: var(--umc-cinza-escuro);
+    background: #fdfdfd;
+    line-height: 1.6;
+}
+
+/* Navbar Premium */
+.navbar-umc {
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(0, 75, 147, 0.05);
+    padding: 0.5rem 0;
+}
+
+.navbar-umc.scrolled {
+    box-shadow: var(--umc-shadow-lg);
+}
+
+.navbar-umc .navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--umc-azul-escuro);
+    padding: 1rem 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.navbar-umc .navbar-brand img {
+    height: 45px;
+}
+
+.navbar-umc .navbar-brand:hover {
+    color: var(--umc-azul-claro);
+}
+
+.navbar-umc .nav-link {
+    color: var(--umc-cinza-medio);
+    font-weight: 500;
+    padding: 1.5rem 1.2rem;
+    position: relative;
+    transition: var(--umc-transition);
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.navbar-umc .nav-link::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 3px;
+    background: var(--umc-azul-royal);
+    transition: var(--umc-transition);
+    transform: translateX(-50%);
+}
+
+.navbar-umc .nav-link:hover,
+.navbar-umc .nav-link.active {
+    color: var(--umc-azul-escuro);
+}
+
+.navbar-umc .nav-link:hover::before,
+.navbar-umc .nav-link.active::before {
+    width: 80%;
+}
+
+/* Hero Section - Estilo UMC */
+.hero-umc {
+    background: var(--umc-gradient-primary);
+    color: var(--umc-branco);
+    padding: 120px 0 80px;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-umc::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"><path d="M0,0 L1200,0 L1200,100 Q600,120 0,100 Z" fill="rgba(255,255,255,0.03)"/></svg>');
+    background-size: cover;
+    opacity: 0.5;
+}
+
+.hero-umc .container {
+    position: relative;
+    z-index: 1;
+}
+
+.hero-umc h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+    line-height: 1.2;
+}
+
+.hero-umc .lead {
+    font-size: 1.4rem;
+    font-weight: 300;
+    opacity: 0.95;
+    margin-bottom: 2rem;
+}
+
+.hero-umc .slogan {
+    font-size: 1.2rem;
+    font-weight: 400;
+    opacity: 0.9;
+    margin-top: 1rem;
+    padding: 1rem 2rem;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50px;
+    display: inline-block;
+}
+
+/* Botões Estilo UMC */
+.btn-umc-primary {
+    background: var(--umc-azul-royal);
+    color: var(--umc-branco);
+    border: none;
+    padding: 14px 32px;
+    font-weight: 600;
+    border-radius: 50px;
+    transition: var(--umc-transition);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    box-shadow: var(--umc-shadow-sm);
+    font-size: 0.95rem;
+}
+
+.btn-umc-primary:hover {
+    background: var(--umc-azul-claro);
+    transform: translateY(-2px);
+    box-shadow: var(--umc-shadow-md);
+    color: var(--umc-branco);
+}
+
+.btn-umc-secondary {
+    background: var(--umc-branco);
+    color: var(--umc-azul-royal);
+    border: 2px solid var(--umc-azul-royal);
+    padding: 12px 30px;
+    font-weight: 600;
+    border-radius: 50px;
+    transition: var(--umc-transition);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-umc-secondary:hover {
+    background: var(--umc-azul-royal);
+    color: var(--umc-branco);
+    transform: translateY(-2px);
+}
+
+.btn-umc-outline {
+    background: transparent;
+    color: var(--umc-azul-royal);
+    border: 2px solid var(--umc-azul-royal);
+    padding: 12px 30px;
+    font-weight: 600;
+    border-radius: 50px;
+    transition: var(--umc-transition);
+}
+
+.btn-umc-outline:hover {
+    background: var(--umc-azul-royal);
+    color: var(--umc-branco);
+}
+
+/* Cards Estilo UMC (Premium) */
+.card-umc {
+    background: var(--umc-branco);
+    border-radius: 16px;
+    box-shadow: var(--umc-shadow-md);
+    transition: var(--umc-transition);
+    border: 1px solid rgba(0, 75, 147, 0.05);
+    overflow: hidden;
+    padding: 24px;
+}
+
+.card-umc:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--umc-shadow-lg);
+}
+
+.glass-card {
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 75, 147, 0.1);
+}
+
+.card-umc-icon {
+    width: 60px;
+    height: 60px;
+    background: var(--umc-gradient-primary);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1.5rem;
+    box-shadow: 0 4px 15px rgba(0, 75, 147, 0.2);
+}
+
+.card-umc-icon i {
+    font-size: 2rem;
+    color: var(--umc-branco);
+}
+
+.card-umc-title {
+    color: var(--umc-azul-escuro);
+    font-weight: 700;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+}
+
+.card-umc-text {
+    color: var(--umc-cinza-medio);
+    line-height: 1.8;
+}
+
+/* Stats Cards */
+.stat-card-umc {
+    background: var(--umc-branco);
+    border-radius: 15px;
+    padding: 2.5rem;
+    text-align: center;
+    box-shadow: var(--umc-shadow-md);
+    transition: var(--umc-transition);
+    border-top: 4px solid var(--umc-azul-royal);
+    height: 100%;
+}
+
+.stat-card-umc:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--umc-shadow-lg);
+    border-top-color: var(--umc-azul-claro);
+}
+
+.stat-card-umc i {
+    font-size: 3rem;
+    background: var(--umc-gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 1rem;
+}
+
+.stat-card-umc h3 {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--umc-azul-escuro);
+    margin: 1rem 0;
+}
+
+.stat-card-umc p {
+    color: var(--umc-cinza-medio);
+    font-weight: 500;
+    margin: 0;
+    font-size: 1.05rem;
+}
+
+/* Badges UMC */
+.badge-umc {
+    background: var(--umc-azul-royal);
+    color: var(--umc-branco);
+    padding: 8px 18px;
+    border-radius: 25px;
+    font-weight: 600;
+    display: inline-block;
+    margin: 5px;
+    font-size: 0.9rem;
+    transition: var(--umc-transition);
+}
+
+.badge-umc:hover {
+    background: var(--umc-azul-claro);
+    transform: scale(1.05);
+}
+
+.badge-umc-primary {
+    background: var(--umc-azul-royal);
+}
+
+.badge-umc-primary:hover {
+    background: var(--umc-azul-claro);
+}
+
+.badge-umc-secondary {
+    background: var(--umc-azul-claro);
+}
+
+.badge-umc-secondary:hover {
+    background: var(--umc-azul-royal);
+}
+
+/* Search Box */
+.search-box-umc, .search-elegant {
+    background: var(--umc-branco);
+    border-radius: 12px;
+    padding: 6px;
+    box-shadow: var(--umc-shadow-md);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    max-width: 800px;
+    margin: 0 auto;
+    transition: var(--umc-transition);
+    border: 1px solid rgba(0, 75, 147, 0.08);
+}
+
+.search-elegant:focus-within {
+    box-shadow: var(--umc-shadow-lg);
+    transform: translateY(-2px);
+    border-color: var(--umc-azul-royal);
+}
+
+.search-elegant input {
+    border: none;
+    outline: none;
+    flex: 1;
+    padding: 12px 20px;
+    font-size: 1.05rem;
+    background: transparent;
+}
+
+.search-elegant button {
+    background: var(--umc-gradient-primary);
+    border: none;
+    padding: 12px 28px;
+    border-radius: 10px;
+    color: var(--umc-branco);
+    font-weight: 600;
+    transition: var(--umc-transition);
+}
+
+.search-elegant button:hover {
+    filter: brightness(1.1);
+    transform: scale(1.02);
+}
+
+/* Section Titles */
+.section-title-umc {
+    text-align: center;
+    margin-bottom: 4.5rem;
+}
+
+.section-title-umc h2 {
+    font-size: 2.8rem;
+    font-weight: 800;
+    color: var(--umc-azul-escuro);
+    margin-bottom: 1.2rem;
+    letter-spacing: -0.02em;
+}
+
+.text-gradient {
+    background: var(--umc-gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Footer UMC */
+.footer-umc {
+    background: var(--umc-cinza-escuro);
+    color: var(--umc-branco);
+    padding: 4rem 0 2rem;
+    margin-top: 5rem;
+}
+
+.footer-umc h5 {
+    color: var(--umc-azul-claro);
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+}
+
+.footer-umc a {
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    transition: var(--umc-transition);
+    display: block;
+    margin-bottom: 0.8rem;
+}
+
+.footer-umc a:hover {
+    color: var(--umc-azul-claro);
+    padding-left: 5px;
+}
+
+.footer-umc-bottom {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    margin-top: 3rem;
+    padding-top: 2rem;
+    text-align: center;
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.6);
+}
+
+/* Alert UMC */
+.alert-umc {
+    background: var(--umc-cinza-claro);
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 2rem 0;
+}
+
+.alert-umc-warning {
+    background: #fff3cd;
+}
+
+.alert-umc h5 {
+    color: var(--umc-azul-escuro);
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-umc h1 {
+        font-size: 2.5rem;
+    }
+    
+    .hero-umc .lead {
+        font-size: 1.1rem;
+    }
+    
+    .section-title-umc h2 {
+        font-size: 2rem;
+    }
+    
+    .stat-card-umc h3 {
+        font-size: 2.5rem;
+    }
+}
+
+/* Estilos para Tabelas */
+.table-umc {
+    background: var(--umc-branco);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--umc-shadow-sm);
+}
+
+.table-umc thead {
+    background: var(--umc-gradient-primary);
+    color: var(--umc-branco);
+}
+
+.table-umc thead th {
+    padding: 1.2rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.5px;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+/* Micro-animação para links e botões */
+a, button {
+    outline: none !important;
+}
+
+.hover-lift {
+    transition: var(--umc-transition);
+}
+
+.hover-lift:hover {
+    transform: translateY(-8px);
+}
+
+/* Background flutuante para Hero */
+@keyframes float {
+    0% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(2deg); }
+    100% { transform: translateY(0px) rotate(0deg); }
+}
+
+.hero-umc::before {
+    animation: float 10s ease-in-out infinite;
+}

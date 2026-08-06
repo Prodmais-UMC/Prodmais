@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/img/umc-favicon.png">
+    <title>Política de Privacidade - Prodmais UMC</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- CSS Elegante -->
+    <link rel="stylesheet" href="/css/prodmais-elegant.css">
+    <link rel="stylesheet" href="/css/umc-theme.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+        }
+        
+        .content-section {
+            background: white;
+            border-radius: 16px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            border: 1px solid var(--gray-200);
+        }
+        
+        .content-section h2 {
+            color: #1e40af;
+            font-weight: 800;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid #1e40af;
+        }
+        
+        .content-section h3 {
+            color: #1e40af;
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .content-section p {
+            color: var(--gray-700);
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+        
+        .content-section ul, .content-section ol {
+            color: var(--gray-700);
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+        
+        .content-section li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(30, 64, 175, 0.05), rgba(59, 130, 246, 0.05));
+            border-left: 4px solid #1e40af;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+        
+        .highlight-box strong {
+            color: #1e40af;
+        }
+        
+        .last-updated {
+            background: var(--gray-100);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            color: var(--gray-600);
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-back-home {
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            color: white;
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 12px;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-back-home::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .btn-back-home:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .btn-back-home:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 24px rgba(30, 64, 175, 0.4);
+        }
+        
+        .btn-back-home:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar Elegante -->
+<nav class="navbar navbar-expand-lg navbar-elegant">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="/">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/0/03/Logo_umc1.png" 
+                 alt="UMC Logo" 
+                 height="45" 
+                 class="me-2"
+                 onerror="this.style.display='none'">
+            <div class="brand-text" style="font-size: 1.75rem; font-weight: 900; background: linear-gradient(135deg, #1a56db 0%, #0369a1 50%, #0ea5e9 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: -0.5px;">
+                Prod<span style="color: #0ea5e9; font-weight: 900;">mais</span>
+            </div>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link-elegant" href="/index.html"><i class="fas fa-home me-1"></i> Início</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link-elegant" href="/pesquisadores.html"><i class="fas fa-users me-1"></i> Pesquisadores</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link-elegant" href="/ppgs.html"><i class="fas fa-university me-1"></i> PPGs</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%); padding: 4rem 0 3rem;">
+    <div class="container text-center">
+        <h1 style="font-size: 3rem; font-weight: 900; color: white; margin-bottom: 1rem;">
+            <i class="fas fa-shield-alt me-3"></i>Política de Privacidade
+        </h1>
+        <p style="font-size: 1.25rem; color: rgba(255,255,255,0.95); margin: 0;">
+            Transparência e proteção dos seus dados
+        </p>
+    </div>
+</section>
+
+<!-- Content -->
+<section class="py-5" style="background: var(--gray-100);">
+    <div class="container">
+        <div class="last-updated">
+            <i class="fas fa-calendar-alt"></i>
+            <strong>Última atualização:</strong> 25/02/2026        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-info-circle me-2"></i>Introdução</h2>
+            <p>
+                O <strong>Prodmais UMC</strong> é um sistema desenvolvido pela Universidade de Mogi das Cruzes (UMC) 
+                para gestão e análise da produção científica dos seus Programas de Pós-Graduação. Este documento 
+                descreve como coletamos, usamos, armazenamos e protegemos os dados pessoais dos usuários, em 
+                conformidade com a <strong>Lei Geral de Proteção de Dados (Lei nº 13.709/2018 - LGPD)</strong>.
+            </p>
+            <div class="highlight-box">
+                <p><strong><i class="fas fa-check-circle me-2"></i>Compromisso com a LGPD:</strong> 
+                Garantimos a proteção dos seus dados pessoais e o cumprimento de todos os princípios e direitos 
+                estabelecidos pela legislação brasileira de proteção de dados.</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-database me-2"></i>Dados Coletados</h2>
+            
+            <h3>1. Dados de Pesquisadores</h3>
+            <p>Coletamos dados disponíveis publicamente na <strong>Plataforma Lattes (CNPq)</strong> e outras fontes acadêmicas:</p>
+            <ul>
+                <li>Nome completo</li>
+                <li>ID Lattes</li>
+                <li>ORCID (quando disponível)</li>
+                <li>Vínculo institucional (PPG)</li>
+                <li>Produções científicas (artigos, livros, capítulos, etc.)</li>
+                <li>Áreas de atuação e pesquisa</li>
+                <li>Projetos de pesquisa</li>
+            </ul>
+
+            <h3>2. Dados de Acesso ao Sistema</h3>
+            <p>Para administradores do sistema:</p>
+            <ul>
+                <li>E-mail institucional</li>
+                <li>Senha criptografada</li>
+                <li>Logs de acesso (data, hora, IP)</li>
+                <li>Histórico de ações no sistema</li>
+            </ul>
+
+            <h3>3. Dados Técnicos</h3>
+            <ul>
+                <li>Endereço IP</li>
+                <li>Tipo de navegador</li>
+                <li>Sistema operacional</li>
+                <li>Cookies essenciais para funcionamento do sistema</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-bullseye me-2"></i>Finalidade do Tratamento</h2>
+            <p>Os dados pessoais são tratados para as seguintes finalidades:</p>
+            
+            <ol>
+                <li><strong>Gestão da Produção Científica:</strong> Organizar, indexar e disponibilizar produções científicas dos programas de pós-graduação.</li>
+                <li><strong>Análise e Relatórios:</strong> Gerar estatísticas, indicadores e relatórios para gestão institucional e prestação de contas à CAPES.</li>
+                <li><strong>Divulgação Científica:</strong> Promover a visibilidade da pesquisa desenvolvida na UMC.</li>
+                <li><strong>Conformidade Legal:</strong> Cumprir obrigações legais e regulatórias perante órgãos de fomento e avaliação.</li>
+                <li><strong>Segurança:</strong> Proteger o sistema contra acessos não autorizados e garantir a integridade dos dados.</li>
+            </ol>
+
+            <div class="highlight-box">
+                <p><strong><i class="fas fa-balance-scale me-2"></i>Base Legal (LGPD):</strong> 
+                O tratamento de dados é realizado com base no <strong>legítimo interesse</strong> da instituição 
+                (Art. 7º, IX da LGPD) e no <strong>cumprimento de obrigação legal</strong> (Art. 7º, II da LGPD), 
+                especialmente perante a CAPES e órgãos de avaliação da pós-graduação.</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-users me-2"></i>Compartilhamento de Dados</h2>
+            <p>Os dados podem ser compartilhados nas seguintes situações:</p>
+            
+            <ul>
+                <li><strong>Divulgação Pública:</strong> Dados de produções científicas são disponibilizados publicamente no site, conforme já são públicos nas fontes originais (Plataforma Lattes, ORCID).</li>
+                <li><strong>CAPES e Órgãos de Fomento:</strong> Relatórios e dados agregados para avaliação dos programas de pós-graduação.</li>
+                <li><strong>Pesquisadores:</strong> Cada pesquisador tem acesso aos seus próprios dados e produções.</li>
+                <li><strong>Determinação Legal:</strong> Quando exigido por lei ou ordem judicial.</li>
+            </ul>
+
+            <p><strong>Não compartilhamos dados com terceiros para fins comerciais ou publicitários.</strong></p>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-lock me-2"></i>Segurança dos Dados</h2>
+            <p>Implementamos medidas técnicas e organizacionais para proteger os dados pessoais:</p>
+            
+            <ul>
+                <li><strong>Criptografia:</strong> Senhas armazenadas com hash bcrypt (irreversível).</li>
+                <li><strong>HTTPS:</strong> Comunicação criptografada via SSL/TLS.</li>
+                <li><strong>Controle de Acesso:</strong> Sistema de autenticação e autorização robusto.</li>
+                <li><strong>Backups:</strong> Backups regulares e seguros dos dados.</li>
+                <li><strong>Logs de Auditoria:</strong> Registro de todas as ações críticas no sistema.</li>
+                <li><strong>Atualização:</strong> Manutenção constante de segurança e correção de vulnerabilidades.</li>
+                <li><strong>Firewall:</strong> Proteção contra acessos não autorizados.</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-user-check me-2"></i>Direitos dos Titulares</h2>
+            <p>Conforme a LGPD (Art. 18), você tem os seguintes direitos:</p>
+            
+            <ol>
+                <li><strong>Confirmação e Acesso:</strong> Confirmar se seus dados são tratados e acessá-los.</li>
+                <li><strong>Correção:</strong> Corrigir dados incompletos, inexatos ou desatualizados.</li>
+                <li><strong>Anonimização ou Bloqueio:</strong> Solicitar anonimização, bloqueio ou eliminação de dados desnecessários.</li>
+                <li><strong>Portabilidade:</strong> Solicitar a portabilidade dos dados a outro fornecedor.</li>
+                <li><strong>Eliminação:</strong> Solicitar a eliminação de dados tratados com seu consentimento.</li>
+                <li><strong>Informação:</strong> Saber com quem compartilhamos seus dados.</li>
+                <li><strong>Revogação:</strong> Revogar consentimento quando aplicável.</li>
+                <li><strong>Oposição:</strong> Opor-se ao tratamento em determinadas situações.</li>
+            </ol>
+
+            <div class="highlight-box">
+                <p><strong><i class="fas fa-envelope me-2"></i>Para exercer seus direitos, entre em contato:</strong></p>
+                <p style="margin-bottom: 0.5rem;"><strong>E-mail:</strong> dpo@umc.br ou prodmais@umc.br</p>
+                <p style="margin-bottom: 0;"><strong>Endereço:</strong> Universidade de Mogi das Cruzes - Av. Dr. Cândido Xavier de Almeida e Souza, 200 - Mogi das Cruzes - SP</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-clock me-2"></i>Retenção de Dados</h2>
+            <p>Os dados são retidos pelo período necessário para:</p>
+            
+            <ul>
+                <li><strong>Produções Científicas:</strong> Mantidos permanentemente para fins de registro histórico e memória acadêmica.</li>
+                <li><strong>Dados de Acesso:</strong> Logs mantidos por 6 meses, conforme Marco Civil da Internet.</li>
+                <li><strong>Dados Administrativos:</strong> Mantidos enquanto necessário para gestão dos programas e prestação de contas.</li>
+            </ul>
+
+            <p>Após o período de retenção, os dados são anonimizados ou eliminados de forma segura.</p>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-cookie-bite me-2"></i>Cookies</h2>
+            <p>Utilizamos apenas cookies essenciais para o funcionamento do sistema:</p>
+            
+            <ul>
+                <li><strong>Sessão:</strong> Mantém você autenticado durante a navegação.</li>
+                <li><strong>Segurança:</strong> CSRF tokens para proteção contra ataques.</li>
+            </ul>
+
+            <p><strong>Não utilizamos cookies de rastreamento, publicidade ou análise de comportamento.</strong></p>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-child me-2"></i>Dados de Menores</h2>
+            <p>
+                O sistema não coleta intencionalmente dados de menores de 18 anos. Caso identifique que dados de 
+                menores foram coletados inadvertidamente, entre em contato para que possamos removê-los imediatamente.
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-edit me-2"></i>Alterações nesta Política</h2>
+            <p>
+                Esta Política de Privacidade pode ser atualizada periodicamente. Alterações significativas serão 
+                comunicadas através do site. A data da última atualização está sempre indicada no topo do documento.
+            </p>
+            <p>
+                Recomendamos que você revise esta política regularmente para se manter informado sobre como 
+                protegemos seus dados.
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-gavel me-2"></i>Legislação Aplicável</h2>
+            <p>Esta Política de Privacidade é regida pelas seguintes legislações brasileiras:</p>
+            
+            <ul>
+                <li><strong>Lei nº 13.709/2018</strong> - Lei Geral de Proteção de Dados (LGPD)</li>
+                <li><strong>Lei nº 12.965/2014</strong> - Marco Civil da Internet</li>
+                <li><strong>Decreto nº 8.771/2016</strong> - Regulamentação do Marco Civil</li>
+                <li><strong>Constituição Federal</strong> - Art. 5º, X e XII (privacidade e sigilo)</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-phone me-2"></i>Contato</h2>
+            <p>Para dúvidas, solicitações ou reclamações sobre privacidade e proteção de dados:</p>
+            
+            <div class="highlight-box">
+                <p><strong>Encarregado de Proteção de Dados (DPO)</strong></p>
+                <p style="margin-bottom: 0.5rem;"><i class="fas fa-envelope me-2"></i><strong>E-mail:</strong> dpo@umc.br</p>
+                <p style="margin-bottom: 0.5rem;"><i class="fas fa-envelope me-2"></i><strong>E-mail do Sistema:</strong> prodmais@umc.br</p>
+                <p style="margin-bottom: 0.5rem;"><i class="fas fa-phone me-2"></i><strong>Telefone:</strong> (11) 4798-7000</p>
+                <p style="margin-bottom: 0;"><i class="fas fa-map-marker-alt me-2"></i><strong>Endereço:</strong> Av. Dr. Cândido Xavier de Almeida e Souza, 200 - Centro Cívico - Mogi das Cruzes - SP - CEP 08780-911</p>
+            </div>
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="/index.html" class="btn btn-lg btn-back-home">
+                <i class="fas fa-home me-2" style="position: relative; z-index: 1;"></i><span style="position: relative; z-index: 1;">Voltar para o Início</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer-elegant">
+    <div class="container">
+        <div class="text-center">
+            <p class="mb-1">&copy; 2026 Universidade de Mogi das Cruzes - Todos os direitos reservados</p>
+            <p style="font-size: 0.875rem; color: var(--gray-500);">
+                Sistema em conformidade com LGPD (Lei nº 13.709/2018)
+            </p>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programas de Pós-Graduação - UMC Prodmais</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/umc-theme.css">
+    <link rel="stylesheet" href="/css/prodmais-elegant.css">
+
+    <style>
+        body {
+            padding-top: 80px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--gray-100);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light navbar-umc fixed-top">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="/">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/0/03/Logo_umc1.png"
+                    alt="UMC Logo"
+                    height="50"
+                    class="me-3"
+                    onerror="this.style.display='none'">
+                <div>
+                    <strong style="font-size: 1.8rem; color: var(--umc-azul-claro); margin-left: 8px;">Prodmais</strong>
+                </div>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/index.html"><i class="fas fa-home"></i> Início</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/pesquisadores.html"><i class="fas fa-users"></i> Pesquisadores</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/ppgs.html"><i class="fas fa-university"></i> PPGs</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/projetos.html"><i class="fas fa-project-diagram"></i> Projetos</a>
+                    </li>
+                                            <li class="nav-item">
+                            <a class="nav-link" href="/dashboard.html"><i class="fas fa-chart-line"></i> Dashboard</a>
+                        </li>
+                                        <li class="nav-item">
+                        <a class="nav-link" href="/login.html"><i class="fas fa-cog"></i> Admin</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section style="background: linear-gradient(135deg, #1e40af 0%, #3b82f6 50%, #60a5fa 100%); padding: 4rem 0 3rem; position: relative; overflow: hidden;">
+        <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.1;">
+            <div style="position: absolute; top: 20%; left: 10%; width: 300px; height: 300px; background: white; border-radius: 50%; filter: blur(80px);"></div>
+            <div style="position: absolute; bottom: 20%; right: 10%; width: 400px; height: 400px; background: white; border-radius: 50%; filter: blur(100px);"></div>
+        </div>
+        
+        <div class="container" style="position: relative; z-index: 1;">
+            <div class="row justify-content-center text-center">
+                <div class="col-lg-10 fade-in-up">
+                    <div style="margin-bottom: 1.5rem;">
+                        <span style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 0.5rem 1.5rem; border-radius: 9999px; font-size: 0.875rem; font-weight: 500; color: white; border: 1px solid rgba(255,255,255,0.3);">
+                            <i class="fas fa-graduation-cap" style="margin-right: 0.5rem;"></i>
+                            Programas de Pós-Graduação
+                        </span>
+                    </div>
+                    
+                    <h1 style="font-size: 3.5rem; font-weight: 900; margin-bottom: 1rem; color: white; line-height: 1.2; letter-spacing: -0.02em;">
+                        <i class="fas fa-university me-3"></i>PPGs UMC
+                    </h1>
+                    <p style="font-size: 1.25rem; color: rgba(255,255,255,0.95); margin-bottom: 0; max-width: 700px; margin-left: auto; margin-right: auto; line-height: 1.6; font-weight: 400;">
+                        Universidade de Mogi das Cruzes
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container my-5">
+        <!-- Erro ao contar produções do PPG Biotecnologia: 404 Not Found: {"error":{"root_cause":[{"type":"index_not_found_exception","reason":"no such index [prodmais_umc]","resource.type":"index_or_alias","resource.id":"prodmais_umc","index_uuid":"_na_","index":"prodmais_umc"}],"type":"index_not_found_exception","reason":"no such index [prodmais_umc]","resource.type":"index_or_alias","resource.id":"prodmais_umc","index_uuid":"_na_","index":"prodmais_umc"},"status":404} -->            <div class="fade-in-up" style="background: white; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); border: 1px solid var(--gray-200); overflow: hidden; margin-bottom: 2rem; transition: all 0.3s ease;"
+                 onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 12px 24px rgba(0,0,0,0.12)';"
+                 onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 12px rgba(0,0,0,0.08)';">
+                
+                <div style="background: linear-gradient(135deg, #1e40af, #3b82f6); padding: 2rem; position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
+                    <div style="position: relative; z-index: 1;">
+                        <h3 style="font-size: 1.75rem; font-weight: 800; color: white; margin-bottom: 1rem;">
+                            <i class="fas fa-graduation-cap me-2"></i>Biotecnologia                        </h3>
+                        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1rem;">
+                            <span style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.875rem; font-weight: 600; color: white; border: 1px solid rgba(255,255,255,0.3);">
+                                <i class="fas fa-certificate me-1"></i>Mestrado/Doutorado                            </span>
+                            <span style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.875rem; font-weight: 600; color: white; border: 1px solid rgba(255,255,255,0.3);">
+                                <i class="fas fa-map-marker-alt me-1"></i>Mogi das Cruzes                            </span>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); padding: 1.25rem; border-radius: 12px; display: inline-block; border: 1px solid rgba(255,255,255,0.2);">
+                            <div style="font-size: 2.5rem; font-weight: 800; color: white; line-height: 1; margin-bottom: 0.25rem;">
+                                0                            </div>
+                            <div style="font-size: 0.875rem; font-weight: 600; color: rgba(255,255,255,0.9); text-transform: uppercase; letter-spacing: 0.5px;">
+                                Produções Científicas
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="padding: 2rem;">
+                    <h6 style="font-weight: 800; color: var(--gray-900); margin-bottom: 1rem; font-size: 1.125rem;">
+                        <i class="fas fa-layer-group me-2" style="color: #3b82f6;"></i>Áreas de Concentração
+                    </h6>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                                    <div style="background: var(--gray-50); padding: 1rem 1.25rem; border-radius: 10px; border-left: 3px solid #3b82f6; color: var(--gray-700); font-weight: 500; transition: all 0.2s ease;"
+                                 onmouseover="this.style.background='var(--gray-100)'; this.style.paddingLeft='1.5rem';"
+                                 onmouseout="this.style.background='var(--gray-50)'; this.style.paddingLeft='1.25rem';">
+                                <i class="fas fa-check-circle me-2" style="color: #3b82f6;"></i>Biotecnologia Industrial                            </div>
+                                                    <div style="background: var(--gray-50); padding: 1rem 1.25rem; border-radius: 10px; border-left: 3px solid #3b82f6; color: var(--gray-700); font-weight: 500; transition: all 0.2s ease;"
+                                 onmouseover="this.style.background='var(--gray-100)'; this.style.paddingLeft='1.5rem';"
+                                 onmouseout="this.style.background='var(--gray-50)'; this.style.paddingLeft='1.25rem';">
+                                <i class="fas fa-check-circle me-2" style="color: #3b82f6;"></i>Biotecnologia Ambiental                            </div>
+                                            </div>
+                    
+                    <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <a href="/ppg.html?codigo=33002010191P0" class="btn btn-lg"
+                           style="background: linear-gradient(135deg, #3b82f6, #1e40af); color: white; padding: 0.875rem 2rem; border-radius: 12px; font-weight: 700; border: none; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); transition: all 0.3s; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;"
+                           onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(59, 130, 246, 0.4)';"
+                           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.3)';">
+                            <i class="fas fa-search"></i>Ver Produções
+                        </a>
+                        <a href="/result.html?ppg=Biotecnologia" class="btn btn-lg"
+                           style="background: var(--gray-200); color: var(--gray-900); padding: 0.875rem 2rem; border-radius: 12px; font-weight: 700; border: none; transition: all 0.3s; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;"
+                           onmouseover="this.style.background='var(--gray-300)';"
+                           onmouseout="this.style.background='var(--gray-200)';">
+                            <i class="fas fa-list"></i>Buscar Produções
+                        </a>
+                    </div>
+                </div>
+            </div>
+        <!-- Erro ao contar produções do PPG Engenharia Biomédica: 404 Not Found: {"error":{"root_cause":[{"type":"index_not_found_exception","reason":"no such index [prodmais_umc]","resource.type":"index_or_alias","resource.id":"prodmais_umc","index_uuid":"_na_","index":"prodmais_umc"}],"type":"index_not_found_exception","reason":"no such index [prodmais_umc]","resource.type":"index_or_alias","resource.id":"prodmais_umc","index_uuid":"_na_","index":"prodmais_umc"},"status":404} -->            <div class="fade-in-up" style="background: white; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); border: 1px solid var(--gray-200); overflow: hidden; margin-bottom: 2rem; transition: all 0.3s ease;"
+                 onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 12px 24px rgba(0,0,0,0.12)';"
+                 onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 12px rgba(0,0,0,0.08)';">
+                
+                <div style="background: linear-gradient(135deg, #1e40af, #3b82f6); padding: 2rem; position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
+                    <div style="position: relative; z-index: 1;">
+                        <h3 style="font-size: 1.75rem; font-weight: 800; color: white; margin-bottom: 1rem;">
+                            <i class="fas fa-graduation-cap me-2"></i>Engenharia Biomédica                        </h3>
+                        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1rem;">
+                            <span style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.875rem; font-weight: 600; color: white; border: 1px solid rgba(255,255,255,0.3);">
+                                <i class="fas fa-certificate me-1"></i>Mestrado/Doutorado                            </span>
+                            <span style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.875rem; font-weight: 600; color: white; border: 1px solid rgba(255,255,255,0.3);">
+                                <i class="fas fa-map-marker-alt me-1"></i>Mogi das Cruzes                            </span>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); padding: 1.25rem; border-radius: 12px; display: inline-block; border: 1px solid rgba(255,255,255,0.2);">
+                            <div style="font-size: 2.5rem; font-weight: 800; color: white; line-height: 1; margin-bottom: 0.25rem;">
+                                0                            </div>
+                            <div style="font-size: 0.875rem; font-weight: 600; color: rgba(255,255,255,0.9); text-transform: uppercase; letter-spacing: 0.5px;">
+                                Produções Científicas
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="padding: 2rem;">
+                    <h6 style="font-weight: 800; color: var(--gray-900); margin-bottom: 1rem; font-size: 1.125rem;">
+                        <i class="fas fa-layer-group me-2" style="color: #3b82f6;"></i>Áreas de Concentração
+                    </h6>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                                    <div style="background: var(--gray-50); padding: 1rem 1.25rem; border-radius: 10px; border-left: 3px solid #3b82f6; color: var(--gray-700); font-weight: 500; transition: all 0.2s ease;"
+                                 onmouseover="this.style.background='var(--gray-100)'; this.style.paddingLeft='1.5rem';"
+                                 onmouseout="this.style.background='var(--gray-50)'; this.style.paddingLeft='1.25rem';">
+                                <i class="fas fa-check-circle me-2" style="color: #3b82f6;"></i>Biomateriais                            </div>
+                                                    <div style="background: var(--gray-50); padding: 1rem 1.25rem; border-radius: 10px; border-left: 3px solid #3b82f6; color: var(--gray-700); font-weight: 500; transition: all 0.2s ease;"
+                                 onmouseover="this.style.background='var(--gray-100)'; this.style.paddingLeft='1.5rem';"
+                                 onmouseout="this.style.background='var(--gray-50)'; this.style.paddingLeft='1.25rem';">
+                                <i class="fas fa-check-circle me-2" style="color: #3b82f6;"></i>Processamento de Sinais Biomédicos                            </div>
+                                            </div>
+                    
+                    <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <a href="/ppg.html?codigo=33002010192P0" class="btn btn-lg"
+                           style="background: linear-gradient(135deg, #3b82f6, #1e40af); color: white; padding: 0.875rem 2rem; border-radius: 12px; font-weight: 700; border: none; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); transition: all 0.3s; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;"
+                           onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(59, 130, 246, 0.4)';"
+                           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.3)';">
+                            <i class="fas fa-search"></i>Ver Produções
+                        </a>
+                        <a href="/result.html?ppg=Engenharia+Biom%C3%A9dica" class="btn btn-lg"
+                           style="background: var(--gray-200); color: var(--gray-900); padding: 0.875rem 2rem; border-radius: 12px; font-weight: 700; border: none; transition: all 0.3s; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;"
+                           onmouseover="this.style.background='var(--gray-300)';"
+                           onmouseout="this.style.background='var(--gray-200)';">
+                            <i class="fas fa-list"></i>Buscar Produções
+                        </a>
+                    </div>
+                </div>
+            </div>
+        <!-- Erro ao contar produções do PPG Políticas Públicas: 404 Not Found: {"error":{"root_cause":[{"type":"index_not_found_exception","reason":"no such index [prodmais_umc]","resource.type":"index_or_alias","resource.id":"prodmais_umc","index_uuid":"_na_","index":"prodmais_umc"}],"type":"index_not_found_exception","reason":"no such index [prodmais_umc]","resource.type":"index_or_alias","resource.id":"prodmais_umc","index_uuid":"_na_","index":"prodmais_umc"},"status":404} -->            <div class="fade-in-up" style="background: white; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); border: 1px solid var(--gray-200); overflow: hidden; margin-bottom: 2rem; transition: all 0.3s ease;"
+                 onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 12px 24px rgba(0,0,0,0.12)';"
+                 onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 12px rgba(0,0,0,0.08)';">
+                
+                <div style="background: linear-gradient(135deg, #1e40af, #3b82f6); padding: 2rem; position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
+                    <div style="position: relative; z-index: 1;">
+                        <h3 style="font-size: 1.75rem; font-weight: 800; color: white; margin-bottom: 1rem;">
+                            <i class="fas fa-graduation-cap me-2"></i>Políticas Públicas                        </h3>
+                        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1rem;">
+                            <span style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.875rem; font-weight: 600; color: white; border: 1px solid rgba(255,255,255,0.3);">
+                                <i class="fas fa-certificate me-1"></i>Mestrado/Doutorado                            </span>
+                            <span style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.875rem; font-weight: 600; color: white; border: 1px solid rgba(255,255,255,0.3);">
+                                <i class="fas fa-map-marker-alt me-1"></i>Mogi das Cruzes                            </span>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); padding: 1.25rem; border-radius: 12px; display: inline-block; border: 1px solid rgba(255,255,255,0.2);">
+                            <div style="font-size: 2.5rem; font-weight: 800; color: white; line-height: 1; margin-bottom: 0.25rem;">
+                                0                            </div>
+                            <div style="font-size: 0.875rem; font-weight: 600; color: rgba(255,255,255,0.9); text-transform: uppercase; letter-spacing: 0.5px;">
+                                Produções Científicas
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="padding: 2rem;">
+                    <h6 style="font-weight: 800; color: var(--gray-900); margin-bottom: 1rem; font-size: 1.125rem;">
+                        <i class="fas fa-layer-group me-2" style="color: #3b82f6;"></i>Áreas de Concentração
+                    </h6>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                                    <div style="background: var(--gray-50); padding: 1rem 1.25rem; border-radius: 10px; border-left: 3px solid #3b82f6; color: var(--gray-700); font-weight: 500; transition: all 0.2s ease;"
+                                 onmouseover="this.style.background='var(--gray-100)'; this.style.paddingLeft='1.5rem';"
+                                 onmouseout="this.style.background='var(--gray-50)'; this.style.paddingLeft='1.25rem';">
+                                <i class="fas fa-check-circle me-2" style="color: #3b82f6;"></i>Análise de Políticas Públicas                            </div>
+                                                    <div style="background: var(--gray-50); padding: 1rem 1.25rem; border-radius: 10px; border-left: 3px solid #3b82f6; color: var(--gray-700); font-weight: 500; transition: all 0.2s ease;"
+                                 onmouseover="this.style.background='var(--gray-100)'; this.style.paddingLeft='1.5rem';"
+                                 onmouseout="this.style.background='var(--gray-50)'; this.style.paddingLeft='1.25rem';">
+                                <i class="fas fa-check-circle me-2" style="color: #3b82f6;"></i>Gestão Pública                            </div>
+                                            </div>
+                    
+                    <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <a href="/ppg.html?codigo=33002010193P0" class="btn btn-lg"
+                           style="background: linear-gradient(135deg, #3b82f6, #1e40af); color: white; padding: 0.875rem 2rem; border-radius: 12px; font-weight: 700; border: none; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); transition: all 0.3s; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;"
+                           onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(59, 130, 246, 0.4)';"
+                           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.3)';">
+                            <i class="fas fa-search"></i>Ver Produções
+                        </a>
+                        <a href="/result.html?ppg=Pol%C3%ADticas+P%C3%BAblicas" class="btn btn-lg"
+                           style="background: var(--gray-200); color: var(--gray-900); padding: 0.875rem 2rem; border-radius: 12px; font-weight: 700; border: none; transition: all 0.3s; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;"
+                           onmouseover="this.style.background='var(--gray-300)';"
+                           onmouseout="this.style.background='var(--gray-200)';">
+                            <i class="fas fa-list"></i>Buscar Produções
+                        </a>
+                    </div>
+                </div>
+            </div>
+        <!-- Erro ao contar produções do PPG Ciência e Tecnologia em Saúde: 404 Not Found: {"error":{"root_cause":[{"type":"index_not_found_exception","reason":"no such index [prodmais_umc]","resource.type":"index_or_alias","resource.id":"prodmais_umc","index_uuid":"_na_","index":"prodmais_umc"}],"type":"index_not_found_exception","reason":"no such index [prodmais_umc]","resource.type":"index_or_alias","resource.id":"prodmais_umc","index_uuid":"_na_","index":"prodmais_umc"},"status":404} -->            <div class="fade-in-up" style="background: white; border-radius: 16px; box-shadow: 0 2px 12px rgba(0,0,0,0.08); border: 1px solid var(--gray-200); overflow: hidden; margin-bottom: 2rem; transition: all 0.3s ease;"
+                 onmouseover="this.style.transform='translateY(-4px)'; this.style.boxShadow='0 12px 24px rgba(0,0,0,0.12)';"
+                 onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 12px rgba(0,0,0,0.08)';">
+                
+                <div style="background: linear-gradient(135deg, #1e40af, #3b82f6); padding: 2rem; position: relative; overflow: hidden;">
+                    <div style="position: absolute; top: -50px; right: -50px; width: 200px; height: 200px; background: rgba(255,255,255,0.1); border-radius: 50%;"></div>
+                    <div style="position: relative; z-index: 1;">
+                        <h3 style="font-size: 1.75rem; font-weight: 800; color: white; margin-bottom: 1rem;">
+                            <i class="fas fa-graduation-cap me-2"></i>Ciência e Tecnologia em Saúde                        </h3>
+                        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 1rem;">
+                            <span style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.875rem; font-weight: 600; color: white; border: 1px solid rgba(255,255,255,0.3);">
+                                <i class="fas fa-certificate me-1"></i>Mestrado/Doutorado                            </span>
+                            <span style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 0.5rem 1rem; border-radius: 8px; font-size: 0.875rem; font-weight: 600; color: white; border: 1px solid rgba(255,255,255,0.3);">
+                                <i class="fas fa-map-marker-alt me-1"></i>Mogi das Cruzes                            </span>
+                        </div>
+                        <div style="background: rgba(255,255,255,0.15); backdrop-filter: blur(10px); padding: 1.25rem; border-radius: 12px; display: inline-block; border: 1px solid rgba(255,255,255,0.2);">
+                            <div style="font-size: 2.5rem; font-weight: 800; color: white; line-height: 1; margin-bottom: 0.25rem;">
+                                0                            </div>
+                            <div style="font-size: 0.875rem; font-weight: 600; color: rgba(255,255,255,0.9); text-transform: uppercase; letter-spacing: 0.5px;">
+                                Produções Científicas
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="padding: 2rem;">
+                    <h6 style="font-weight: 800; color: var(--gray-900); margin-bottom: 1rem; font-size: 1.125rem;">
+                        <i class="fas fa-layer-group me-2" style="color: #3b82f6;"></i>Áreas de Concentração
+                    </h6>
+                    <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                                                    <div style="background: var(--gray-50); padding: 1rem 1.25rem; border-radius: 10px; border-left: 3px solid #3b82f6; color: var(--gray-700); font-weight: 500; transition: all 0.2s ease;"
+                                 onmouseover="this.style.background='var(--gray-100)'; this.style.paddingLeft='1.5rem';"
+                                 onmouseout="this.style.background='var(--gray-50)'; this.style.paddingLeft='1.25rem';">
+                                <i class="fas fa-check-circle me-2" style="color: #3b82f6;"></i>Inovação Tecnológica em Saúde                            </div>
+                                                    <div style="background: var(--gray-50); padding: 1rem 1.25rem; border-radius: 10px; border-left: 3px solid #3b82f6; color: var(--gray-700); font-weight: 500; transition: all 0.2s ease;"
+                                 onmouseover="this.style.background='var(--gray-100)'; this.style.paddingLeft='1.5rem';"
+                                 onmouseout="this.style.background='var(--gray-50)'; this.style.paddingLeft='1.25rem';">
+                                <i class="fas fa-check-circle me-2" style="color: #3b82f6;"></i>Vigilância em Saúde                            </div>
+                                            </div>
+                    
+                    <div style="margin-top: 2rem; display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <a href="/ppg.html?codigo=33002010194P0" class="btn btn-lg"
+                           style="background: linear-gradient(135deg, #3b82f6, #1e40af); color: white; padding: 0.875rem 2rem; border-radius: 12px; font-weight: 700; border: none; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); transition: all 0.3s; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;"
+                           onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 8px 20px rgba(59, 130, 246, 0.4)';"
+                           onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(59, 130, 246, 0.3)';">
+                            <i class="fas fa-search"></i>Ver Produções
+                        </a>
+                        <a href="/result.html?ppg=Ci%C3%AAncia+e+Tecnologia+em+Sa%C3%BAde" class="btn btn-lg"
+                           style="background: var(--gray-200); color: var(--gray-900); padding: 0.875rem 2rem; border-radius: 12px; font-weight: 700; border: none; transition: all 0.3s; text-decoration: none; display: inline-flex; align-items: center; gap: 0.5rem;"
+                           onmouseover="this.style.background='var(--gray-300)';"
+                           onmouseout="this.style.background='var(--gray-200)';">
+                            <i class="fas fa-list"></i>Buscar Produções
+                        </a>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+    <!-- Footer -->
+    <footer class="footer-elegant">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>PRODMAIS UMC</h5>
+                    <p style="color: var(--gray-400); line-height: 1.6;">Sistema de Gestão da Produção Científica dos Programas de Pós-Graduação da Universidade de Mogi das Cruzes</p>
+                </div>
+                <div class="col-md-3">
+                    <h5>Links Úteis</h5>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 0.5rem;"><a href="/index.html">Início</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="/pesquisadores.html">Pesquisadores</a></li>
+                        <li style="margin-bottom: 0.5rem;"><a href="/ppgs.html">PPGs</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3">
+                    <h5>Integrações</h5>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 0.5rem;"><i class="fas fa-check" style="color: #10b981;"></i> Plataforma Lattes</li>
+                        <li style="margin-bottom: 0.5rem;"><i class="fas fa-check" style="color: #10b981;"></i> ORCID</li>
+                        <li style="margin-bottom: 0.5rem;"><i class="fas fa-check" style="color: #10b981;"></i> OpenAlex</li>
+                    </ul>
+                </div>
+            </div>
+            <hr style="border-color: var(--gray-700); margin: 2rem 0;">
+            <div class="text-center">
+                <p class="mb-1">&copy; 2026 Universidade de Mogi das Cruzes - PIVIC 2025</p>
+                <p style="font-size: 0.875rem; color: var(--gray-500);">Desenvolvido com excelência seguindo conformidade LGPD e padrões CAPES</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

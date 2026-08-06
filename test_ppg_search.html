@@ -1,0 +1,50 @@
+<h2>Teste de Busca PPG - Biotecnologia</h2><pre>=== 1. Buscando 5 documentos para ver estrutura ===
+
+ERRO: 404 Not Found: {"error":{"root_cause":[{"type":"index_not_found_exception","reason":"no such index [prodmais_umc]","resource.type":"index_or_alias","resource.id":"prodmais_umc","index_uuid":"_na_","index":"prodmais_umc"}],"type":"index_not_found_exception","reason":"no such index [prodmais_umc]","resource.type":"index_or_alias","resource.id":"prodmais_umc","index_uuid":"_na_","index":"prodmais_umc"},"status":404}
+
+
+=== 2. Buscando por PPG = 'Biotecnologia' (match) ===
+
+ERRO: 404 Not Found: {"error":{"root_cause":[{"type":"index_not_found_exception","reason":"no such index [prodmais_umc]","resource.type":"index_or_alias","resource.id":"prodmais_umc","index_uuid":"_na_","index":"prodmais_umc"}],"type":"index_not_found_exception","reason":"no such index [prodmais_umc]","resource.type":"index_or_alias","resource.id":"prodmais_umc","index_uuid":"_na_","index":"prodmais_umc"},"status":404}
+
+
+=== 3. Valores únicos de PPG no índice (aggregation) ===
+
+ERRO: 404 Not Found: {"error":{"root_cause":[{"type":"index_not_found_exception","reason":"no such index [prodmais_umc]","resource.type":"index_or_alias","resource.id":"prodmais_umc","index_uuid":"_na_","index":"prodmais_umc"}],"type":"index_not_found_exception","reason":"no such index [prodmais_umc]","resource.type":"index_or_alias","resource.id":"prodmais_umc","index_uuid":"_na_","index":"prodmais_umc"},"status":404}
+
+
+=== 4. Testando query do ppg.html (bool com should) ===
+
+Query JSON:
+{
+    "bool": {
+        "must": [
+            {
+                "bool": {
+                    "should": [
+                        {
+                            "match": {
+                                "ppg": "Biotecnologia"
+                            }
+                        },
+                        {
+                            "match_phrase": {
+                                "ppg": "Biotecnologia"
+                            }
+                        },
+                        {
+                            "term": {
+                                "ppg.keyword": "Biotecnologia"
+                            }
+                        }
+                    ],
+                    "minimum_should_match": 1
+                }
+            }
+        ]
+    }
+}
+
+ERRO: 404 Not Found: {"error":{"root_cause":[{"type":"index_not_found_exception","reason":"no such index [prodmais_umc]","resource.type":"index_or_alias","resource.id":"prodmais_umc","index_uuid":"_na_","index":"prodmais_umc"}],"type":"index_not_found_exception","reason":"no such index [prodmais_umc]","resource.type":"index_or_alias","resource.id":"prodmais_umc","index_uuid":"_na_","index":"prodmais_umc"},"status":404}
+
+</pre>

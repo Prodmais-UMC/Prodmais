@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/img/umc-favicon.png">
+    <title>Login Prodmais - UMC</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        body {
+            background:
+                linear-gradient(135deg, rgba(30, 64, 175, 0.92) 0%, rgba(59, 130, 246, 0.90) 50%, rgba(96, 165, 250, 0.88) 100%),
+                url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat;
+            min-height: 100vh;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        body::before {
+            content: '';
+            position: absolute;
+            top: 20%;
+            left: 10%;
+            width: 400px;
+            height: 400px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            filter: blur(100px);
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: absolute;
+            bottom: 20%;
+            right: 10%;
+            width: 500px;
+            height: 500px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50%;
+            filter: blur(120px);
+            z-index: 0;
+        }
+
+        .login-container {
+            max-width: 480px;
+            width: 90%;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            padding: 2rem 2rem;
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .umc-logo {
+            display: block;
+            margin: 0 auto 2rem auto;
+            width: 140px;
+            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
+        }
+
+        .btn-umc {
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            color: #fff;
+            font-weight: 700;
+            border-radius: 12px;
+            padding: 1rem;
+            font-size: 1.125rem;
+            border: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 4px 16px rgba(30, 64, 175, 0.3);
+        }
+
+        .btn-umc:hover {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb);
+            color: #fff;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(30, 64, 175, 0.4);
+        }
+
+        .umc-title {
+            color: #1e40af;
+            font-weight: 900;
+            font-size: 2rem;
+            text-align: center;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .umc-subtitle {
+            color: #64748b;
+            font-size: 1rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .form-label {
+            color: #1e293b;
+            font-weight: 600;
+            font-size: 0.938rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-control {
+            border-radius: 10px;
+            border: 2px solid #e2e8f0;
+            padding: 0.875rem 1rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        }
+
+        .footer-umc {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.95);
+            font-size: 0.938rem;
+            margin-top: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .alert {
+            border-radius: 12px;
+            border: none;
+            font-weight: 500;
+        }
+
+        .login-icon {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 8px 20px rgba(30, 64, 175, 0.3);
+        }
+
+        .login-icon i {
+            font-size: 1.75rem;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-container">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/03/Logo_umc1.png/1200px-Logo_umc1.png" alt="UMC" class="umc-logo">
+        <div class="umc-title">PRODMAIS UMC</div>
+        <div class="umc-subtitle">Bem-vindo! Faça login com seu usuário institucional UMC para acessar a área administrativa.<br><span style="font-size:0.875em;color:#3b82f6;font-weight:600;"><i class="fas fa-lock me-1"></i>Somente colaboradores autorizados</span></div>
+        <form method="post" autocomplete="off">
+            <div class="mb-3">
+                <label for="user" class="form-label">Usuário institucional</label>
+                <input type="text" class="form-control" id="user" name="user" required autofocus placeholder="Seu login UMC">
+            </div>
+            <div class="mb-3">
+                <label for="pass" class="form-label">Senha</label>
+                <input type="password" class="form-control" id="pass" name="pass" required placeholder="Sua senha UMC">
+            </div>
+                        <div class="d-grid">
+                <button type="submit" class="btn btn-umc btn-lg">Entrar</button>
+            </div>
+            <div class="mt-3 text-center">
+                <a href="/esqueci-senha.html" style="color: #3b82f6; text-decoration: none; font-weight: 600; transition: all 0.3s;" onmouseover="this.style.textDecoration='underline'" onmouseout="this.style.textDecoration='none'">
+                    <i class="fas fa-key me-1"></i>Esqueci minha senha
+                </a>
+            </div>
+        </form>
+        <div class="mt-3 text-center" style="font-size:0.95em;color:#555;">
+            <span>Problemas de acesso? Contate o suporte TI da UMC.</span>
+        </div>
+        <div class="mt-3 text-center" style="font-size:0.95em;color:#444;">
+            Universidade de Mogi das Cruzes<br>
+            <span style="font-size:0.9em;">© 2025 UMC. Todos os direitos reservados.</span>
+        </div>
+    </div>
+</body>
+
+</html>

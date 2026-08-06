@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/img/umc-favicon.png">
+    <title>Projetos de Pesquisa - Prodmais UMC</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- CSS Elegante Profissional -->
+    <link rel="stylesheet" href="/css/prodmais-elegant.css">
+    <link rel="stylesheet" href="/css/umc-theme.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar Elegante -->
+<nav class="navbar navbar-expand-lg navbar-elegant">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="/">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/0/03/Logo_umc1.png" 
+                 alt="UMC Logo" 
+                 height="45" 
+                 class="me-2"
+                 onerror="this.style.display='none'">
+            <div class="brand-text" style="font-size: 1.75rem; font-weight: 900; background: linear-gradient(135deg, #1a56db 0%, #0369a1 50%, #0ea5e9 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: -0.5px;">
+                Prod<span style="color: #0ea5e9; font-weight: 900;">mais</span>
+            </div>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link-elegant" href="/index.html"><i class="fas fa-home me-1"></i> Início</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link-elegant" href="/pesquisadores.html"><i class="fas fa-users me-1"></i> Pesquisadores</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link-elegant" href="/ppgs.html"><i class="fas fa-university me-1"></i> PPGs</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link-elegant active" href="/projetos.html"><i class="fas fa-project-diagram me-1"></i> Projetos</a>
+                </li>
+                                <li class="nav-item">
+                    <a class="nav-link-elegant" href="/dashboard.html"><i class="fas fa-chart-line me-1"></i> Dashboard</a>
+                </li>
+                                <li class="nav-item">
+                    <a class="nav-link-elegant" href="/login.html"><i class="fas fa-cog me-1"></i> Admin</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section Ultra Elegante -->
+<section style="background: linear-gradient(135deg, #0d9488 0%, #14b8a6 50%, #2dd4bf 100%); padding: 4rem 0 3rem; position: relative; overflow: hidden;">
+    <!-- Background decorativo -->
+    <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; opacity: 0.1;">
+        <div style="position: absolute; top: 20%; left: 10%; width: 300px; height: 300px; background: white; border-radius: 50%; filter: blur(80px);"></div>
+        <div style="position: absolute; bottom: 20%; right: 10%; width: 400px; height: 400px; background: white; border-radius: 50%; filter: blur(100px);"></div>
+    </div>
+    
+    <div class="container" style="position: relative; z-index: 1;">
+        <div class="row justify-content-center text-center">
+            <div class="col-lg-10 fade-in-up">
+                <div style="margin-bottom: 1.5rem;">
+                    <span style="background: rgba(255,255,255,0.2); backdrop-filter: blur(10px); padding: 0.5rem 1.5rem; border-radius: 9999px; font-size: 0.875rem; font-weight: 500; color: white; border: 1px solid rgba(255,255,255,0.3);">
+                        <i class="fas fa-project-diagram" style="margin-right: 0.5rem;"></i>
+                        0 Projetos de Pesquisa
+                    </span>
+                </div>
+                
+                <h1 style="font-size: 3.5rem; font-weight: 900; margin-bottom: 1rem; color: white; line-height: 1.2; letter-spacing: -0.02em;">
+                    <i class="fas fa-flask me-3"></i>Projetos de Pesquisa
+                </h1>
+                <p style="font-size: 1.25rem; color: rgba(255,255,255,0.95); margin-bottom: 0; max-width: 700px; margin-left: auto; margin-right: auto; line-height: 1.6; font-weight: 400;">
+                    Conheça os projetos de pesquisa desenvolvidos na UMC
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Projetos Section -->
+<section class="py-5" style="background: var(--gray-100);">
+    <div class="container">
+        <div class="row">
+            <!-- Sidebar de Filtros -->
+            <div class="col-lg-3 mb-4">
+                <div style="background: white; border-radius: 16px; padding: 1.5rem; border: 1px solid var(--gray-200); box-shadow: 0 2px 8px rgba(0,0,0,0.08); position: sticky; top: 20px;">
+                    <h5 style="font-weight: 800; margin-bottom: 1.5rem; color: var(--gray-900); font-size: 1.125rem;">
+                        <i class="fas fa-filter me-2" style="color: #0d9488;"></i>Filtros
+                    </h5>
+                    
+                    <form method="GET" action="/projetos.html" id="filterForm">
+                        <!-- Coordenador -->
+                        <div class="mb-3">
+                            <label style="font-weight: 600; font-size: 0.875rem; color: var(--gray-700); margin-bottom: 0.5rem; display: block;">
+                                <i class="fas fa-user me-1" style="color: #0d9488; font-size: 0.75rem;"></i> Coordenador
+                            </label>
+                            <input type="text" name="coordenador" class="form-control form-control-sm" 
+                                   placeholder="Nome do coordenador" 
+                                   value=""
+                                   style="border-radius: 8px; border: 1px solid var(--gray-300);">
+                        </div>
+                        
+                        <!-- Status -->
+                        <div class="mb-3">
+                            <label style="font-weight: 600; font-size: 0.875rem; color: var(--gray-700); margin-bottom: 0.5rem; display: block;">
+                                <i class="fas fa-info-circle me-1" style="color: #0d9488; font-size: 0.75rem;"></i> Status
+                            </label>
+                            <select name="status" class="form-select form-select-sm" style="border-radius: 8px; border: 1px solid var(--gray-300);" onchange="this.form.submit()">
+                                <option value="">Todos</option>
+                                <option value="Em andamento" >Em Andamento</option>
+                                <option value="Concluído" >Concluído</option>
+                                <option value="Aprovado" >Aprovado</option>
+                            </select>
+                        </div>
+                        
+                        <!-- PPG -->
+                        <div class="mb-3">
+                            <label style="font-weight: 600; font-size: 0.875rem; color: var(--gray-700); margin-bottom: 0.5rem; display: block;">
+                                <i class="fas fa-graduation-cap me-1" style="color: #0d9488; font-size: 0.75rem;"></i> PPG
+                            </label>
+                            <select name="ppg" class="form-select form-select-sm" style="border-radius: 8px; border: 1px solid var(--gray-300);" onchange="this.form.submit()">
+                                <option value="">Todos</option>
+                                                                <option value="Biotecnologia" >
+                                    Biotec                                </option>
+                                                                <option value="Engenharia Biomédica" >
+                                    Eng. Biomédica                                </option>
+                                                                <option value="Políticas Públicas" >
+                                    Pol. Públicas                                </option>
+                                                                <option value="Ciência e Tecnologia em Saúde" >
+                                    C&amp;T Saúde                                </option>
+                                                            </select>
+                        </div>
+                        
+                        <!-- Período -->
+                        <div class="mb-3">
+                            <label style="font-weight: 600; font-size: 0.875rem; color: var(--gray-700); margin-bottom: 0.5rem; display: block;">
+                                <i class="fas fa-calendar me-1" style="color: #0d9488; font-size: 0.75rem;"></i> Ano de Início
+                            </label>
+                            <div class="row g-2">
+                                <div class="col-6">
+                                    <input type="number" name="ano_inicio" class="form-control form-control-sm" 
+                                           placeholder="De" min="2000" max="2026" 
+                                           value="" 
+                                           style="border-radius: 8px; border: 1px solid var(--gray-300);">
+                                </div>
+                                <div class="col-6">
+                                    <input type="number" name="ano_fim" class="form-control form-control-sm" 
+                                           placeholder="Até" min="2000" max="2026"
+                                           value="" 
+                                           style="border-radius: 8px; border: 1px solid var(--gray-300);">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Resultados por página -->
+                        <div class="mb-3">
+                            <label style="font-weight: 600; font-size: 0.875rem; color: var(--gray-700); margin-bottom: 0.5rem; display: block;">
+                                <i class="fas fa-list me-1" style="color: #0d9488; font-size: 0.75rem;"></i> Exibir
+                            </label>
+                            <select name="limit" class="form-select form-select-sm" style="border-radius: 8px; border: 1px solid var(--gray-300);" onchange="this.form.submit()">
+                                <option value="20" selected>20 por página</option>
+                                <option value="50" >50 por página</option>
+                                <option value="100" >100 por página</option>
+                            </select>
+                        </div>
+                        
+                        <button type="submit" style="width: 100%; background: linear-gradient(135deg, #0d9488, #14b8a6); color: white; border: none; padding: 0.75rem; border-radius: 8px; font-weight: 600; cursor: pointer; transition: all 0.3s ease;"
+                                onmouseover="this.style.transform='scale(1.03)'"
+                                onmouseout="this.style.transform='scale(1)'">
+                            <i class="fas fa-search me-2"></i>Aplicar Filtros
+                        </button>
+                        
+                                            </form>
+                    
+                    <!-- Estatísticas -->
+                    <hr style="margin: 1.5rem 0; border-color: var(--gray-200);">
+                    <div style="text-align: center;">
+                        <div style="font-size: 2rem; font-weight: 800; color: #0d9488; line-height: 1;">
+                            0                        </div>
+                        <div style="font-size: 0.813rem; color: var(--gray-600); font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+                            Nenhum projeto                        </div>
+                    </div>
+                    
+                                    </div>
+            </div>
+            
+            <!-- Lista de Projetos -->
+            <div class="col-lg-9">
+                                <div style="background: white; border-radius: 16px; padding: 3rem; text-align: center; border: 1px solid var(--gray-200);">
+                    <i class="fas fa-flask" style="font-size: 4rem; color: var(--gray-300); margin-bottom: 1rem;"></i>
+                    <h4 style="color: var(--gray-700); font-weight: 700; margin-bottom: 0.5rem;">
+                        Nenhum projeto cadastrado                    </h4>
+                    <p style="color: var(--gray-500);">
+                        Os projetos serão exibidos assim que forem importados.                    </p>
+                </div>
+                            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer Elegante -->
+<footer class="footer-elegant">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <h5>Universidade de Mogi das Cruzes</h5>
+                <p style="color: var(--gray-400); line-height: 1.6;">Sistema de Gestão de Produção Científica dos Programas de Pós-Graduação em Biotecnologia, Engenharia Biomédica, Políticas Públicas e Ciência e Tecnologia em Saúde</p>
+            </div>
+            <div class="col-md-4 mb-4">
+                <h5>Links Úteis</h5>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 0.5rem;"><a href="/politica-privacidade.html">Política de Privacidade</a></li>
+                    <li style="margin-bottom: 0.5rem;"><a href="/termos-uso.html">Termos de Uso</a></li>
+                    <li style="margin-bottom: 0.5rem;"><a href="/sobre">Sobre</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4 mb-4">
+                <h5>Integrações</h5>
+                <ul style="list-style: none; padding: 0;">
+                    <li style="margin-bottom: 0.5rem;"><i class="fas fa-check" style="color: #10b981;"></i> Plataforma Lattes</li>
+                    <li style="margin-bottom: 0.5rem;"><i class="fas fa-check" style="color: #10b981;"></i> ORCID</li>
+                    <li style="margin-bottom: 0.5rem;"><i class="fas fa-check" style="color: #10b981;"></i> OpenAlex</li>
+                </ul>
+            </div>
+        </div>
+        <hr style="border-color: var(--gray-700); margin: 2rem 0;">
+        <div class="text-center">
+            <p class="mb-1">&copy; 2026 Universidade de Mogi das Cruzes - PIVIC 2025</p>
+            <p style="font-size: 0.875rem; color: var(--gray-500);">
+                Desenvolvido com excelência seguindo conformidade LGPD e padrões CAPES
+            </p>
+        </div>
+    </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

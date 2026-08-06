@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/img/umc-favicon.png">
+    <title>Termos de Uso - Prodmais UMC</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- CSS Elegante -->
+    <link rel="stylesheet" href="/css/prodmais-elegant.css">
+    <link rel="stylesheet" href="/css/umc-theme.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.7;
+        }
+        
+        .content-section {
+            background: white;
+            border-radius: 16px;
+            padding: 3rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            border: 1px solid var(--gray-200);
+        }
+        
+        .content-section h2 {
+            color: #10b981;
+            font-weight: 800;
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 3px solid #10b981;
+        }
+        
+        .content-section h3 {
+            color: #10b981;
+            font-weight: 700;
+            font-size: 1.25rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .content-section p {
+            color: var(--gray-700);
+            margin-bottom: 1rem;
+            text-align: justify;
+        }
+        
+        .content-section ul, .content-section ol {
+            color: var(--gray-700);
+            margin-bottom: 1.5rem;
+            padding-left: 2rem;
+        }
+        
+        .content-section li {
+            margin-bottom: 0.75rem;
+        }
+        
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(5, 150, 105, 0.05));
+            border-left: 4px solid #10b981;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+        
+        .highlight-box strong {
+            color: #10b981;
+        }
+        
+        .warning-box {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.05), rgba(220, 38, 38, 0.05));
+            border-left: 4px solid #ef4444;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+        }
+        
+        .warning-box strong {
+            color: #ef4444;
+        }
+        
+        .last-updated {
+            background: var(--gray-100);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            color: var(--gray-600);
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-accept-terms {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border: none;
+            padding: 1rem 3rem;
+            border-radius: 12px;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-accept-terms::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        
+        .btn-accept-terms:hover::before {
+            width: 300px;
+            height: 300px;
+        }
+        
+        .btn-accept-terms:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.4);
+        }
+        
+        .btn-accept-terms:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+        
+        .btn-view-policy {
+            background: white;
+            color: #10b981;
+            border: 2px solid #10b981;
+            padding: 1rem 3rem;
+            border-radius: 12px;
+            font-weight: 700;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-view-policy::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(16, 185, 129, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        
+        .btn-view-policy:hover::before {
+            left: 100%;
+        }
+        
+        .btn-view-policy:hover {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            border-color: #059669;
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+        }
+        
+        .btn-view-policy:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+    </style>
+</head>
+<body>
+
+<!-- Navbar Elegante -->
+<nav class="navbar navbar-expand-lg navbar-elegant">
+    <div class="container">
+        <a class="navbar-brand d-flex align-items-center" href="/">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/0/03/Logo_umc1.png" 
+                 alt="UMC Logo" 
+                 height="45" 
+                 class="me-2"
+                 onerror="this.style.display='none'">
+            <div class="brand-text" style="font-size: 1.75rem; font-weight: 900; background: linear-gradient(135deg, #1a56db 0%, #0369a1 50%, #0ea5e9 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; letter-spacing: -0.5px;">
+                Prod<span style="color: #0ea5e9; font-weight: 900;">mais</span>
+            </div>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link-elegant" href="/index.html"><i class="fas fa-home me-1"></i> Início</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link-elegant" href="/pesquisadores.html"><i class="fas fa-users me-1"></i> Pesquisadores</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link-elegant" href="/ppgs.html"><i class="fas fa-university me-1"></i> PPGs</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Hero Section -->
+<section style="background: linear-gradient(135deg, #10b981 0%, #059669 50%, #047857 100%); padding: 4rem 0 3rem;">
+    <div class="container text-center">
+        <h1 style="font-size: 3rem; font-weight: 900; color: white; margin-bottom: 1rem;">
+            <i class="fas fa-file-contract me-3"></i>Termos de Uso
+        </h1>
+        <p style="font-size: 1.25rem; color: rgba(255,255,255,0.95); margin: 0;">
+            Condições para utilização do Prodmais UMC
+        </p>
+    </div>
+</section>
+
+<!-- Content -->
+<section class="py-5" style="background: var(--gray-100);">
+    <div class="container">
+        <div class="last-updated">
+            <i class="fas fa-calendar-alt"></i>
+            <strong>Última atualização:</strong> 25/02/2026        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-handshake me-2"></i>Aceitação dos Termos</h2>
+            <p>
+                Bem-vindo ao <strong>Prodmais UMC</strong>. Ao acessar e utilizar este sistema, você concorda em 
+                cumprir e estar vinculado aos seguintes Termos de Uso. Se você não concorda com qualquer parte 
+                destes termos, por favor, não utilize o sistema.
+            </p>
+            <div class="highlight-box">
+                <p><strong><i class="fas fa-check-circle me-2"></i>Aceite:</strong> 
+                O uso continuado do sistema constitui aceitação destes termos e de todas as suas atualizações.</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-info-circle me-2"></i>Sobre o Sistema</h2>
+            <p>
+                O <strong>Prodmais UMC</strong> é um sistema de gestão e visualização da produção científica dos 
+                Programas de Pós-Graduação da Universidade de Mogi das Cruzes (UMC). O sistema tem como objetivos:
+            </p>
+            <ul>
+                <li>Organizar e indexar produções científicas dos pesquisadores vinculados aos PPGs da UMC</li>
+                <li>Facilitar a busca e consulta de publicações acadêmicas</li>
+                <li>Gerar estatísticas e indicadores para gestão dos programas</li>
+                <li>Promover a visibilidade da pesquisa desenvolvida na instituição</li>
+                <li>Auxiliar na prestação de contas aos órgãos de fomento (CAPES, CNPq, etc.)</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-user-circle me-2"></i>Tipos de Usuários</h2>
+            
+            <h3>1. Usuário Público (Visitante)</h3>
+            <p>Qualquer pessoa pode acessar livremente:</p>
+            <ul>
+                <li>Consulta de produções científicas</li>
+                <li>Visualização de perfis de pesquisadores</li>
+                <li>Informações sobre os Programas de Pós-Graduação</li>
+                <li>Estatísticas e indicadores públicos</li>
+            </ul>
+
+            <h3>2. Pesquisador</h3>
+            <p>Pesquisadores vinculados aos PPGs da UMC:</p>
+            <ul>
+                <li>Têm seus dados importados da Plataforma Lattes</li>
+                <li>Suas produções são indexadas e disponibilizadas publicamente</li>
+                <li>Podem solicitar correções ou atualizações através dos canais oficiais</li>
+            </ul>
+
+            <h3>3. Administrador</h3>
+            <p>Gestores dos PPGs e da instituição:</p>
+            <ul>
+                <li>Acesso autenticado ao painel administrativo</li>
+                <li>Importação e gerenciamento de currículos Lattes</li>
+                <li>Configuração do sistema</li>
+                <li>Geração de relatórios completos</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-gavel me-2"></i>Direitos de Uso</h2>
+            
+            <h3>Você PODE:</h3>
+            <ul>
+                <li><strong>Consultar:</strong> Buscar e visualizar produções científicas publicamente disponíveis</li>
+                <li><strong>Citar:</strong> Referenciar as produções encontradas em trabalhos acadêmicos, seguindo normas de citação</li>
+                <li><strong>Compartilhar:</strong> Compartilhar links para produções específicas</li>
+                <li><strong>Exportar:</strong> Exportar referências bibliográficas para uso acadêmico</li>
+            </ul>
+
+            <h3>Você NÃO PODE:</h3>
+            <div class="warning-box">
+                <ul style="margin-bottom: 0;">
+                    <li><strong>Copiar em massa:</strong> Realizar scraping, extração automatizada ou download em massa de dados</li>
+                    <li><strong>Uso comercial:</strong> Utilizar os dados para fins comerciais sem autorização prévia</li>
+                    <li><strong>Modificar:</strong> Alterar, distorcer ou falsificar informações do sistema</li>
+                    <li><strong>Sobrecarregar:</strong> Realizar ataques DDoS, flooding ou qualquer ação que prejudique o funcionamento</li>
+                    <li><strong>Acessar indevidamente:</strong> Tentar acessar áreas restritas sem autorização</li>
+                    <li><strong>Revender:</strong> Comercializar dados ou acesso ao sistema</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-shield-alt me-2"></i>Responsabilidades do Usuário</h2>
+            
+            <h3>Como Usuário Público, você deve:</h3>
+            <ol>
+                <li>Utilizar o sistema de forma ética e legal</li>
+                <li>Respeitar os direitos autorais das produções científicas</li>
+                <li>Não tentar comprometer a segurança do sistema</li>
+                <li>Reportar bugs ou vulnerabilidades de forma responsável</li>
+            </ol>
+
+            <h3>Como Administrador, você deve:</h3>
+            <ol>
+                <li>Manter suas credenciais de acesso em sigilo</li>
+                <li>Não compartilhar sua senha com terceiros</li>
+                <li>Utilizar o sistema apenas para fins institucionais</li>
+                <li>Respeitar a privacidade e os dados dos pesquisadores</li>
+                <li>Realizar backups regulares dos dados</li>
+                <li>Reportar incidentes de segurança imediatamente</li>
+            </ol>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-university me-2"></i>Responsabilidades da UMC</h2>
+            <p>A Universidade de Mogi das Cruzes se compromete a:</p>
+            
+            <ul>
+                <li><strong>Disponibilidade:</strong> Manter o sistema disponível e funcional (não garantimos 100% de uptime)</li>
+                <li><strong>Segurança:</strong> Implementar medidas de segurança adequadas para proteção dos dados</li>
+                <li><strong>Atualização:</strong> Manter os dados atualizados conforme fontes públicas (Plataforma Lattes)</li>
+                <li><strong>Privacidade:</strong> Respeitar a privacidade dos usuários conforme LGPD</li>
+                <li><strong>Suporte:</strong> Oferecer canais de suporte para dúvidas e problemas</li>
+            </ul>
+
+            <div class="warning-box">
+                <p><strong><i class="fas fa-exclamation-triangle me-2"></i>Isenção de Responsabilidade:</strong></p>
+                <ul style="margin-bottom: 0;">
+                    <li>O sistema é fornecido "no estado em que se encontra"</li>
+                    <li>Não garantimos que o sistema estará livre de erros ou interrupções</li>
+                    <li>Não nos responsabilizamos por perdas decorrentes de falhas técnicas</li>
+                    <li>Os dados são importados de fontes públicas e podem conter imprecisões</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-copyright me-2"></i>Propriedade Intelectual</h2>
+            
+            <h3>Código-fonte e Sistema</h3>
+            <p>
+                O código-fonte do sistema, design, interface e funcionalidades são de propriedade da 
+                Universidade de Mogi das Cruzes e estão protegidos por direitos autorais.
+            </p>
+
+            <h3>Produções Científicas</h3>
+            <p>
+                Os direitos autorais das produções científicas pertencem aos seus respectivos autores e/ou 
+                editoras. O sistema apenas indexa e disponibiliza metadados públicos.
+            </p>
+
+            <h3>Dados de Pesquisadores</h3>
+            <p>
+                Os dados são importados de fontes públicas (Plataforma Lattes, ORCID) e o tratamento é 
+                realizado conforme LGPD para fins acadêmicos e institucionais.
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-ban me-2"></i>Restrições e Proibições</h2>
+            <p>É expressamente proibido:</p>
+            
+            <ol>
+                <li><strong>Engenharia Reversa:</strong> Descompilar, fazer engenharia reversa ou tentar extrair o código-fonte</li>
+                <li><strong>Ataques:</strong> Realizar ataques de negação de serviço, injeção SQL, XSS ou similares</li>
+                <li><strong>Fraude:</strong> Falsificar identidade, criar contas falsas ou fornecer informações incorretas</li>
+                <li><strong>Spam:</strong> Enviar spam, malware ou conteúdo malicioso através do sistema</li>
+                <li><strong>Violação de Privacidade:</strong> Coletar dados pessoais de outros usuários sem autorização</li>
+                <li><strong>Uso Indevido:</strong> Utilizar o sistema para fins ilegais, antiéticos ou prejudiciais</li>
+            </ol>
+
+            <div class="warning-box">
+                <p><strong><i class="fas fa-gavel me-2"></i>Consequências:</strong> 
+                Violações destes termos podem resultar em:</p>
+                <ul style="margin-bottom: 0;">
+                    <li>Bloqueio imediato do acesso</li>
+                    <li>Notificação às autoridades competentes</li>
+                    <li>Ações legais cabíveis</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-lock me-2"></i>Segurança e Privacidade</h2>
+            <p>
+                O tratamento de dados pessoais é regido pela nossa 
+                <a href="/politica-privacidade.html" style="color: #10b981; font-weight: 700;">Política de Privacidade</a>, 
+                em conformidade com a LGPD.
+            </p>
+            
+            <div class="highlight-box">
+                <p><strong><i class="fas fa-shield-alt me-2"></i>Medidas de Segurança:</strong></p>
+                <ul style="margin-bottom: 0;">
+                    <li>Senhas criptografadas com bcrypt</li>
+                    <li>Comunicação via HTTPS (SSL/TLS)</li>
+                    <li>Proteção contra CSRF e XSS</li>
+                    <li>Logs de auditoria</li>
+                    <li>Backups regulares</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-link me-2"></i>Links Externos</h2>
+            <p>
+                O sistema pode conter links para sites externos (Plataforma Lattes, ORCID, editoras, etc.). 
+                Não somos responsáveis pelo conteúdo ou práticas de privacidade desses sites.
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-sync-alt me-2"></i>Modificações</h2>
+            <p>
+                Reservamo-nos o direito de modificar estes Termos de Uso a qualquer momento. Alterações 
+                significativas serão comunicadas através do site. O uso continuado após as alterações 
+                constitui aceitação dos novos termos.
+            </p>
+            <p>
+                <strong>Recomendamos que você revise estes termos periodicamente.</strong>
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-times-circle me-2"></i>Suspensão e Término</h2>
+            <p>A UMC pode, a seu critério:</p>
+            
+            <ul>
+                <li>Suspender ou encerrar o acesso de usuários que violem estes termos</li>
+                <li>Modificar ou descontinuar funcionalidades do sistema</li>
+                <li>Interromper temporariamente o sistema para manutenção</li>
+            </ul>
+
+            <p>
+                Usuários podem solicitar a remoção de seus dados conforme LGPD, exceto quando houver 
+                obrigação legal de retenção.
+            </p>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-balance-scale me-2"></i>Lei Aplicável</h2>
+            <p>
+                Estes Termos de Uso são regidos pelas leis brasileiras. Qualquer disputa será resolvida 
+                no foro da Comarca de Mogi das Cruzes - SP.
+            </p>
+            
+            <p><strong>Legislação aplicável:</strong></p>
+            <ul>
+                <li>Lei nº 13.709/2018 (LGPD)</li>
+                <li>Lei nº 12.965/2014 (Marco Civil da Internet)</li>
+                <li>Lei nº 9.610/1998 (Direitos Autorais)</li>
+                <li>Código Civil Brasileiro</li>
+                <li>Código de Defesa do Consumidor (quando aplicável)</li>
+            </ul>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-phone me-2"></i>Contato e Suporte</h2>
+            <p>Para dúvidas, sugestões ou problemas técnicos:</p>
+            
+            <div class="highlight-box">
+                <p><strong>Suporte Técnico</strong></p>
+                <p style="margin-bottom: 0.5rem;"><i class="fas fa-envelope me-2"></i><strong>E-mail:</strong> prodmais@umc.br</p>
+                <p style="margin-bottom: 0.5rem;"><i class="fas fa-phone me-2"></i><strong>Telefone:</strong> (11) 4798-7000</p>
+                <p style="margin-bottom: 0.5rem;"><i class="fas fa-clock me-2"></i><strong>Horário:</strong> Segunda a sexta, 8h às 18h</p>
+                <p style="margin-bottom: 0;"><i class="fas fa-map-marker-alt me-2"></i><strong>Endereço:</strong> Av. Dr. Cândido Xavier de Almeida e Souza, 200 - Mogi das Cruzes - SP</p>
+            </div>
+
+            <p><strong>Para questões sobre privacidade e dados:</strong></p>
+            <div class="highlight-box">
+                <p style="margin-bottom: 0;"><i class="fas fa-envelope me-2"></i><strong>DPO (Encarregado de Dados):</strong> dpo@umc.br</p>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2><i class="fas fa-check-double me-2"></i>Disposições Finais</h2>
+            <ul>
+                <li>Se qualquer cláusula destes termos for considerada inválida, as demais permanecem em vigor</li>
+                <li>A tolerância ao descumprimento de qualquer cláusula não constitui renúncia de direitos</li>
+                <li>Estes termos constituem o acordo integral entre você e a UMC quanto ao uso do sistema</li>
+            </ul>
+        </div>
+
+        <div class="highlight-box text-center">
+            <p style="font-size: 1.125rem; margin-bottom: 1rem;"><strong>Ao utilizar o Prodmais UMC, você confirma que leu, compreendeu e concorda com estes Termos de Uso.</strong></p>
+            <p style="margin-bottom: 0; color: var(--gray-600);">
+                <i class="fas fa-calendar-alt me-2"></i>Versão vigente desde: 25/02/2026            </p>
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="/index.html" class="btn btn-lg btn-accept-terms" style="margin-right: 1rem;">
+                <i class="fas fa-check me-2" style="position: relative; z-index: 1;"></i><span style="position: relative; z-index: 1;">Aceito os Termos</span>
+            </a>
+            <a href="/politica-privacidade.html" class="btn btn-lg btn-view-policy">
+                <i class="fas fa-shield-alt me-2"></i>Ver Política de Privacidade
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer-elegant">
+    <div class="container">
+        <div class="text-center">
+            <p class="mb-1">&copy; 2026 Universidade de Mogi das Cruzes - Todos os direitos reservados</p>
+            <p style="font-size: 0.875rem; color: var(--gray-500);">
+                Sistema desenvolvido seguindo as melhores práticas de segurança e conformidade legal
+            </p>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

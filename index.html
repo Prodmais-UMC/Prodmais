@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="/img/umc-favicon.png">
+    <title>Prodmais UMC - Sistema de Gestão de Produção Científica</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- CSS -->
+    <link rel="stylesheet" href="/css/prodmais-elegant.css">
+    <link rel="stylesheet" href="/css/umc-theme.css">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            padding-top: 70px;
+        }
+        .hero-section {
+            background: linear-gradient(135deg, #1a56db 0%, #0369a1 50%, #0891b2 100%);
+            padding: 8rem 0 6rem;
+            color: white;
+            text-align: center;
+        }
+        .demo-badge {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 0.5rem 1.5rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+        .search-box {
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            background: white;
+            padding: 0.5rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 4rem 0;
+        }
+        .stat-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1a56db;
+            margin-bottom: 0.5rem;
+        }
+        .demo-notice {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            padding: 1rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background: rgba(26, 86, 219, 0.95); backdrop-filter: blur(10px);">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <img src="/img/umc-logo.png" alt="UMC" style="height: 40px; margin-right: 10px;">
+                <div class="brand-text" style="font-size: 1.75rem; font-weight: 900; background: linear-gradient(135deg, #1a56db 0%, #0369a1 50%, #0ea5e9 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    Prod<span style="color: #0ea5e9;">mais</span>
+                </div>
+            </a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link" href="index.html"><i class="fas fa-home me-1"></i> Início</a>
+                <a class="nav-link" href="pesquisadores.html"><i class="fas fa-users me-1"></i> Pesquisadores</a>
+                <a class="nav-link" href="ppgs.html"><i class="fas fa-university me-1"></i> PPGs</a>
+                <a class="nav-link" href="projetos.html"><i class="fas fa-project-diagram me-1"></i> Projetos</a>
+                <a class="nav-link" href="dashboard.html"><i class="fas fa-chart-line me-1"></i> Dashboard</a>
+                <a class="nav-link" href="admin.html"><i class="fas fa-cog me-1"></i> Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container">
+            <div class="demo-badge">
+                <i class="fas fa-star" style="color: #fbbf24; margin-right: 0.5rem;"></i>
+                Versão Demonstração - Frontend Estático
+            </div>
+            
+            <h1 style="font-size: 3.5rem; font-weight: 800; margin-bottom: 1.5rem;">
+                Universidade de Mogi das Cruzes
+            </h1>
+            <p style="font-size: 1.375rem; color: rgba(255,255,255,0.95); margin-bottom: 3rem; max-width: 800px; margin-left: auto; margin-right: auto;">
+                Sistema de Gestão de Produção Científica dos Programas de Pós-Graduação
+            </p>
+            
+            <div class="demo-notice">
+                <i class="fas fa-info-circle me-2"></i>
+                <strong>Demonstração Frontend:</strong> Interface completa disponível. Para dados dinâmicos, use a versão completa local.
+            </div>
+            
+            <!-- Search Box -->
+            <div class="search-box">
+                <div class="input-group">
+                    <input type="search" class="form-control form-control-lg border-0" placeholder="Buscar produções científicas, pesquisadores, projetos..." style="font-size: 1.1rem;">
+                    <button class="btn btn-primary btn-lg" style="background: linear-gradient(135deg, #1a56db, #0369a1); border: none; padding: 0.75rem 2rem;">
+                        <i class="fas fa-search me-2"></i> Buscar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="container my-5">
+        <h2 class="text-center mb-5" style="font-size: 2.5rem; font-weight: 700; color: #1a56db;">
+            Produção Científica UMC
+        </h2>
+        
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-number">1,247</div>
+                <h5 style="color: #64748b;">Produções Científicas</h5>
+                <p style="color: #94a3b8;">Artigos, teses e dissertações</p>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-number">89</div>
+                <h5 style="color: #64748b;">Pesquisadores</h5>
+                <p style="color: #94a3b8;">Corpo docente e discente</p>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-number">4</div>
+                <h5 style="color: #64748b;">Programas de Pós-Graduação</h5>
+                <p style="color: #94a3b8;">Mestrado e Doutorado</p>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-number">156</div>
+                <h5 style="color: #64748b;">Projetos de Pesquisa</h5>
+                <p style="color: #94a3b8;">Em andamento e concluídos</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="container my-5">
+        <h2 class="text-center mb-5" style="font-size: 2.5rem; font-weight: 700; color: #1a56db;">
+            Recursos do Sistema
+        </h2>
+        
+        <div class="row">
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #1a56db, #0369a1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                            <i class="fas fa-search fa-lg text-white"></i>
+                        </div>
+                        <h5>Busca Avançada</h5>
+                        <p style="color: #64748b;">Pesquisa inteligente em múltiplos índices com filtros especializados</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                            <i class="fas fa-chart-line fa-lg text-white"></i>
+                        </div>
+                        <h5>Análise Estatística</h5>
+                        <p style="color: #64748b;">Dashboard interativo com métricas e visualizações detalhadas</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4 mb-4">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body text-center p-4">
+                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #f59e0b, #d97706); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 1rem;">
+                            <i class="fas fa-download fa-lg text-white"></i>
+                        </div>
+                        <h5>Exportação de Dados</h5>
+                        <p style="color: #64748b;">Múltiplos formatos: CSV, BibTeX, RIS, XML, JSON</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-4 mt-5">
+        <div class="container text-center">
+            <p class="mb-2">© 2026 Universidade de Mogi das Cruzes - Sistema Prodmais UMC</p>
+            <p style="font-size: 0.875rem; color: #94a3b8;">
+                Versão Demonstração Frontend | 
+                <a href="politica-privacidade.html" style="color: #94a3b8;">Política de Privacidade</a> | 
+                <a href="termos-uso.html" style="color: #94a3b8;">Termos de Uso</a>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
