@@ -535,6 +535,16 @@ $ppgs = getAllPPGs();
     .adm-alert-info h6 { color: #312e81; font-weight: 700; margin-bottom: .5rem; }
     .adm-alert-info p { color: #1e1b4b; margin: 0; font-size: .9rem; line-height: 1.6; }
     .adm-alert-info a { color: #4f46e5; font-weight: 600; }
+    /* ── Cards de integração externa (sem hover, altura simétrica) ── */
+    .adm-integration-card {
+        display: flex;
+        align-items: flex-start;
+        gap: .75rem;
+        padding: 1.5rem;
+        border-radius: 14px;
+        width: 100%;
+    }
+
     /* ── Guia do Usuário (accordion) ── */
     .adm-guia-accordion .accordion-item { border: 1px solid rgba(0,0,0,.07); border-radius: 12px; overflow: hidden; margin-bottom: .75rem; }
     .adm-guia-accordion .accordion-item:last-child { margin-bottom: 0; }
@@ -1252,9 +1262,9 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
                                 <h5><i class="fas fa-plug me-2" aria-hidden="true"></i>Integrações Externas</h5>
                             </div>
                             <div class="adm-card-body">
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <div class="adm-stat-item" style="display:flex;align-items:center;gap:.75rem;">
+                                <div class="row g-3 align-items-stretch">
+                                    <div class="col-md-6 d-flex">
+                                        <div class="adm-integration-card" style="background:linear-gradient(135deg,#ede9fe,#ddd6fe);">
                                             <i class="fab fa-orcid" style="color:#059669;font-size:1.25rem;"></i>
                                             <div>
                                                 <div style="font-weight:700;color:#312e81;font-size:.9rem;">ORCID</div>
@@ -1262,8 +1272,8 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="adm-stat-item" style="display:flex;align-items:center;gap:.75rem;background:<?= $brCrisConfigurado ? 'linear-gradient(135deg,#ede9fe,#ddd6fe)' : 'linear-gradient(135deg,#fef3c7,#fde68a)' ?>;">
+                                    <div class="col-md-6 d-flex">
+                                        <div class="adm-integration-card" style="background:<?= $brCrisConfigurado ? 'linear-gradient(135deg,#ede9fe,#ddd6fe)' : 'linear-gradient(135deg,#fef3c7,#fde68a)' ?>;">
                                             <i class="fas fa-network-wired" style="color:<?= $brCrisConfigurado ? '#059669' : '#b45309' ?>;font-size:1.25rem;"></i>
                                             <div>
                                                 <div style="font-weight:700;color:#312e81;font-size:.9rem;">BrCris</div>
