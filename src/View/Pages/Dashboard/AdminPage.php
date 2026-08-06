@@ -61,6 +61,11 @@ if (isset($_POST['expunge'])) {
         : 'Nenhum log com mais de 365 dias — nada a remover.';
 }
 
+if (isset($_POST['expunge_all'])) {
+    $removidos = $log->expungeAll();
+    $msg = "{$removidos} log(s) removido(s). Histórico zerado.";
+}
+
 // ── Aprovação de cadastros pendentes (somente admin) ──
 $souAdmin = papelEfetivo() === 'admin';
 $pendingMsg = null;
@@ -1045,11 +1050,18 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
                         <div class="adm-card">
                             <div class="adm-card-header">
                                 <h5><i class="fas fa-file-alt me-2" aria-hidden="true"></i>Logs do Sistema</h5>
-                                <form method="post" class="d-inline">
-                                    <button name="expunge" value="1" class="adm-btn-primary adm-btn-danger" style="width:auto;padding:.5rem 1.1rem;font-size:.8rem;">
-                                        <i class="fas fa-trash me-1" aria-hidden="true"></i>Expurgar Antigos
-                                    </button>
-                                </form>
+                                <div class="d-inline-flex gap-2">
+                                    <form method="post" class="d-inline">
+                                        <button name="expunge" value="1" class="adm-btn-primary adm-btn-danger" style="width:auto;padding:.5rem 1.1rem;font-size:.8rem;" title="Remove apenas logs com mais de 365 dias">
+                                            <i class="fas fa-trash me-1" aria-hidden="true"></i>Expurgar Antigos
+                                        </button>
+                                    </form>
+                                    <form method="post" class="d-inline" onsubmit="return confirm('Isso apaga TODOS os logs do sistema, sem volta. Confirma?');">
+                                        <button name="expunge_all" value="1" class="adm-btn-primary adm-btn-danger" style="width:auto;padding:.5rem 1.1rem;font-size:.8rem;" title="Apaga todo o histórico de logs imediatamente">
+                                            <i class="fas fa-eraser me-1" aria-hidden="true"></i>Limpar Tudo
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                             <div class="adm-card-body" style="padding:0;">
                                 <div class="table-responsive adm-table-wrap">

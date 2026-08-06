@@ -89,6 +89,11 @@ class LogService {
         return $this->db->changes();
     }
 
+    public function expungeAll(): int {
+        $this->db->exec("DELETE FROM logs");
+        return $this->db->changes();
+    }
+
     public function getLogs($limit = 100) {
         $stmt = $this->db->prepare("SELECT level, message, context, user, action, timestamp FROM logs ORDER BY timestamp DESC LIMIT :limit");
         $stmt->bindValue(':limit', (int) $limit, SQLITE3_INTEGER);
