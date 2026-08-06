@@ -153,11 +153,6 @@ $ppg_palette = [
     display: flex;
     flex-direction: column;
     height: 100%;
-    transition: transform .25s ease, box-shadow .25s ease;
-}
-.ppg-card-v2:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 12px 36px rgba(0,0,0,.13);
 }
 .ppg-card-v2-banner {
     height: 6px;
@@ -260,7 +255,13 @@ $ppg_palette = [
     transition: filter .2s ease, transform .2s ease;
     white-space: nowrap;
 }
-.ppg-card-v2-cta:hover { filter: brightness(1.1); transform: translateY(-1px); color: white; }
+.ppg-card-v2-cta:hover { filter: brightness(.87); color: white; box-shadow: 0 6px 18px rgba(0,0,0,.28); }
+.ppg-card-v2-cta .fa-arrow-right { transition: transform .2s ease; }
+.ppg-card-v2-cta:hover .fa-arrow-right { animation: ppgV2ArrowNudge .85s ease-in-out infinite; }
+@keyframes ppgV2ArrowNudge {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(4px); }
+}
 </style>
 
 <section class="ppgs-hero">

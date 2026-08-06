@@ -213,21 +213,26 @@ $ppg_chip = [
 }
 .rc-btn-primary:hover { filter: brightness(1.1); color: white; }
 .rc-btn-orcid {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    background: #f0fdf4;
-    border: 1px solid #bbf7d0;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: #f3faea;
+    border: 1.5px solid #d3e9a8;
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #059669;
-    font-size: .9rem;
+    color: #a6ce39;
+    font-size: 1.15rem;
     flex-shrink: 0;
-    transition: background .2s;
+    transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
     text-decoration: none;
 }
-.rc-btn-orcid:hover { background: #dcfce7; color: #059669; }
+.rc-btn-orcid:hover {
+    background: #a6ce39;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(166,206,57,.4);
+}
 </style>
 
 <section class="researchers-hero">
@@ -289,6 +294,9 @@ $ppg_chip = [
             <?php foreach ($pesquisadores as $idx => $p):
                 $nome       = $p['nome_completo'] ?? 'Nome não informado';
                 $orcid      = $p['orcidID'] ?? $p['orcid'] ?? '';
+                // O Lattes às vezes grava a URL completa (https://orcid.org/xxxx),
+                // às vezes só o ID — normaliza pra nunca duplicar o link.
+                $orcid      = str_replace(['https://orcid.org/', 'http://orcid.org/'], '', trim($orcid));
                 $lattes     = $p['id_lattes'] ?? '';
                 $atualizado = $p['data_atualizacao_cv'] ?? '';
                 $email      = $p['email'] ?? '';
@@ -349,6 +357,7 @@ $ppg_chip = [
                            target="_blank"
                            rel="noopener noreferrer"
                            class="rc-btn-orcid"
+                           title="Ver perfil no ORCID"
                            aria-label="Perfil ORCID de <?= htmlspecialchars($nome) ?>">
                             <i class="fab fa-orcid" aria-hidden="true"></i>
                         </a>
