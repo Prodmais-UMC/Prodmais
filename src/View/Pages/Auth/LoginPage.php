@@ -396,6 +396,12 @@ class LoginPage {
             filter: brightness(1.05);
         }
 
+        .btn-primary-auth:disabled {
+            cursor: wait;
+            opacity: .85;
+            transform: none;
+        }
+
         .btn-primary-auth:active {
             transform: translateY(0);
             box-shadow: 0 2px 8px rgba(26,86,219,.25);
@@ -571,7 +577,7 @@ class LoginPage {
             </div>
             <?php endif; ?>
 
-            <form method="POST" novalidate>
+            <form method="POST" novalidate id="loginForm">
 
                 <!-- E-mail / usuário -->
                 <div class="field-group">
@@ -613,11 +619,22 @@ class LoginPage {
                     </div>
                 </div>
 
-                <button type="submit" class="btn-primary-auth">
+                <button type="submit" class="btn-primary-auth" id="loginSubmitBtn">
                     <i class="fas fa-arrow-right-to-bracket" aria-hidden="true"></i>
                     Acessar o sistema
                 </button>
             </form>
+            <script>
+                document.getElementById('loginForm').addEventListener('submit', function () {
+                    var btn = document.getElementById('loginSubmitBtn');
+                    if (btn.disabled) {
+                        return;
+                    }
+                    btn.disabled = true;
+                    btn.setAttribute('aria-busy', 'true');
+                    btn.innerHTML = '<i class="fas fa-spinner fa-spin" aria-hidden="true"></i> Validando...';
+                });
+            </script>
 
             <div class="auth-divider">ou</div>
 

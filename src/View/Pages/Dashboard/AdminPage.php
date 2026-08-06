@@ -384,6 +384,14 @@ $ppgs = getAllPPGs();
     .pending-card-meta { font-size: .8125rem; color: #64748b; }
     .pending-card-actions { display: flex; gap: .625rem; }
     .pending-card-actions form { flex: 1; }
+    .pending-card-actions--manage { flex-wrap: wrap; }
+    .pending-card-actions--manage form:first-of-type { flex: 1 1 240px; }
+    .pending-card-actions--manage form:last-of-type { flex: 0 0 auto; }
+    .pending-card-actions--manage .adm-form-select--role { flex: 1 1 auto; min-width: 9rem; }
+    @media (max-width: 480px) {
+        .pending-card-actions--manage { flex-direction: column; align-items: stretch; }
+        .pending-card-actions--manage form { width: 100%; }
+    }
     .pending-btn-approve, .pending-btn-reject {
         width: 100%; display: flex; align-items: center; justify-content: center; gap: .4rem;
         border: none; border-radius: 10px; padding: .7rem 1rem;
@@ -729,11 +737,53 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
 <section class="adm-section">
     <div class="container">
 
-        <!-- ── Alertas globais ── -->
-        <?php if (!empty($msg)) echo "<div class='alert alert-success mb-3'><i class='bi bi-check-circle me-2'></i>$msg</div>"; ?>
-        <?php if (!empty($msg_error)) echo "<div class='alert alert-danger mb-3'><i class='bi bi-exclamation-triangle me-2'></i>$msg_error</div>"; ?>
-        <?php if (!empty($pendingMsg)) echo "<div class='alert alert-success mb-3'><i class='bi bi-check-circle me-2'></i>" . htmlspecialchars($pendingMsg) . "</div>"; ?>
-        <?php if (!empty($manageMsg)) echo "<div class='alert alert-success mb-3'><i class='bi bi-check-circle me-2'></i>" . htmlspecialchars($manageMsg) . "</div>"; ?>
+        <!-- ── Alertas globais (toast, some sozinho) ── -->
+        <?php
+        $admToasts = [];
+        if (!empty($msg)) {
+            $admToasts[] = ['type' => 'success', 'text' => $msg];
+        }
+        if (!empty($msg_error)) {
+            $admToasts[] = ['type' => 'error', 'text' => $msg_error];
+        }
+        if (!empty($pendingMsg)) {
+            $admToasts[] = ['type' => 'success', 'text' => $pendingMsg];
+        }
+        if (!empty($manageMsg)) {
+            $admToasts[] = ['type' => 'success', 'text' => $manageMsg];
+        }
+        ?>
+        <?php if (!empty($admToasts)): ?>
+        <div class="adm-toast-stack" aria-live="polite">
+            <?php foreach ($admToasts as $admToast): ?>
+            <div class="adm-toast adm-toast--<?= $admToast['type'] ?>" data-adm-toast>
+                <i class="fas <?= $admToast['type'] === 'error' ? 'fa-circle-exclamation' : 'fa-circle-check' ?>" aria-hidden="true"></i>
+                <span><?= htmlspecialchars($admToast['text']) ?></span>
+                <button type="button" class="adm-toast-close" onclick="this.closest('[data-adm-toast]').remove()" aria-label="Fechar aviso">
+                    <i class="fas fa-xmark" aria-hidden="true"></i>
+                </button>
+            </div>
+            <?php endforeach; ?>
+        </div>
+        <style>
+            .adm-toast-stack { position: fixed; top: 84px; right: 1.25rem; z-index: 1080; display: flex; flex-direction: column; gap: .625rem; max-width: 360px; }
+            .adm-toast { display: flex; align-items: flex-start; gap: .625rem; background: #fff; border: 1px solid rgba(0,0,0,.08); border-radius: 14px; box-shadow: 0 12px 32px rgba(0,0,0,.14); padding: .875rem 1rem; font-size: .875rem; color: #0f172a; animation: admToastIn .3s ease both, admToastOut .4s ease 4.6s both; }
+            .adm-toast--success i { color: #059669; }
+            .adm-toast--error i { color: #dc2626; }
+            .adm-toast-close { background: none; border: none; color: #94a3b8; cursor: pointer; padding: .1rem; margin-left: auto; flex-shrink: 0; }
+            .adm-toast-close:hover { color: #475569; }
+            @keyframes admToastIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+            @keyframes admToastOut { to { opacity: 0; transform: translateY(-10px); } }
+            @media (max-width: 480px) {
+                .adm-toast-stack { left: 1rem; right: 1rem; max-width: none; top: 76px; }
+            }
+        </style>
+        <script>
+            document.querySelectorAll('[data-adm-toast]').forEach(function (el) {
+                setTimeout(function () { el.remove(); }, 5000);
+            });
+        </script>
+        <?php endif; ?>
 
         <!-- ── Layout: sidebar + conteúdo ── -->
         <div class="adm-layout">
@@ -865,15 +915,15 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
                                         </span>
                                     </div>
                                 </div>
-                                <div class="pending-card-actions">
+                                <div class="pending-card-actions pending-card-actions--manage">
                                     <?php if ((int) $au['id'] === $meuId): ?>
                                         <span class="pending-card-meta" style="align-self:center;">Gerencie sua própria conta em "Alterar senha"</span>
                                     <?php elseif (!empty($au['conta_sistema'])): ?>
                                         <span class="pending-card-meta" style="align-self:center;"><i class="fas fa-lock" aria-hidden="true"></i> Conta protegida — não pode ser editada nem excluída por aqui</span>
                                     <?php else: ?>
-                                    <form method="post" style="display:flex;gap:.5rem;align-items:center;flex:1;">
+                                    <form method="post" style="display:flex;gap:.5rem;align-items:center;">
                                         <input type="hidden" name="account_id" value="<?= (int) $au['id'] ?>">
-                                        <select name="novo_papel" class="adm-form-select" style="flex:1;">
+                                        <select name="novo_papel" class="adm-form-select adm-form-select--role">
                                             <option value="admin" <?= $au['papel'] === 'admin' ? 'selected' : '' ?>>Admin</option>
                                             <option value="pesquisador" <?= $au['papel'] === 'pesquisador' ? 'selected' : '' ?>>Pesquisador</option>
                                             <option value="visualizador" <?= $au['papel'] === 'visualizador' ? 'selected' : '' ?>>Visualizador</option>
