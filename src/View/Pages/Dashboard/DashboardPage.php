@@ -182,6 +182,100 @@ if (!empty($producoes_por_qualis)) {
     }
     $producoes_por_qualis = $producoes_ordenadas;
 }
+
+/**
+ * Agrega um campo do índice de produções, tentando .keyword primeiro e
+ * caindo para contagem manual se o mapping não tiver nem uma coisa nem
+ * outra — mesmo padrão defensivo já usado para o Qualis acima.
+ */
+function agregarProducoesPorCampo($client, $index, $campo, $limite = 10) {
+    $resultado = [];
+    if ($client === null) {
+        return $resultado;
+    }
+
+    try {
+        $params = [
+            'index' => $index,
+            'body' => [
+                'size' => 0,
+                'aggs' => [
+                    'agregacao' => [
+                        'terms' => ['field' => "{$campo}.keyword", 'size' => $limite]
+                    ]
+                ]
+            ]
+        ];
+        $response = $client->search($params);
+        if (isset($response['aggregations']['agregacao']['buckets']) && !empty($response['aggregations']['agregacao']['buckets'])) {
+            foreach ($response['aggregations']['agregacao']['buckets'] as $bucket) {
+                $resultado[$bucket['key']] = $bucket['doc_count'];
+            }
+        } else {
+            $params['body']['aggs']['agregacao']['terms']['field'] = $campo;
+            $response = $client->search($params);
+            if (isset($response['aggregations']['agregacao']['buckets'])) {
+                foreach ($response['aggregations']['agregacao']['buckets'] as $bucket) {
+                    $resultado[$bucket['key']] = $bucket['doc_count'];
+                }
+            }
+        }
+
+        if (empty($resultado)) {
+            $params = [
+                'index' => $index,
+                'size' => 1000,
+                'body' => ['query' => ['match_all' => (object) []]]
+            ];
+            $response = $client->search($params);
+            $contagem = [];
+            foreach ($response['hits']['hits'] ?? [] as $hit) {
+                $valor = $hit['_source'][$campo] ?? null;
+                if (empty($valor)) {
+                    continue;
+                }
+                $valor = is_array($valor) ? ($valor[0] ?? null) : $valor;
+                if (empty($valor)) {
+                    continue;
+                }
+                $contagem[$valor] = ($contagem[$valor] ?? 0) + 1;
+            }
+            arsort($contagem);
+            $resultado = array_slice($contagem, 0, $limite, true);
+        }
+    } catch (Exception $e) {
+        error_log("Erro ao agregar produções por {$campo}: " . $e->getMessage());
+    }
+
+    return array_filter($resultado, function ($chave) {
+        return !empty($chave) && $chave !== 'null';
+    }, ARRAY_FILTER_USE_KEY);
+}
+
+$producoes_por_tipo = agregarProducoesPorCampo($client, $index, 'tipo', 8);
+$tipo_labels_amigaveis = [
+    'PERIODICO' => 'Artigo em periódico',
+    'LIVRO' => 'Livro publicado',
+    'CAPITULO' => 'Capítulo de livro',
+    'EVENTO' => 'Trabalho em evento',
+];
+$producoes_por_tipo_exibicao = [];
+foreach ($producoes_por_tipo as $chave => $valor) {
+    $producoes_por_tipo_exibicao[$tipo_labels_amigaveis[$chave] ?? $chave] = $valor;
+}
+
+$producoes_por_idioma = agregarProducoesPorCampo($client, $index, 'idioma', 6);
+$idioma_labels_amigaveis = [
+    'Português' => 'Português', 'PORTUGUES' => 'Português', 'PT' => 'Português',
+    'Inglês' => 'Inglês', 'INGLES' => 'Inglês', 'EN' => 'Inglês', 'English' => 'Inglês',
+    'Espanhol' => 'Espanhol', 'ESPANHOL' => 'Espanhol', 'ES' => 'Espanhol',
+];
+$producoes_por_idioma_exibicao = [];
+foreach ($producoes_por_idioma as $chave => $valor) {
+    $producoes_por_idioma_exibicao[$idioma_labels_amigaveis[$chave] ?? $chave] = $valor;
+}
+
+$top_pesquisadores = agregarProducoesPorCampo($client, $index, 'pesquisador_nome', 8);
 ?>
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -436,6 +530,38 @@ Navbar::display([
             </div>
         </div>
 
+        <!-- Produções por Tipo e por Idioma -->
+        <div class="row g-3 g-md-4 mb-5">
+            <div class="col-12 col-lg-6 fade-in-up" style="animation-delay:0.65s">
+                <div class="dash-chart-card">
+                    <h5><i class="fas fa-layer-group" aria-hidden="true"></i>Produções por Tipo</h5>
+                    <div class="dash-chart-container">
+                        <canvas id="chartProducoesPorTipo" aria-label="Gráfico de produções por tipo"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-lg-6 fade-in-up" style="animation-delay:0.7s">
+                <div class="dash-chart-card">
+                    <h5><i class="fas fa-language" aria-hidden="true"></i>Produções por Idioma</h5>
+                    <div class="dash-chart-container">
+                        <canvas id="chartProducoesPorIdioma" aria-label="Gráfico de produções por idioma"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Top Pesquisadores -->
+        <div class="row g-3 g-md-4 mb-5">
+            <div class="col-12 fade-in-up" style="animation-delay:0.75s">
+                <div class="dash-chart-card">
+                    <h5><i class="fas fa-ranking-star" aria-hidden="true"></i>Top Pesquisadores por Produção</h5>
+                    <div class="dash-chart-container">
+                        <canvas id="chartTopPesquisadores" aria-label="Gráfico dos pesquisadores com mais produções"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Cards de Acesso Rápido (não exibido para o papel visualizador) -->
         <?php if (papelEfetivo() !== 'visualizador'): ?>
         <div class="row g-3 g-md-4">
@@ -661,6 +787,103 @@ new Chart(ctxPPG, {
         }
     }
 });
+
+// Produções por Tipo
+const tipoData = <?php echo json_encode(array_values($producoes_por_tipo_exibicao)); ?>;
+const tipoLabels = <?php echo json_encode(array_keys($producoes_por_tipo_exibicao)); ?>;
+if (tipoData.length > 0) {
+    new Chart(document.getElementById('chartProducoesPorTipo').getContext('2d'), {
+        type: 'doughnut',
+        data: {
+            labels: tipoLabels,
+            datasets: [{
+                data: tipoData,
+                backgroundColor: ['#1a56db', '#059669', '#d97706', '#7c3aed', '#dc2626', '#0891b2', '#c026d3', '#65a30d'],
+                borderWidth: 2,
+                borderColor: '#fff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } }
+        }
+    });
+} else {
+    document.getElementById('chartProducoesPorTipo').closest('.dash-chart-container').innerHTML =
+        '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--gray-400);font-size:.875rem;">Sem dados suficientes ainda</div>';
+}
+
+// Produções por Idioma
+const idiomaData = <?php echo json_encode(array_values($producoes_por_idioma_exibicao)); ?>;
+const idiomaLabels = <?php echo json_encode(array_keys($producoes_por_idioma_exibicao)); ?>;
+if (idiomaData.length > 0) {
+    new Chart(document.getElementById('chartProducoesPorIdioma').getContext('2d'), {
+        type: 'doughnut',
+        data: {
+            labels: idiomaLabels,
+            datasets: [{
+                data: idiomaData,
+                backgroundColor: ['#1a56db', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#0ea5e9'],
+                borderWidth: 2,
+                borderColor: '#fff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 11 } } } }
+        }
+    });
+} else {
+    document.getElementById('chartProducoesPorIdioma').closest('.dash-chart-container').innerHTML =
+        '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--gray-400);font-size:.875rem;">Sem dados suficientes ainda</div>';
+}
+
+// Top Pesquisadores
+const topPesqData = <?php echo json_encode(array_values($top_pesquisadores)); ?>;
+const topPesqLabels = <?php echo json_encode(array_keys($top_pesquisadores)); ?>;
+const isMobileTopPesq = window.matchMedia('(max-width: 767px)').matches;
+if (topPesqData.length > 0) {
+    new Chart(document.getElementById('chartTopPesquisadores').getContext('2d'), {
+        type: 'bar',
+        data: {
+            labels: topPesqLabels,
+            datasets: [{
+                label: 'Produções',
+                data: topPesqData,
+                backgroundColor: 'rgba(26, 86, 219, 0.8)',
+                borderColor: 'rgba(26, 86, 219, 1)',
+                borderWidth: 2,
+                borderRadius: 8
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            plugins: { legend: { display: false } },
+            scales: {
+                x: { beginAtZero: true, ticks: { precision: 0 } },
+                y: {
+                    ticks: {
+                        font: { size: isMobileTopPesq ? 10 : 12 },
+                        callback: function (value) {
+                            const label = this.getLabelForValue(value);
+                            if (isMobileTopPesq && label.length > 16) {
+                                return label.slice(0, 14) + '…';
+                            }
+                            return label;
+                        }
+                    }
+                }
+            }
+        }
+    });
+} else {
+    document.getElementById('chartTopPesquisadores').closest('.dash-chart-container').innerHTML =
+        '<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--gray-400);font-size:.875rem;">Sem dados suficientes ainda</div>';
+}
     <?php HookManager::doAction('app_footer'); ?>
 </script>
 </body>
