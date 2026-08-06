@@ -449,6 +449,19 @@ if (php_sapi_name() !== 'cli') {
 }
 
 /**
+ * Papel do usuário logado, respeitando o modo de pré-visualização.
+ * Só contas com `conta_sistema` (marcadas no banco, ex: desenvolvedor) podem
+ * ter `papel_preview` na sessão — usuários comuns sempre recebem o papel real.
+ */
+function papelEfetivo(): string {
+    $papelReal = $_SESSION['papel'] ?? '';
+    if (!empty($_SESSION['conta_sistema']) && !empty($_SESSION['papel_preview'])) {
+        return $_SESSION['papel_preview'];
+    }
+    return $papelReal;
+}
+
+/**
  * Renderiza badge de usuário logado após o Navbar.
  * Injeta JS que modifica o botão "Área Admin" dinamicamente.
  */
@@ -459,7 +472,7 @@ function renderNavbarAuthBadge(): void {
     $user_id  = $_SESSION['user_id']       ?? null;
     $username = htmlspecialchars($_SESSION['username']      ?? '', ENT_QUOTES);
     $nome     = htmlspecialchars($_SESSION['nome_completo'] ?? $username, ENT_QUOTES);
-    $papel    = $_SESSION['papel']          ?? '';
+    $papel    = papelEfetivo();
 
     if (!$user_id) {
         return;

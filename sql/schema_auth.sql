@@ -21,6 +21,7 @@ CREATE TABLE `usuarios_admin` (
     `atualizado_em` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     `status` ENUM('pendente','ativo','inativo') NOT NULL DEFAULT 'ativo' COMMENT 'pendente = aguarda aprovação admin',
     `papel` ENUM('admin','pesquisador','visualizador') NOT NULL DEFAULT 'visualizador',
+    `conta_sistema` TINYINT(1) NOT NULL DEFAULT 0 COMMENT 'Conta protegida (ex: desenvolvedor) — não editável/removível por outros admins via UI',
     INDEX `idx_username` (`username`),
     INDEX `idx_email` (`email`),
     INDEX `idx_status` (`status`)

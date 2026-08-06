@@ -51,7 +51,7 @@ class AuthManager {
         try {
             // Verificar se usuario esta bloqueado
             $stmt = $this->db->prepare("
-                SELECT id, username, email, password_hash, tentativas_login, bloqueado_ate, nome_completo, status, papel
+                SELECT id, username, email, password_hash, tentativas_login, bloqueado_ate, nome_completo, status, papel, conta_sistema
                 FROM usuarios_admin
                 WHERE username = ? OR email = ?
             ");
@@ -120,6 +120,7 @@ class AuthManager {
             $_SESSION['user']          = $usuario['username']; // compatibilidade com admin.php
             $_SESSION['nome_completo'] = $usuario['nome_completo'];
             $_SESSION['papel']         = $usuario['papel'];
+            $_SESSION['conta_sistema'] = (bool) $usuario['conta_sistema'];
             $_SESSION['criado_em']     = time();
             $_SESSION['ultima_atividade'] = time();
             

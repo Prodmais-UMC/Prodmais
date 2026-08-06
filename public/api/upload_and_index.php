@@ -28,7 +28,8 @@ try {
         echo json_encode(['status' => 'error', 'message' => 'Não autenticado. Faça login para importar currículos.']);
         exit;
     }
-    if (!in_array($_SESSION['papel'] ?? '', ['admin', 'pesquisador'], true)) {
+    require_once dirname(__DIR__, 2) . '/src/UmcFunctions.php';
+    if (!in_array(papelEfetivo(), ['admin', 'pesquisador'], true)) {
         ob_end_clean();
         http_response_code(403);
         echo json_encode(['status' => 'error', 'message' => 'Acesso negado. Apenas administradores e pesquisadores podem importar currículos.']);

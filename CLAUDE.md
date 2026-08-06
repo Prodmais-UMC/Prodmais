@@ -401,7 +401,6 @@ Não spawnar agentes para tarefas que cabem em uma leitura de arquivo. Não usar
 
 ## Pontos de Atenção (débito técnico conhecido)
 
-- `public/login.php` na branch `main` ainda usa array com senhas hardcoded — deve ser migrado para `AuthManager`
-- `.env.production` foi commitado com credenciais reais — removido do tracking em `xmlprod`, verificar em `main`
-- Elasticsearch com `xpack.security.enabled=false` em dev — habilitar em produção
-- Sem pipeline de CI/CD configurado — GitHub Actions planejado em `.github/workflows/ci.yml`
+- `.env.production` foi removido do tracking do Git, mas as credenciais antigas (MySQL local/OCI) continuam recuperáveis no histórico (commit `c0f1742`) — avaliar `git filter-repo` antes de expandir acesso à organização do repositório
+- Produção usa AWS OpenSearch com Fine-Grained Access Control (não o `xpack.security.enabled=false` do Elasticsearch local de dev)
+- Sem backup automatizado confirmado no RDS/OpenSearch — validar retenção de snapshot antes de repassar a infraestrutura para a instituição (ver `docs/GUIA_TRANSFERENCIA_INFRAESTRUTURA.md`)

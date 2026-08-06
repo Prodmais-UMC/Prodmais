@@ -16,8 +16,7 @@ if (session_status() === PHP_SESSION_NONE) {
 
 // Redirecionar se já autenticado
 if (!empty($_SESSION['user_id'])) {
-    $papel_atual = $_SESSION['papel'] ?? '';
-    $dest_already = in_array($papel_atual, ['admin', 'pesquisador']) ? '/admin.php' : '/dashboard.php';
+    $dest_already = in_array(papelEfetivo(), ['admin', 'pesquisador']) ? '/admin.php' : '/dashboard.php';
     header('Location: ' . $dest_already);
     exit;
 }
@@ -42,7 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $primeiroNome = explode(' ', trim($_SESSION['nome_completo'] ?? $username))[0];
             $_SESSION['flash_welcome'] = $primeiroNome;
 
-            $destino = in_array($_SESSION['papel'] ?? '', ['admin', 'pesquisador']) ? '/admin.php' : '/dashboard.php';
+            $destino = in_array(papelEfetivo(), ['admin', 'pesquisador']) ? '/admin.php' : '/dashboard.php';
             header('Location: ' . $destino);
             exit;
         }

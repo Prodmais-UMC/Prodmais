@@ -83,8 +83,11 @@ class Navbar extends Component {
                         </li>
                         <?php if (!empty($_SESSION['user_id'])): ?>
                         <?php
+                        if (!function_exists('papelEfetivo')) {
+                            require_once __DIR__ . '/../../../UmcFunctions.php';
+                        }
                         $nome_completo = $_SESSION['nome_completo'] ?? $_SESSION['username'] ?? 'Usuário';
-                        $papel         = $_SESSION['papel'] ?? '';
+                        $papel         = papelEfetivo();
                         $painel_href   = in_array($papel, ['admin', 'pesquisador']) ? '/admin.php' : '/dashboard.php';
 
                         $partes    = preg_split('/\s+/', trim($nome_completo));
@@ -129,6 +132,19 @@ class Navbar extends Component {
                                 <li><a class="dropdown-item" href="/importar_lattes.php"><i class="fas fa-file-import me-2" aria-hidden="true"></i>Importar Lattes</a></li>
                                 <?php endif; ?>
                                 <li><a class="dropdown-item" href="/trocar-senha.php"><i class="fas fa-key me-2" aria-hidden="true"></i>Alterar senha</a></li>
+                                <?php if (!empty($_SESSION['conta_sistema'])): ?>
+                                <li><hr class="dropdown-divider"></li>
+                                <li class="px-3 py-1">
+                                    <label for="papelPreviewDesktop" class="d-block small text-muted mb-1">Modo de teste (dev)</label>
+                                    <form action="/dev_preview.php" method="post">
+                                        <select name="papel_preview" id="papelPreviewDesktop" class="form-select form-select-sm" onchange="this.form.submit()">
+                                            <option value="real"<?php echo empty($_SESSION['papel_preview']) ? ' selected' : ''; ?>>Real (admin)</option>
+                                            <option value="pesquisador"<?php echo ($_SESSION['papel_preview'] ?? '') === 'pesquisador' ? ' selected' : ''; ?>>Pesquisador</option>
+                                            <option value="visualizador"<?php echo ($_SESSION['papel_preview'] ?? '') === 'visualizador' ? ' selected' : ''; ?>>Visualizador</option>
+                                        </select>
+                                    </form>
+                                </li>
+                                <?php endif; ?>
                                 <li><hr class="dropdown-divider"></li>
                                 <li><a class="dropdown-item text-danger" href="/logout.php"><i class="fas fa-arrow-right-from-bracket me-2" aria-hidden="true"></i>Sair</a></li>
                             </ul>
@@ -156,6 +172,18 @@ class Navbar extends Component {
                                 <a class="nav-link-elegant nav-link-elegant--sub" href="/importar_lattes.php">Importar Lattes</a>
                                 <?php endif; ?>
                                 <a class="nav-link-elegant nav-link-elegant--sub" href="/trocar-senha.php">Alterar senha</a>
+                                <?php if (!empty($_SESSION['conta_sistema'])): ?>
+                                <div class="px-3 py-2">
+                                    <label for="papelPreviewMobile" class="d-block small text-muted mb-1">Modo de teste (dev)</label>
+                                    <form action="/dev_preview.php" method="post">
+                                        <select name="papel_preview" id="papelPreviewMobile" class="form-select form-select-sm" onchange="this.form.submit()">
+                                            <option value="real"<?php echo empty($_SESSION['papel_preview']) ? ' selected' : ''; ?>>Real (admin)</option>
+                                            <option value="pesquisador"<?php echo ($_SESSION['papel_preview'] ?? '') === 'pesquisador' ? ' selected' : ''; ?>>Pesquisador</option>
+                                            <option value="visualizador"<?php echo ($_SESSION['papel_preview'] ?? '') === 'visualizador' ? ' selected' : ''; ?>>Visualizador</option>
+                                        </select>
+                                    </form>
+                                </div>
+                                <?php endif; ?>
                                 <a class="nav-link-elegant nav-link-elegant--sub text-danger" href="/logout.php">Sair</a>
                             </div>
                         </li>

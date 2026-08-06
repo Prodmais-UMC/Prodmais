@@ -38,6 +38,12 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     exit;
 }
 
+if (!preg_match('/@umc\.br$/i', $email)) {
+    http_response_code(422);
+    echo json_encode(['sucesso' => false, 'mensagem' => 'Cadastro permitido apenas com e-mail institucional (@umc.br)']);
+    exit;
+}
+
 if (!preg_match('/^[a-zA-Z0-9._-]+$/', $username)) {
     http_response_code(422);
     echo json_encode(['sucesso' => false, 'mensagem' => 'Username inválido — use apenas letras, números, ponto, traço e underscore']);

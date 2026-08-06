@@ -16,7 +16,8 @@ if (empty($_SESSION['user_id']) && empty($_SESSION['user'])) {
     header('Location: /login.php');
     exit;
 }
-if (!in_array($_SESSION['papel'] ?? '', ['admin', 'pesquisador'], true)) {
+require_once __DIR__ . '/../../../../src/UmcFunctions.php';
+if (!in_array(papelEfetivo(), ['admin', 'pesquisador'], true)) {
     header('Location: /dashboard.php');
     exit;
 }

@@ -38,7 +38,7 @@ if (empty($_SESSION['user_id']) && empty($_SESSION['user'])) {
     exit;
 }
 // Painel administrativo é restrito a admin e pesquisador — visualizador não tem permissão
-if (!in_array($_SESSION['papel'] ?? '', ['admin', 'pesquisador'], true)) {
+if (!in_array(papelEfetivo(), ['admin', 'pesquisador'], true)) {
     header('Location: /dashboard.php');
     exit;
 }
@@ -62,7 +62,7 @@ if (isset($_POST['expunge'])) {
 }
 
 // ── Aprovação de cadastros pendentes (somente admin) ──
-$souAdmin = ($_SESSION['papel'] ?? '') === 'admin';
+$souAdmin = papelEfetivo() === 'admin';
 $pendingMsg = null;
 
 if ($souAdmin && (isset($_POST['approve_user']) || isset($_POST['reject_user']))) {
@@ -123,12 +123,14 @@ if ($souAdmin && (isset($_POST['update_role']) || isset($_POST['delete_account']
     } elseif ($alvoId) {
         try {
             $pdoUsers = $pdoUsers ?? criarConexaoMysql();
-            $stmt = $pdoUsers->prepare("SELECT username, email, papel FROM usuarios_admin WHERE id = ?");
+            $stmt = $pdoUsers->prepare("SELECT username, email, papel, conta_sistema FROM usuarios_admin WHERE id = ?");
             $stmt->execute([$alvoId]);
             $alvo = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if (!$alvo) {
                 $manageMsg = 'Usuário não encontrado (talvez já tenha sido removido).';
+            } elseif (!empty($alvo['conta_sistema'])) {
+                $manageMsg = 'Esta é uma conta protegida do sistema e não pode ser alterada nem excluída por aqui.';
             } elseif (isset($_POST['update_role'])) {
                 $novoPapel = filter_input(INPUT_POST, 'novo_papel', FILTER_SANITIZE_SPECIAL_CHARS);
                 if (in_array($novoPapel, ['admin', 'pesquisador', 'visualizador'], true)) {
@@ -157,7 +159,7 @@ if ($souAdmin) {
     try {
         $pdoUsers = $pdoUsers ?? criarConexaoMysql();
         $stmt = $pdoUsers->query(
-            "SELECT id, username, email, nome_completo, papel, status, criado_em, ultimo_login
+            "SELECT id, username, email, nome_completo, papel, status, criado_em, ultimo_login, conta_sistema
              FROM usuarios_admin ORDER BY nome_completo ASC"
         );
         $allUsers = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -847,6 +849,7 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
                                         <span class="pending-card-name">
                                             <?= htmlspecialchars($auNome) ?>
                                             <?php if ((int) $au['id'] === $meuId): ?><span class="adm-badge adm-badge-info" style="margin-left:.5rem;">Você</span><?php endif; ?>
+                                            <?php if (!empty($au['conta_sistema'])): ?><span class="adm-badge adm-badge-info" style="margin-left:.5rem;"><i class="fas fa-shield-halved" aria-hidden="true"></i> Conta de Sistema</span><?php endif; ?>
                                             <span class="adm-badge <?= $statusBadgeCls ?>" style="margin-left:.4rem;"><?= htmlspecialchars($au['status']) ?></span>
                                         </span>
                                         <span class="pending-card-meta">
@@ -860,6 +863,8 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
                                 <div class="pending-card-actions">
                                     <?php if ((int) $au['id'] === $meuId): ?>
                                         <span class="pending-card-meta" style="align-self:center;">Gerencie sua própria conta em "Alterar senha"</span>
+                                    <?php elseif (!empty($au['conta_sistema'])): ?>
+                                        <span class="pending-card-meta" style="align-self:center;"><i class="fas fa-lock" aria-hidden="true"></i> Conta protegida — não pode ser editada nem excluída por aqui</span>
                                     <?php else: ?>
                                     <form method="post" style="display:flex;gap:.5rem;align-items:center;flex:1;">
                                         <input type="hidden" name="account_id" value="<?= (int) $au['id'] ?>">
