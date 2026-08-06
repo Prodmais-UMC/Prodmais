@@ -26,6 +26,10 @@ if (!class_exists('BrCrisIntegration')) {
     require_once __DIR__ . '/../../../../src/Infrastructure/External/BrCrisIntegration.php';
 }
 
+if (!class_exists('EmailService')) {
+    require_once __DIR__ . '/../../../../src/Infrastructure/External/EmailService.php';
+}
+
 require_once __DIR__ . '/../../../../src/Infrastructure/Database/MysqlConnectionFactory.php';
 
 $config_legacy = [];
@@ -80,21 +84,47 @@ if ($souAdmin && (isset($_POST['approve_user']) || isset($_POST['reject_user']))
     if ($pendingId) {
         try {
             $pdoUsers = criarConexaoMysql();
-            $stmt = $pdoUsers->prepare("SELECT username, email FROM usuarios_admin WHERE id = ? AND status = 'pendente'");
+            $stmt = $pdoUsers->prepare("SELECT username, email, nome_completo FROM usuarios_admin WHERE id = ? AND status = 'pendente'");
             $stmt->execute([$pendingId]);
             $alvo = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($alvo) {
+                $emailServicePendente = new \EmailService();
+                $primeiroNomeAlvo = explode(' ', trim($alvo['nome_completo'] ?? $alvo['username']))[0];
+
                 if (isset($_POST['approve_user'])) {
                     $stmt = $pdoUsers->prepare("UPDATE usuarios_admin SET status = 'ativo' WHERE id = ?");
                     $stmt->execute([$pendingId]);
                     $log->log($_SESSION['user'], "Aprovou cadastro de {$alvo['username']} ({$alvo['email']})");
                     $pendingMsg = "Cadastro de {$alvo['username']} aprovado — já pode fazer login.";
+
+                    $corpoAprovado = "
+                        <p>Olá, <strong>{$primeiroNomeAlvo}</strong></p>
+                        <p>Seu cadastro no Prodmais UMC foi aprovado por um administrador. Você já pode fazer login normalmente com o usuário <strong>{$alvo['username']}</strong>.</p>
+                        <p style='text-align: center;'>
+                            <a href='https://" . $_SERVER['HTTP_HOST'] . "/login.php' class='button'>Acessar o Prodmais UMC</a>
+                        </p>
+                    ";
+                    $emailServicePendente->enviar(
+                        $alvo['email'],
+                        'Cadastro aprovado - Prodmais UMC',
+                        $emailServicePendente->envelope('Cadastro Aprovado', $corpoAprovado)
+                    );
                 } else {
                     $stmt = $pdoUsers->prepare("DELETE FROM usuarios_admin WHERE id = ?");
                     $stmt->execute([$pendingId]);
                     $log->log($_SESSION['user'], "Rejeitou cadastro de {$alvo['username']} ({$alvo['email']})");
                     $pendingMsg = "Solicitação de {$alvo['username']} rejeitada e removida.";
+
+                    $corpoRejeitado = "
+                        <p>Olá, <strong>{$primeiroNomeAlvo}</strong></p>
+                        <p>Seu cadastro no Prodmais UMC não foi aprovado neste momento. Se você acredita que isso é um engano, entre em contato com a coordenação do seu Programa de Pós-Graduação.</p>
+                    ";
+                    $emailServicePendente->enviar(
+                        $alvo['email'],
+                        'Cadastro não aprovado - Prodmais UMC',
+                        $emailServicePendente->envelope('Cadastro Não Aprovado', $corpoRejeitado)
+                    );
                 }
             } else {
                 $pendingMsg = 'Solicitação não encontrada (talvez já tenha sido tratada).';
@@ -263,21 +293,6 @@ $ppgs = getAllPPGs();
     
     <!-- AdminPage premium styles -->
     <style>
-    /* ── Hero ── */
-    .adm-hero {
-        background: #070d1f;
-        background-image:
-            radial-gradient(ellipse 60% 70% at 15% 65%, rgba(99,102,241,.13), transparent),
-            radial-gradient(ellipse 40% 40% at 88% 12%, rgba(139,92,246,.10), transparent),
-            radial-gradient(ellipse 30% 30% at 55% 88%, rgba(79,70,229,.08), transparent);
-        position: relative; overflow: hidden;
-        padding: 5.5rem 0 3.5rem;
-    }
-    .adm-hero::before {
-        content: ''; position: absolute; inset: 0;
-        background-image: radial-gradient(rgba(255,255,255,.05) 1px, transparent 1px);
-        background-size: 28px 28px; pointer-events: none;
-    }
     /* ══ Sidebar Layout ══ */
     .adm-layout {
         display: flex;
@@ -298,16 +313,7 @@ $ppgs = getAllPPGs();
         position: sticky;
         top: 80px;
     }
-    .adm-sidebar-header {
-        background: linear-gradient(135deg,#4f46e5,#6366f1);
-        padding: 1.25rem 1.5rem;
-        display: flex; align-items: center; gap: .625rem;
-    }
-    .adm-sidebar-header span {
-        color: white; font-weight: 700; font-size: .875rem; letter-spacing: .02em;
-    }
-    .adm-sidebar-header i { color: rgba(255,255,255,.75); font-size: .9rem; }
-    .adm-sidebar-nav { padding: .625rem; }
+    .adm-sidebar-nav { padding: .75rem; }
     .adm-tab-btn {
         display: flex; align-items: center; gap: .75rem; width: 100%;
         border: none; background: transparent; border-radius: 12px;
@@ -529,8 +535,18 @@ $ppgs = getAllPPGs();
     .adm-alert-info h6 { color: #312e81; font-weight: 700; margin-bottom: .5rem; }
     .adm-alert-info p { color: #1e1b4b; margin: 0; font-size: .9rem; line-height: 1.6; }
     .adm-alert-info a { color: #4f46e5; font-weight: 600; }
+    /* ── Guia do Usuário (accordion) ── */
+    .adm-guia-accordion .accordion-item { border: 1px solid rgba(0,0,0,.07); border-radius: 12px; overflow: hidden; margin-bottom: .75rem; }
+    .adm-guia-accordion .accordion-item:last-child { margin-bottom: 0; }
+    .adm-guia-accordion .accordion-button { font-weight: 700; color: #312e81; font-size: .9rem; background: #fff; }
+    .adm-guia-accordion .accordion-button:not(.collapsed) { background: rgba(79,70,229,.06); color: #4f46e5; box-shadow: none; }
+    .adm-guia-accordion .accordion-button:focus { box-shadow: 0 0 0 3px rgba(99,102,241,.12); }
+    .adm-guia-accordion .accordion-button::after { filter: hue-rotate(210deg); }
+    .adm-guia-accordion .accordion-body { color: #475569; font-size: .875rem; line-height: 1.7; }
+    .adm-guia-accordion .accordion-body p:last-child { margin-bottom: 0; }
+
     /* ── Section bg ── */
-    .adm-section { background: #f8fafc; padding: 3rem 0 5rem; }
+    .adm-section { background: #f8fafc; padding: calc(64px + 1.75rem) 0 5rem; }
     </style>
     
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -737,34 +753,6 @@ $ppgs = getAllPPGs();
 Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_link_dashboard ?? true]);
 ?>
 
-<!-- ══ Hero Admin ══ -->
-<section class="adm-hero">
-    <div class="container text-center" style="position:relative;z-index:1;">
-
-        <div style="display:inline-flex;align-items:center;gap:.5rem;background:rgba(99,102,241,.15);border:1px solid rgba(99,102,241,.3);border-radius:100px;padding:.375rem 1rem;font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#a5b4fc;margin-bottom:1.75rem;">
-            <i class="fas fa-shield-alt" style="font-size:.7rem;"></i>
-            Área Restrita · Administração
-        </div>
-
-        <h1 style="font-size:clamp(1.6rem,5vw,3.75rem);font-weight:900;line-height:1.05;letter-spacing:-2px;color:#f1f5f9;margin:0 0 1rem;">
-            <i class="fas fa-cog me-3" style="color:#6366f1;"></i>Administração
-        </h1>
-
-        <p style="font-size:1rem;color:rgba(241,245,249,.5);max-width:500px;margin:0 auto;line-height:1.6;">
-            Gestão de Pesquisadores, Currículos Lattes e Logs do Sistema
-        </p>
-
-        <?php if (!empty($_SESSION['username'])): ?>
-        <div style="margin-top:2rem;display:inline-flex;align-items:center;gap:.5rem;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);border-radius:100px;padding:.5rem 1.25rem;font-size:.82rem;color:rgba(241,245,249,.7);">
-            <i class="fas fa-user-circle" style="color:#a5b4fc;"></i>
-            Logado como <strong style="color:#c7d2fe;margin-left:.25rem;"><?= htmlspecialchars($_SESSION['username']) ?></strong>
-        </div>
-        <?php endif; ?>
-
-    </div>
-</section>
-<!-- ══ /Hero Admin ══ -->
-
 <section class="adm-section">
     <div class="container">
 
@@ -821,10 +809,6 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
 
             <!-- ══ SIDEBAR (desktop) ══ -->
             <aside class="adm-sidebar" aria-label="Navegação do painel">
-                <div class="adm-sidebar-header">
-                    <i class="fas fa-cog"></i>
-                    <span>Painel Admin</span>
-                </div>
                 <nav class="adm-sidebar-nav" id="adminTabs" role="tablist">
                     <?php if ($souAdmin): ?>
                     <button class="adm-tab-btn<?= $pendingCount > 0 ? ' active' : '' ?>" id="pending-tab" data-bs-toggle="tab" data-bs-target="#pending" type="button" role="tab" aria-controls="pending">
@@ -854,6 +838,11 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
                     <button class="adm-tab-btn" id="lgpd-tab" data-bs-toggle="tab" data-bs-target="#lgpd" type="button" role="tab" aria-controls="lgpd">
                         <i class="fas fa-shield-alt" aria-hidden="true"></i>
                         <span class="adm-tab-label">Conformidade LGPD</span>
+                    </button>
+                    <div class="adm-sidebar-divider"></div>
+                    <button class="adm-tab-btn" id="guia-tab" data-bs-toggle="tab" data-bs-target="#guia" type="button" role="tab" aria-controls="guia">
+                        <i class="fas fa-book-open" aria-hidden="true"></i>
+                        <span class="adm-tab-label">Guia do Usuário</span>
                     </button>
                 </nav>
             </aside>
@@ -1290,6 +1279,215 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
                             </div>
                         </div>
                     </div>
+
+                    <!-- Aba: Guia do Usuário -->
+                    <div class="tab-pane fade" id="guia" role="tabpanel">
+                        <div class="adm-card">
+                            <div class="adm-card-header">
+                                <h5><i class="fas fa-book-open me-2" aria-hidden="true"></i>Guia do Usuário</h5>
+                            </div>
+                            <div class="adm-card-body" style="padding:1.25rem;">
+                                <div class="accordion adm-guia-accordion" id="guiaAccordion">
+
+<?php
+$guiaSecoes = [
+    [
+        'icon' => 'fa-flag-checkered',
+        'titulo' => 'Introdução ao Prodmais UMC',
+        'corpo' => '
+            <p>O Prodmais UMC consolida, organiza e permite consultar a produção científica dos quatro Programas de Pós-Graduação da UMC:</p>
+            <ul>
+                <li>Biotecnologia (33002010191P0)</li>
+                <li>Engenharia Biomédica (33002010192P0)</li>
+                <li>Políticas Públicas (33002010193P0)</li>
+                <li>Ciência e Tecnologia em Saúde (33002010194P0)</li>
+            </ul>
+            <p>Os dados vêm dos currículos Lattes dos docentes, importados manualmente por um administrador ou pesquisador (não há sincronização automática com o CNPq).</p>
+            <p>Existem três papéis de usuário:</p>
+            <ul>
+                <li><strong>Admin</strong> — acesso completo, incluindo este Painel Admin.</li>
+                <li><strong>Pesquisador</strong> — pode importar currículos Lattes, sem acesso à gestão de usuários nem à Conformidade LGPD.</li>
+                <li><strong>Visualizador</strong> — só acessa as telas públicas (Início, Pesquisadores, PPGs, Projetos, Dashboard).</li>
+            </ul>
+        ',
+    ],
+    [
+        'icon' => 'fa-right-to-bracket',
+        'titulo' => 'Como fazer login',
+        'corpo' => '
+            <ol>
+                <li>Acesse a tela de login e preencha <strong>"E-mail ou usuário"</strong> e <strong>"Senha"</strong>.</li>
+                <li>Clique em <strong>"Acessar o sistema"</strong>. O botão mostra um spinner ("Validando...") enquanto confirma as credenciais.</li>
+                <li>Esqueceu a senha? Clique em <strong>"Esqueceu a senha?"</strong>, ao lado do campo de senha, informe seu e-mail cadastrado e siga o link recebido por e-mail (válido por 1 hora).</li>
+                <li>Se ainda não tem conta, clique em <strong>"Solicitar cadastro"</strong>, no rodapé do formulário.</li>
+            </ol>
+        ',
+    ],
+    [
+        'icon' => 'fa-user-plus',
+        'titulo' => 'Como solicitar cadastro',
+        'corpo' => '
+            <ol>
+                <li>Na tela de login, clique em <strong>"Solicitar cadastro"</strong>.</li>
+                <li>Preencha nome completo, e-mail institucional (obrigatoriamente terminado em <strong>@umc.br</strong> — outros domínios são recusados), usuário e senha.</li>
+                <li>Escolha o perfil desejado: <strong>Visualizador</strong> (apenas consulta) ou <strong>Pesquisador</strong> (importa currículos).</li>
+                <li>Clique em <strong>"Enviar solicitação"</strong>.</li>
+                <li>O cadastro fica com status <em>pendente</em> até um administrador aprovar — não é possível fazer login antes disso.</li>
+            </ol>
+        ',
+    ],
+    [
+        'icon' => 'fa-key',
+        'titulo' => 'Como trocar ou recuperar a senha',
+        'corpo' => '
+            <p><strong>Já logado:</strong> abra o menu do seu usuário (canto superior direito da barra de navegação) e clique em <strong>"Alterar senha"</strong>.</p>
+            <p><strong>Esqueceu a senha:</strong> na tela de login, clique em <strong>"Esqueceu a senha?"</strong>, informe seu e-mail cadastrado e siga o link enviado. O link expira em 1 hora e só pode ser usado uma vez.</p>
+        ',
+    ],
+    [
+        'icon' => 'fa-magnifying-glass',
+        'titulo' => 'Buscar produções (tela Início)',
+        'corpo' => '
+            <ol>
+                <li>No campo de busca da tela Início ("Pesquise produções, pesquisadores, projetos..."), digite um termo.</li>
+                <li>Ao digitar um nome, sugestões de pesquisadores aparecem automaticamente abaixo do campo (autocomplete). Use as setas do teclado ou o mouse para escolher uma, ou aperte Enter/Tab para selecionar a destacada.</li>
+                <li>Selecionar uma sugestão leva direto às produções daquele pesquisador específico — útil quando há mais de uma pessoa com o mesmo nome.</li>
+                <li>Clicar em <strong>"Buscar"</strong> sem selecionar uma sugestão faz uma busca geral pelo termo digitado.</li>
+            </ol>
+        ',
+    ],
+    [
+        'icon' => 'fa-users',
+        'titulo' => 'Tela de Pesquisadores',
+        'corpo' => '
+            <ol>
+                <li>No menu superior, clique em <strong>"Pesquisadores"</strong>.</li>
+                <li>Use o campo <strong>"Buscar por nome..."</strong> para filtrar a lista já carregada na tela (com o mesmo autocomplete de sugestões da tela Início).</li>
+                <li>Cada card mostra nome, PPG, currículo Lattes disponível e, quando existir, um selo <strong>"ORCID verificado"</strong> com o total de obras encontradas no ORCID.</li>
+                <li>Clique em <strong>"Ver Produções"</strong> no card para ver só as produções daquele pesquisador.</li>
+                <li>O ícone do ORCID (quando presente) abre o perfil público do pesquisador no site orcid.org.</li>
+            </ol>
+        ',
+    ],
+    [
+        'icon' => 'fa-university',
+        'titulo' => 'Tela de PPGs',
+        'corpo' => '
+            <p>No menu superior, clique em <strong>"PPGs"</strong> para ver os quatro programas com suas áreas de concentração. Clique em <strong>"Ver Produções"</strong> no card de um programa para ver só as produções vinculadas a ele.</p>
+        ',
+    ],
+    [
+        'icon' => 'fa-flask',
+        'titulo' => 'Tela de Projetos',
+        'corpo' => '
+            <p>No menu superior, clique em <strong>"Projetos"</strong> para consultar os projetos de pesquisa cadastrados, com filtro por nome do coordenador e por período (De/Até).</p>
+        ',
+    ],
+    [
+        'icon' => 'fa-filter',
+        'titulo' => 'Filtrar os resultados de busca',
+        'corpo' => '
+            <p>Na tela de resultados, o painel de filtros lateral tem:</p>
+            <ul>
+                <li><strong>Tipo</strong> — Artigos em Periódicos, Livros Publicados, Capítulos de Livros ou Trabalhos em Eventos.</li>
+                <li><strong>Qualis</strong> — de A1 a C.</li>
+                <li><strong>Período</strong> — campos "De" e "Até" (ano).</li>
+                <li><strong>Exibir</strong> — 20, 50 ou 100 resultados por página.</li>
+            </ul>
+            <p>Depois de escolher os filtros, clique em <strong>"Aplicar Filtros"</strong>. Para recomeçar, clique em <strong>"Limpar"</strong>. Em cada resultado, o botão <strong>"Ver Detalhes"</strong> abre um modal com as informações completas da produção (incluindo DOI, quando existir).</p>
+            <div class="alert alert-warning mb-0" style="font-size:.8rem;">
+                <i class="fas fa-triangle-exclamation me-1" aria-hidden="true"></i>
+                A exportação em BibTeX, RIS, CSV, JSON e XML já existe no sistema, mas ainda não tem um botão nesta tela — hoje só é acessível diretamente pela URL da API (<code>/api/export.php</code>). É um ajuste pendente.
+            </div>
+        ',
+    ],
+    [
+        'icon' => 'fa-chart-line',
+        'titulo' => 'Dashboard',
+        'corpo' => '
+            <p>No menu superior, clique em <strong>"Dashboard"</strong> para ver: total de produções, pesquisadores, PPGs e projetos; gráficos de produções por ano, por Qualis (depende de uma base de dados da CAPES ainda não carregada), por PPG, por tipo, por idioma e um ranking dos pesquisadores com mais produções.</p>
+            <p>Para admins e pesquisadores, a seção <strong>"Acesso Rápido"</strong> logo abaixo dos gráficos tem atalhos para <strong>"Importar Lattes"</strong>, <strong>"Buscar Produções"</strong> e <strong>"Administração"</strong> — essa seção não aparece para o papel visualizador.</p>
+        ',
+    ],
+    [
+        'icon' => 'fa-user-clock',
+        'titulo' => 'Painel Admin — Usuários Pendentes',
+        'corpo' => '
+            <p>Lista quem solicitou cadastro e ainda não foi avaliado, com um contador visível no menu lateral. Para cada solicitação:</p>
+            <ul>
+                <li><strong>Aprovar</strong> — ativa a conta e envia um e-mail avisando que já pode fazer login.</li>
+                <li><strong>Rejeitar</strong> — remove a solicitação e envia um e-mail avisando que não foi aprovada.</li>
+            </ul>
+        ',
+    ],
+    [
+        'icon' => 'fa-users-gear',
+        'titulo' => 'Painel Admin — Gerenciar Usuários',
+        'corpo' => '
+            <p>Lista todos os usuários já ativos. Para cada um (exceto você mesmo e contas marcadas "Conta de Sistema"), é possível trocar o papel (Admin, Pesquisador ou Visualizador) pelo seletor e clicar em <strong>"Salvar"</strong>, ou clicar em <strong>"Excluir"</strong> para remover a conta (pede confirmação antes).</p>
+        ',
+    ],
+    [
+        'icon' => 'fa-user-plus',
+        'titulo' => 'Painel Admin — Adicionar Pesquisador',
+        'corpo' => '
+            <ol>
+                <li>Escolha o Programa de Pós-Graduação.</li>
+                <li>Arraste o arquivo XML exportado da Plataforma Lattes para a área de upload, ou clique nela para selecionar (não é o PDF do currículo — precisa ser o XML).</li>
+                <li>Se o docente assinou o Termo de Ciência e Consentimento (LGPD), marque a caixa correspondente.</li>
+                <li>Clique em <strong>"Importar Currículo Lattes"</strong>.</li>
+                <li>Reimportar o currículo de alguém já cadastrado atualiza os dados, sem duplicar.</li>
+            </ol>
+        ',
+    ],
+    [
+        'icon' => 'fa-upload',
+        'titulo' => 'Painel Admin — Upload em Lote',
+        'corpo' => '
+            <p>Mesma ideia do "Adicionar Pesquisador", mas aceita selecionar vários arquivos XML de uma vez, processando um a um.</p>
+        ',
+    ],
+    [
+        'icon' => 'fa-file-alt',
+        'titulo' => 'Painel Admin — Logs do Sistema',
+        'corpo' => '
+            <p>Registra acessos, importações e ações administrativas, com nível (INFO, ou o nome de quem fez a ação), usuário/sistema, ação e data/hora.</p>
+            <ul>
+                <li><strong>Expurgar Antigos</strong> — remove só os registros com mais de 365 dias.</li>
+                <li><strong>Limpar Tudo</strong> — apaga todo o histórico imediatamente (pede confirmação, sem volta).</li>
+            </ul>
+        ',
+    ],
+    [
+        'icon' => 'fa-shield-alt',
+        'titulo' => 'Painel Admin — Conformidade LGPD',
+        'corpo' => '
+            <p>Mostra o status geral de conformidade, o Relatório de Impacto à Proteção de Dados (DPIA) — com botão para <strong>"Baixar DPIA (JSON)"</strong> — e o status das integrações externas: ORCID (ativo, enriquece o perfil do pesquisador automaticamente na importação) e BrCris (implementado, aguardando credencial de API da IBICT, uma etapa institucional, não de código).</p>
+        ',
+    ],
+];
+
+foreach ($guiaSecoes as $gi => $secao):
+    $guiaId = 'guia' . ($gi + 1);
+?>
+                                    <div class="accordion-item">
+                                        <h2 class="accordion-header">
+                                            <button class="accordion-button<?= $gi === 0 ? '' : ' collapsed' ?>" type="button" data-bs-toggle="collapse" data-bs-target="#<?= $guiaId ?>">
+                                                <i class="fas <?= $secao['icon'] ?> me-2" aria-hidden="true"></i><?= htmlspecialchars($secao['titulo']) ?>
+                                            </button>
+                                        </h2>
+                                        <div id="<?= $guiaId ?>" class="accordion-collapse collapse<?= $gi === 0 ? ' show' : '' ?>" data-bs-parent="#guiaAccordion">
+                                            <div class="accordion-body">
+                                                <?= $secao['corpo'] ?>
+                                            </div>
+                                        </div>
+                                    </div>
+<?php endforeach; ?>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="text-center mt-4 mb-2">
@@ -1343,6 +1541,11 @@ Navbar::display(['active_page' => 'admin', 'mostrar_link_dashboard' => $mostrar_
         <button class="adm-tab-btn" data-bs-target="#lgpd" type="button">
             <i class="fas fa-shield-alt" aria-hidden="true"></i>
             <span class="adm-tab-label">Conformidade LGPD</span>
+        </button>
+        <div class="adm-sidebar-divider"></div>
+        <button class="adm-tab-btn" data-bs-target="#guia" type="button">
+            <i class="fas fa-book-open" aria-hidden="true"></i>
+            <span class="adm-tab-label">Guia do Usuário</span>
         </button>
     </nav>
 </div>
