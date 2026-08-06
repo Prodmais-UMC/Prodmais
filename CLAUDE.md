@@ -10,10 +10,18 @@ Sistema de gestão de produção científica da Universidade de Mogi das Cruzes 
 |--------|-----------|--------|
 | Backend | PHP + Apache | 8.2 |
 | Banco principal | MySQL | 8.0 |
-| Busca full-text | Elasticsearch | 8.10.4 |
+| Busca full-text (dev local) | Elasticsearch (Docker) | 8.10.4 |
+| Busca full-text (produção) | AWS OpenSearch | — |
 | Frontend | HTML + CSS + Vanilla JS | — |
 | Containerização | Docker + Docker Compose | — |
 | Dependências PHP | Composer | — |
+
+Em dev local (`docker-compose up`), a busca roda em Elasticsearch de verdade.
+Em produção, roda em **AWS OpenSearch** — um fork mantido pela AWS, compatível
+na maior parte da API mas não é Elasticsearch propriamente dito (por isso o
+projeto usa o cliente `opensearch-project/opensearch-php`, não o
+`elastic/elasticsearch-php` — o cliente oficial da Elastic rejeita ativamente
+clusters OpenSearch).
 
 ---
 
@@ -286,27 +294,23 @@ Rollback: `git checkout vX.Y.Z` ou apontar o deploy da plataforma para a tag.
 
 ---
 
-## Deploy Gratuito
+## Deploy Atual (produção)
 
-### OCI Always Free
+A aplicação roda hoje em **Render** (web service, build via `Dockerfile.render`,
+porta dinâmica `$PORT`), com dados em **AWS RDS MySQL** e **AWS OpenSearch**
+(ambos na região us-east-2). Toda essa infraestrutura está provisionada em
+conta pessoal do desenvolvedor — é temporário, até a UMC assumir os custos e
+o servidor.
 
-Oracle Cloud oferece permanentemente (não é trial):
-- 4 vCPU ARM Ampere A1 + 24GB RAM
-- Suficiente para MySQL + Elasticsearch + PHP/Apache sem degradação
+A tentativa original foi hospedar em **Oracle Cloud (OCI) Always Free**
+(4 vCPU ARM Ampere A1 + 24GB RAM gratuito permanente) — mas o acesso/gestão da
+VM se mostrou pouco confiável na prática, e a stack migrou para Render + AWS,
+que resultou numa plataforma mais leve, rápida e fácil de manter. Os guias
+antigos (`docs/OCI_DEPLOY_GUIDE.md`, `docs/DEPLOY_OCI.md`) ficam só como
+referência histórica — **não é o caminho de deploy atual**.
 
-```bash
-# Na VM OCI, com Docker instalado:
-git clone https://github.com/<user>/Prodmais.git
-cd Prodmais
-cp .env.example .env   # Configurar variáveis
-docker-compose -f docker-compose.prod.yml up -d
-```
-
-Guias detalhados: `docs/OCI_DEPLOY_GUIDE.md` e `docs/DEPLOY_OCI.md`
-
-Railway e Render foram avaliados e descartados como opção — hospedagem é feita
-exclusivamente na OCI Always Free (VM sempre gratuita, sem os limites de uso
-de plataformas PaaS gratuitas).
+Guia de migração para infraestrutura institucional (quando a UMC assumir):
+`docs/GUIA_TRANSFERENCIA_INFRAESTRUTURA.md`.
 
 ### Variáveis de ambiente obrigatórias em produção
 
@@ -390,12 +394,13 @@ Não spawnar agentes para tarefas que cabem em uma leitura de arquivo. Não usar
 
 ## Integrações Externas
 
-| API | Classe | Descrição |
-|-----|--------|-----------|
-| OpenAlex | `OpenAlexFetcher` | Métricas de citação e metadados |
-| ORCID | `OrcidFetcher` | Perfis via Consórcio CAPES-ORCID |
-| BrCris | `BrCrisIntegration` | Plataforma brasileira de pesquisa |
-| Lattes (CNPq) | `LattesImporter` / `LattesParser` | Importação de currículos XML |
+| API | Classe | Descrição | Status |
+|-----|--------|-----------|--------|
+| OpenAlex | `OpenAlexFetcher` | Métricas de citação e metadados | Ativo — enriquece produções por DOI na importação |
+| ORCID | `OrcidFetcher` | Perfil público via API do ORCID | Ativo — enriquece o pesquisador na importação (API pública, sem credencial) |
+| BrCris | `BrCrisIntegration` | Plataforma brasileira de pesquisa | Implementado, aguardando credencial de API da IBICT (cadastro institucional) |
+| Lattes (CNPq) | `LattesImporter` / `LattesParser` | Importação de currículos XML | Ativo — fluxo principal de entrada de dados |
+| Resend | `EmailService` | Envio de e-mail transacional (recuperação de senha, aprovação/rejeição de cadastro) | Ativo |
 
 ---
 
@@ -403,4 +408,9 @@ Não spawnar agentes para tarefas que cabem em uma leitura de arquivo. Não usar
 
 - `.env.production` foi removido do tracking do Git, mas as credenciais antigas (MySQL local/OCI) continuam recuperáveis no histórico (commit `c0f1742`) — avaliar `git filter-repo` antes de expandir acesso à organização do repositório
 - Produção usa AWS OpenSearch com Fine-Grained Access Control (não o `xpack.security.enabled=false` do Elasticsearch local de dev)
+- Distribuição por Qualis no dashboard não funciona porque nenhuma produção tem o campo `qualis` preenchido — exige carregar uma base real da CAPES (ISSN → estrato) e cruzar por ISSN na importação; nunca foi implementado
+- Exportação (BibTeX/RIS/CSV/JSON/XML) existe em `ExportService`/`api/export.php`, mas não tem botão em nenhuma tela — só acessível chamando a API diretamente
+- Padrão de bug recorrente: queries `term`/`aggs` contra `campo.keyword` retornam silenciosamente vazio se esse sub-campo não existir no mapping do índice (já corrigido em vários pontos — Qualis, filtros de busca, gráficos do dashboard — mas vale desconfiar desse padrão em qualquer novo filtro/agregação)
+- Permissões de workflow do GitHub Actions (`default_workflow_permissions`) resetaram para "read" na organização e no repositório após a transferência para `Prodmais-UMC` — já corrigido via `gh api`, mas o publish da imagem Docker no GHCR ainda falha com 403 por uma política de criação de pacotes da organização que só é ajustável pela interface web (`Settings → Packages`), não expõe endpoint na API pública
+- `data/` (uploads, XMLs do Lattes, backups) não persiste no Render Free — sem disco persistente, tudo é perdido a cada redeploy/restart
 - Sem backup automatizado confirmado no RDS/OpenSearch — validar retenção de snapshot antes de repassar a infraestrutura para a instituição (ver `docs/GUIA_TRANSFERENCIA_INFRAESTRUTURA.md`)
