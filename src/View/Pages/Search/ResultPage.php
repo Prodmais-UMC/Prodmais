@@ -40,12 +40,32 @@ if (!empty($search_term)) {
     ];
 }
 
+// Usa .keyword OU o campo puro no mesmo "should" — evita depender de qual
+// variante existe de fato no mapping do índice (mesmo problema já visto
+// antes: term query contra um sub-campo .keyword inexistente não dá erro,
+// só retorna zero resultados silenciosamente).
 if (!empty($filter_tipo)) {
-    $filter_queries[] = ['term' => ['tipo.keyword' => $filter_tipo]];
+    $filter_queries[] = [
+        'bool' => [
+            'should' => [
+                ['term' => ['tipo.keyword' => $filter_tipo]],
+                ['term' => ['tipo' => $filter_tipo]],
+            ],
+            'minimum_should_match' => 1,
+        ],
+    ];
 }
 
 if (!empty($filter_qualis)) {
-    $filter_queries[] = ['term' => ['qualis.keyword' => $filter_qualis]];
+    $filter_queries[] = [
+        'bool' => [
+            'should' => [
+                ['term' => ['qualis.keyword' => $filter_qualis]],
+                ['term' => ['qualis' => $filter_qualis]],
+            ],
+            'minimum_should_match' => 1,
+        ],
+    ];
 }
 
 if (!empty($filter_ppg)) {
