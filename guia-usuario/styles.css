@@ -310,6 +310,8 @@ a { color: inherit; }
 }
 
 @media (max-width: 600px) {
+    /* Estimativa inicial só para o primeiro paint — script.js mede a altura
+       real do cabeçalho e sobrescreve esta variável a cada resize. */
     :root { --topbar-h: 108px; }
     .topbar {
         flex-wrap: wrap;

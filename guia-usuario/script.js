@@ -1,6 +1,21 @@
 (function () {
     'use strict';
 
+    // ── Mantém --topbar-h em sincronia com a altura real do cabeçalho ──
+    // (ele quebra em duas linhas no mobile, então um valor fixo no CSS
+    // fica fora de sincronia com zoom, tamanho de fonte ou quebra de texto)
+    var topbarEl = document.querySelector('.topbar');
+    function sincronizarAlturaTopbar() {
+        if (topbarEl) {
+            document.documentElement.style.setProperty('--topbar-h', topbarEl.offsetHeight + 'px');
+        }
+    }
+    sincronizarAlturaTopbar();
+    window.addEventListener('resize', sincronizarAlturaTopbar);
+    if (window.ResizeObserver && topbarEl) {
+        new ResizeObserver(sincronizarAlturaTopbar).observe(topbarEl);
+    }
+
     var sections = Array.prototype.slice.call(document.querySelectorAll('.doc-section'));
     var sidebarLinks = Array.prototype.slice.call(document.querySelectorAll('.sidebar-link'));
     var topbarTabs = Array.prototype.slice.call(document.querySelectorAll('.topbar-tab'));
